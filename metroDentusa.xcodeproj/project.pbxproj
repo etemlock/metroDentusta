@@ -1,0 +1,568 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		541709D51FE27BD400DA8027 /* LoginSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D41FE27BD400DA8027 /* LoginSignUpViewController.swift */; };
+		541709D71FE2801B00DA8027 /* RevealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D61FE2801B00DA8027 /* RevealViewController.swift */; };
+		541709D91FE2832500DA8027 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D81FE2832500DA8027 /* Extensions.swift */; };
+		54327FFE1FE2564500CC4DB4 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54327FFD1FE2564500CC4DB4 /* RootViewController.swift */; };
+		543280061FE26A0700CC4DB4 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 543280051FE26A0700CC4DB4 /* SWRevealViewController.m */; };
+		543280081FE26DA200CC4DB4 /* navBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543280071FE26DA200CC4DB4 /* navBarController.swift */; };
+		54B79E411FE2502E00692E5C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B79E401FE2502E00692E5C /* AppDelegate.swift */; };
+		54B79E461FE2502E00692E5C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B79E441FE2502E00692E5C /* Main.storyboard */; };
+		54B79E481FE2502E00692E5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B79E471FE2502E00692E5C /* Assets.xcassets */; };
+		54B79E4B1FE2502E00692E5C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B79E491FE2502E00692E5C /* LaunchScreen.storyboard */; };
+		54B79E561FE2502E00692E5C /* metroDentusaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B79E551FE2502E00692E5C /* metroDentusaTests.swift */; };
+		54B79E611FE2502E00692E5C /* metroDentusaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B79E601FE2502E00692E5C /* metroDentusaUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		54B79E521FE2502E00692E5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 54B79E351FE2502D00692E5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54B79E3C1FE2502D00692E5C;
+			remoteInfo = metroDentusa;
+		};
+		54B79E5D1FE2502E00692E5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 54B79E351FE2502D00692E5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54B79E3C1FE2502D00692E5C;
+			remoteInfo = metroDentusa;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		541709D41FE27BD400DA8027 /* LoginSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginSignUpViewController.swift; sourceTree = "<group>"; };
+		541709D61FE2801B00DA8027 /* RevealViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RevealViewController.swift; sourceTree = "<group>"; };
+		541709D81FE2832500DA8027 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		54327FFD1FE2564500CC4DB4 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		543280041FE26A0700CC4DB4 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWRevealViewController.h; path = ../../../.Trash/SWRevealViewController.h; sourceTree = "<group>"; };
+		543280051FE26A0700CC4DB4 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWRevealViewController.m; path = ../../../.Trash/SWRevealViewController.m; sourceTree = "<group>"; };
+		543280071FE26DA200CC4DB4 /* navBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = navBarController.swift; sourceTree = "<group>"; };
+		54B79E3D1FE2502E00692E5C /* metroDentusa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = metroDentusa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		54B79E401FE2502E00692E5C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		54B79E451FE2502E00692E5C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		54B79E471FE2502E00692E5C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		54B79E4A1FE2502E00692E5C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		54B79E4C1FE2502E00692E5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		54B79E511FE2502E00692E5C /* metroDentusaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = metroDentusaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		54B79E551FE2502E00692E5C /* metroDentusaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = metroDentusaTests.swift; sourceTree = "<group>"; };
+		54B79E571FE2502E00692E5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		54B79E5C1FE2502E00692E5C /* metroDentusaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = metroDentusaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		54B79E601FE2502E00692E5C /* metroDentusaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = metroDentusaUITests.swift; sourceTree = "<group>"; };
+		54B79E621FE2502E00692E5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		54B79E3A1FE2502D00692E5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54B79E4E1FE2502E00692E5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54B79E591FE2502E00692E5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		54B79E341FE2502D00692E5C = {
+			isa = PBXGroup;
+			children = (
+				54B79E3F1FE2502E00692E5C /* metroDentusa */,
+				54B79E541FE2502E00692E5C /* metroDentusaTests */,
+				54B79E5F1FE2502E00692E5C /* metroDentusaUITests */,
+				54B79E3E1FE2502E00692E5C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		54B79E3E1FE2502E00692E5C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				54B79E3D1FE2502E00692E5C /* metroDentusa.app */,
+				54B79E511FE2502E00692E5C /* metroDentusaTests.xctest */,
+				54B79E5C1FE2502E00692E5C /* metroDentusaUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		54B79E3F1FE2502E00692E5C /* metroDentusa */ = {
+			isa = PBXGroup;
+			children = (
+				54B79E6F1FE250F900692E5C /* SWRevealViewController */,
+				54B79E401FE2502E00692E5C /* AppDelegate.swift */,
+				54B79E441FE2502E00692E5C /* Main.storyboard */,
+				541709D41FE27BD400DA8027 /* LoginSignUpViewController.swift */,
+				543280071FE26DA200CC4DB4 /* navBarController.swift */,
+				541709D81FE2832500DA8027 /* Extensions.swift */,
+				54327FFD1FE2564500CC4DB4 /* RootViewController.swift */,
+				541709D61FE2801B00DA8027 /* RevealViewController.swift */,
+				54B79E471FE2502E00692E5C /* Assets.xcassets */,
+				54B79E491FE2502E00692E5C /* LaunchScreen.storyboard */,
+				54B79E4C1FE2502E00692E5C /* Info.plist */,
+			);
+			path = metroDentusa;
+			sourceTree = "<group>";
+		};
+		54B79E541FE2502E00692E5C /* metroDentusaTests */ = {
+			isa = PBXGroup;
+			children = (
+				54B79E551FE2502E00692E5C /* metroDentusaTests.swift */,
+				54B79E571FE2502E00692E5C /* Info.plist */,
+			);
+			path = metroDentusaTests;
+			sourceTree = "<group>";
+		};
+		54B79E5F1FE2502E00692E5C /* metroDentusaUITests */ = {
+			isa = PBXGroup;
+			children = (
+				54B79E601FE2502E00692E5C /* metroDentusaUITests.swift */,
+				54B79E621FE2502E00692E5C /* Info.plist */,
+			);
+			path = metroDentusaUITests;
+			sourceTree = "<group>";
+		};
+		54B79E6F1FE250F900692E5C /* SWRevealViewController */ = {
+			isa = PBXGroup;
+			children = (
+				543280041FE26A0700CC4DB4 /* SWRevealViewController.h */,
+				543280051FE26A0700CC4DB4 /* SWRevealViewController.m */,
+			);
+			name = SWRevealViewController;
+			path = "../../Downloads/SWRevealViewController-master/SWRevealViewController";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		54B79E3C1FE2502D00692E5C /* metroDentusa */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54B79E651FE2502E00692E5C /* Build configuration list for PBXNativeTarget "metroDentusa" */;
+			buildPhases = (
+				54B79E391FE2502D00692E5C /* Sources */,
+				54B79E3A1FE2502D00692E5C /* Frameworks */,
+				54B79E3B1FE2502D00692E5C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = metroDentusa;
+			productName = metroDentusa;
+			productReference = 54B79E3D1FE2502E00692E5C /* metroDentusa.app */;
+			productType = "com.apple.product-type.application";
+		};
+		54B79E501FE2502E00692E5C /* metroDentusaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54B79E681FE2502E00692E5C /* Build configuration list for PBXNativeTarget "metroDentusaTests" */;
+			buildPhases = (
+				54B79E4D1FE2502E00692E5C /* Sources */,
+				54B79E4E1FE2502E00692E5C /* Frameworks */,
+				54B79E4F1FE2502E00692E5C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				54B79E531FE2502E00692E5C /* PBXTargetDependency */,
+			);
+			name = metroDentusaTests;
+			productName = metroDentusaTests;
+			productReference = 54B79E511FE2502E00692E5C /* metroDentusaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		54B79E5B1FE2502E00692E5C /* metroDentusaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54B79E6B1FE2502E00692E5C /* Build configuration list for PBXNativeTarget "metroDentusaUITests" */;
+			buildPhases = (
+				54B79E581FE2502E00692E5C /* Sources */,
+				54B79E591FE2502E00692E5C /* Frameworks */,
+				54B79E5A1FE2502E00692E5C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				54B79E5E1FE2502E00692E5C /* PBXTargetDependency */,
+			);
+			name = metroDentusaUITests;
+			productName = metroDentusaUITests;
+			productReference = 54B79E5C1FE2502E00692E5C /* metroDentusaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		54B79E351FE2502D00692E5C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0820;
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = ASO;
+				TargetAttributes = {
+					54B79E3C1FE2502D00692E5C = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+					54B79E501FE2502E00692E5C = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 54B79E3C1FE2502D00692E5C;
+					};
+					54B79E5B1FE2502E00692E5C = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 54B79E3C1FE2502D00692E5C;
+					};
+				};
+			};
+			buildConfigurationList = 54B79E381FE2502D00692E5C /* Build configuration list for PBXProject "metroDentusa" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 54B79E341FE2502D00692E5C;
+			productRefGroup = 54B79E3E1FE2502E00692E5C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				54B79E3C1FE2502D00692E5C /* metroDentusa */,
+				54B79E501FE2502E00692E5C /* metroDentusaTests */,
+				54B79E5B1FE2502E00692E5C /* metroDentusaUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		54B79E3B1FE2502D00692E5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54B79E4B1FE2502E00692E5C /* LaunchScreen.storyboard in Resources */,
+				54B79E481FE2502E00692E5C /* Assets.xcassets in Resources */,
+				54B79E461FE2502E00692E5C /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54B79E4F1FE2502E00692E5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54B79E5A1FE2502E00692E5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		54B79E391FE2502D00692E5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54B79E411FE2502E00692E5C /* AppDelegate.swift in Sources */,
+				541709D71FE2801B00DA8027 /* RevealViewController.swift in Sources */,
+				543280081FE26DA200CC4DB4 /* navBarController.swift in Sources */,
+				54327FFE1FE2564500CC4DB4 /* RootViewController.swift in Sources */,
+				541709D51FE27BD400DA8027 /* LoginSignUpViewController.swift in Sources */,
+				543280061FE26A0700CC4DB4 /* SWRevealViewController.m in Sources */,
+				541709D91FE2832500DA8027 /* Extensions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54B79E4D1FE2502E00692E5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54B79E561FE2502E00692E5C /* metroDentusaTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		54B79E581FE2502E00692E5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54B79E611FE2502E00692E5C /* metroDentusaUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		54B79E531FE2502E00692E5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54B79E3C1FE2502D00692E5C /* metroDentusa */;
+			targetProxy = 54B79E521FE2502E00692E5C /* PBXContainerItemProxy */;
+		};
+		54B79E5E1FE2502E00692E5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54B79E3C1FE2502D00692E5C /* metroDentusa */;
+			targetProxy = 54B79E5D1FE2502E00692E5C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		54B79E441FE2502E00692E5C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				54B79E451FE2502E00692E5C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		54B79E491FE2502E00692E5C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				54B79E4A1FE2502E00692E5C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		54B79E631FE2502E00692E5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		54B79E641FE2502E00692E5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		54B79E661FE2502E00692E5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = metroDentusa/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = p.metroDentusa;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "metroDentusa-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		54B79E671FE2502E00692E5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = metroDentusa/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = p.metroDentusa;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "metroDentusa-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		54B79E691FE2502E00692E5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = metroDentusaTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = p.metroDentusaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/metroDentusa.app/metroDentusa";
+			};
+			name = Debug;
+		};
+		54B79E6A1FE2502E00692E5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = metroDentusaTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = p.metroDentusaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/metroDentusa.app/metroDentusa";
+			};
+			name = Release;
+		};
+		54B79E6C1FE2502E00692E5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				INFOPLIST_FILE = metroDentusaUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = p.metroDentusaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = metroDentusa;
+			};
+			name = Debug;
+		};
+		54B79E6D1FE2502E00692E5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				INFOPLIST_FILE = metroDentusaUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = p.metroDentusaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = metroDentusa;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		54B79E381FE2502D00692E5C /* Build configuration list for PBXProject "metroDentusa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54B79E631FE2502E00692E5C /* Debug */,
+				54B79E641FE2502E00692E5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		54B79E651FE2502E00692E5C /* Build configuration list for PBXNativeTarget "metroDentusa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54B79E661FE2502E00692E5C /* Debug */,
+				54B79E671FE2502E00692E5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		54B79E681FE2502E00692E5C /* Build configuration list for PBXNativeTarget "metroDentusaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54B79E691FE2502E00692E5C /* Debug */,
+				54B79E6A1FE2502E00692E5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		54B79E6B1FE2502E00692E5C /* Build configuration list for PBXNativeTarget "metroDentusaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54B79E6C1FE2502E00692E5C /* Debug */,
+				54B79E6D1FE2502E00692E5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 54B79E351FE2502D00692E5C /* Project object */;
+}
