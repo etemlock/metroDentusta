@@ -21,6 +21,15 @@ extension UIViewController {
     }
 }
 
+extension UIButton {
+    func setUpDefaultType(title: String?){
+        self.setTitle(title, for: .normal)
+        self.backgroundColor = RootViewController.themeColor
+        self.titleLabel?.textColor = UIColor.white
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 20
+    }
+}
     
 
  

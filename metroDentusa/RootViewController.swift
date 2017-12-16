@@ -9,6 +9,7 @@
 import UIKit
 
 class RootViewController : UIViewController {
+    static var themeColor = UIColor(red: 26/255, green: 122/255, blue: 1, alpha: 1)
     var menuButton : UIBarButtonItem!
         
     override func viewDidLoad() {
@@ -22,5 +23,12 @@ class RootViewController : UIViewController {
             menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
+        let WelcomeLabel = UILabel(frame: CGRect(x: 87, y: 315, width: 200, height: 50))
+        WelcomeLabel.font = WelcomeLabel.font.withSize(22)
+        WelcomeLabel.textColor = RootViewController.themeColor
+        WelcomeLabel.text = "Welcome!"
+        WelcomeLabel.textAlignment = NSTextAlignment.center
+        WelcomeLabel.layer.borderColor = RootViewController.themeColor.cgColor
+        self.view.addSubview(WelcomeLabel)
     }
 }
