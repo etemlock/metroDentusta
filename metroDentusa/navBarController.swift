@@ -25,6 +25,9 @@ class navBarController : UITableViewController {
         if(indexPath.section == 0){
             performSegue(withIdentifier: "backHome", sender: self)
         }
+        if(indexPath.section == 1){
+            performSegue(withIdentifier: "findDentistSegue", sender: self)
+        }
         if(indexPath.section == 6){
             performSegue(withIdentifier: "toSignUp", sender: self)
         }

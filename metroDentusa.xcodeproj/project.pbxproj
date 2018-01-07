@@ -11,6 +11,7 @@
 		541709D71FE2801B00DA8027 /* RevealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D61FE2801B00DA8027 /* RevealViewController.swift */; };
 		541709D91FE2832500DA8027 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D81FE2832500DA8027 /* Extensions.swift */; };
 		541D59C11FF8B296003ACC73 /* models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541D59C01FF8B296003ACC73 /* models.swift */; };
+		541D59C820024089003ACC73 /* findDentistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541D59C720024089003ACC73 /* findDentistViewController.swift */; };
 		54327FFE1FE2564500CC4DB4 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54327FFD1FE2564500CC4DB4 /* RootViewController.swift */; };
 		543280081FE26DA200CC4DB4 /* navBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543280071FE26DA200CC4DB4 /* navBarController.swift */; };
 		5456ECAD1FE37AF800C9D6E4 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5456ECAC1FE37AF800C9D6E4 /* SWRevealViewController.m */; };
@@ -47,6 +48,7 @@
 		541709D61FE2801B00DA8027 /* RevealViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RevealViewController.swift; sourceTree = "<group>"; };
 		541709D81FE2832500DA8027 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		541D59C01FF8B296003ACC73 /* models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = models.swift; path = Models/models.swift; sourceTree = "<group>"; };
+		541D59C720024089003ACC73 /* findDentistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = findDentistViewController.swift; sourceTree = "<group>"; };
 		54327FFD1FE2564500CC4DB4 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		543280071FE26DA200CC4DB4 /* navBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = navBarController.swift; sourceTree = "<group>"; };
 		5456ECAB1FE37AF800C9D6E4 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWRevealViewController.h; path = "../../SWRevealViewController-master 2/SWRevealViewController/SWRevealViewController.h"; sourceTree = "<group>"; };
@@ -101,6 +103,14 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		541D59C620024072003ACC73 /* findDentist */ = {
+			isa = PBXGroup;
+			children = (
+				541D59C720024089003ACC73 /* findDentistViewController.swift */,
+			);
+			name = findDentist;
+			sourceTree = "<group>";
+		};
 		5456ECB01FE4AC6000C9D6E4 /* loginSignUp */ = {
 			isa = PBXGroup;
 			children = (
@@ -141,6 +151,7 @@
 				543280071FE26DA200CC4DB4 /* navBarController.swift */,
 				541709D81FE2832500DA8027 /* Extensions.swift */,
 				5456ECB01FE4AC6000C9D6E4 /* loginSignUp */,
+				541D59C620024072003ACC73 /* findDentist */,
 				54327FFD1FE2564500CC4DB4 /* RootViewController.swift */,
 				5456ECB31FE4CBEE00C9D6E4 /* delegateMethods.swift */,
 				541709D61FE2801B00DA8027 /* RevealViewController.swift */,
@@ -319,6 +330,7 @@
 				541709D71FE2801B00DA8027 /* RevealViewController.swift in Sources */,
 				543280081FE26DA200CC4DB4 /* navBarController.swift in Sources */,
 				5456ECB41FE4CBEE00C9D6E4 /* delegateMethods.swift in Sources */,
+				541D59C820024089003ACC73 /* findDentistViewController.swift in Sources */,
 				5456ECAD1FE37AF800C9D6E4 /* SWRevealViewController.m in Sources */,
 				54327FFE1FE2564500CC4DB4 /* RootViewController.swift in Sources */,
 				541709D51FE27BD400DA8027 /* LoginSignUpViewController.swift in Sources */,
