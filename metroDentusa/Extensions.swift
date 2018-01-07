@@ -19,6 +19,18 @@ extension UIViewController {
             alert.dismiss(animated: true, completion: nil)
         }
     }
+    
+    func hideKeyBoardWhenTappedAround(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard(){
+        view.endEditing(true)
+    }
+    
+    
 }
 
 extension UIButton {
@@ -30,6 +42,28 @@ extension UIButton {
         self.layer.cornerRadius = 20
     }
 }
-    
 
- 
+extension String {
+    func validatePredicate(regex: String) -> Bool {
+        let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
+        return predicate.evaluate(with: self)
+    }
+    
+}
+
+extension countryInfo {
+    mutating func clear(){
+        self.topoName = ""
+        self.name = ""
+        self.lat = 0
+        self.long = 0
+        self.geoId = 0
+        self.countryCode = ""
+        self.countryName = ""
+    }
+}
+
+
+
+
+

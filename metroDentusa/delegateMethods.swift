@@ -9,5 +9,7 @@
 import Foundation
 
 protocol userInputFieldDelegate {
-    func userInputFieldDidEndEditing(userInputField: userInputField)
+    func userInputFieldDidChange(userInputField: userInputField)
+    
+    //func userInputFieldDidChange(userInputField: userInputField)
 }

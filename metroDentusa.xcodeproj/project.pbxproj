@@ -10,6 +10,7 @@
 		541709D51FE27BD400DA8027 /* LoginSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D41FE27BD400DA8027 /* LoginSignUpViewController.swift */; };
 		541709D71FE2801B00DA8027 /* RevealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D61FE2801B00DA8027 /* RevealViewController.swift */; };
 		541709D91FE2832500DA8027 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D81FE2832500DA8027 /* Extensions.swift */; };
+		541D59C11FF8B296003ACC73 /* models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541D59C01FF8B296003ACC73 /* models.swift */; };
 		54327FFE1FE2564500CC4DB4 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54327FFD1FE2564500CC4DB4 /* RootViewController.swift */; };
 		543280081FE26DA200CC4DB4 /* navBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543280071FE26DA200CC4DB4 /* navBarController.swift */; };
 		5456ECAD1FE37AF800C9D6E4 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5456ECAC1FE37AF800C9D6E4 /* SWRevealViewController.m */; };
@@ -21,6 +22,7 @@
 		54B79E4B1FE2502E00692E5C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B79E491FE2502E00692E5C /* LaunchScreen.storyboard */; };
 		54B79E561FE2502E00692E5C /* metroDentusaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B79E551FE2502E00692E5C /* metroDentusaTests.swift */; };
 		54B79E611FE2502E00692E5C /* metroDentusaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B79E601FE2502E00692E5C /* metroDentusaUITests.swift */; };
+		54D8E5A91FF2393B00CC888B /* retrievePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D8E5A81FF2393B00CC888B /* retrievePasswordViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,7 @@
 		541709D41FE27BD400DA8027 /* LoginSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginSignUpViewController.swift; sourceTree = "<group>"; };
 		541709D61FE2801B00DA8027 /* RevealViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RevealViewController.swift; sourceTree = "<group>"; };
 		541709D81FE2832500DA8027 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		541D59C01FF8B296003ACC73 /* models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = models.swift; path = Models/models.swift; sourceTree = "<group>"; };
 		54327FFD1FE2564500CC4DB4 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		543280071FE26DA200CC4DB4 /* navBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = navBarController.swift; sourceTree = "<group>"; };
 		5456ECAB1FE37AF800C9D6E4 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWRevealViewController.h; path = "../../SWRevealViewController-master 2/SWRevealViewController/SWRevealViewController.h"; sourceTree = "<group>"; };
@@ -62,6 +65,7 @@
 		54B79E5C1FE2502E00692E5C /* metroDentusaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = metroDentusaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		54B79E601FE2502E00692E5C /* metroDentusaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = metroDentusaUITests.swift; sourceTree = "<group>"; };
 		54B79E621FE2502E00692E5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		54D8E5A81FF2393B00CC888B /* retrievePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = retrievePasswordViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,9 +93,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		541D59C21FF8B2C3003ACC73 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				541D59C01FF8B296003ACC73 /* models.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		5456ECB01FE4AC6000C9D6E4 /* loginSignUp */ = {
 			isa = PBXGroup;
 			children = (
+				54D8E5A81FF2393B00CC888B /* retrievePasswordViewController.swift */,
 				5456ECB11FE4ACA500C9D6E4 /* formTableViewCell.swift */,
 				541709D41FE27BD400DA8027 /* LoginSignUpViewController.swift */,
 			);
@@ -121,6 +134,7 @@
 		54B79E3F1FE2502E00692E5C /* metroDentusa */ = {
 			isa = PBXGroup;
 			children = (
+				541D59C21FF8B2C3003ACC73 /* Models */,
 				54B79E6F1FE250F900692E5C /* SWRevealViewController */,
 				54B79E401FE2502E00692E5C /* AppDelegate.swift */,
 				54B79E441FE2502E00692E5C /* Main.storyboard */,
@@ -309,6 +323,8 @@
 				54327FFE1FE2564500CC4DB4 /* RootViewController.swift in Sources */,
 				541709D51FE27BD400DA8027 /* LoginSignUpViewController.swift in Sources */,
 				541709D91FE2832500DA8027 /* Extensions.swift in Sources */,
+				54D8E5A91FF2393B00CC888B /* retrievePasswordViewController.swift in Sources */,
+				541D59C11FF8B296003ACC73 /* models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

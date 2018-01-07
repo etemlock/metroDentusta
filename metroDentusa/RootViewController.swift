@@ -31,4 +31,5 @@ class RootViewController : UIViewController {
         WelcomeLabel.layer.borderColor = RootViewController.themeColor.cgColor
         self.view.addSubview(WelcomeLabel)
     }
+    
 }

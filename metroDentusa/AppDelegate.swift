@@ -40,6 +40,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    func downloadDataFromURL(urlString: String, completion: @escaping (_ data: Data?)->Void){
+        let session = URLSession.shared
+        let url = URL(string: urlString)
+        let task = session.dataTask(with: url!, completionHandler: {
+            (data: Data?, response: URLResponse?, error: Error?) in
+            if (error != nil) {
+                print("there was an error : \(error)")
+            } else {
+                let httpResponse = response as? HTTPURLResponse
+                if let httpStatusCode = httpResponse?.statusCode {
+                    print("status code is \(httpStatusCode)")
+                }
+                
+                completion(data)
+            }
+        })
+        task.resume()
+    }
 
 
 }

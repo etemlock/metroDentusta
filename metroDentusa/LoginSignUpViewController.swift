@@ -8,7 +8,10 @@
 
 import Foundation
 
-class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, userInputFieldDelegate {
+
+class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, userInputFieldDelegate, XMLParserDelegate {
+    
+    //views and subviews
     private var segmentIndexFlag = 0
     var loginInputs : [String] = ["",""]
     var createInputs : [String] = ["","",""]
@@ -18,8 +21,19 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     let forgotPasswordBtn = UIButton(frame: CGRect(x: 25, y: 460, width: 320, height: 44))
     let segmentController : UISegmentedControl = UISegmentedControl(items: ["Login", "Create Username"])
     
+    
+    //data and other stuff
+    var parser = XMLParser()
+    //var loginUserArray : [LoginMember] = []
+    var foundCharacters = ""
+    var countryInfoItem : countryInfo!
+    var countryInfoArray : [countryInfo] = []
+    var countryWantedFound = "Czechia"
+    var countryWantedFoundId = Int32(3077311)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyBoardWhenTappedAround()
         menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
         self.navigationItem.leftBarButtonItem = menuButton
         self.navigationItem.title = "Sign Up or Login!"
@@ -87,11 +101,35 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     }
     
     func continueClick(){
-        print("ole ole ole ole!! We fight!")
+        if segmentIndexFlag == 0{
+            let isLoginValid = validateLogin()
+            if isLoginValid {
+                DispatchQueue.global(qos: .background).async {
+                    AppDelegate().downloadDataFromURL(urlString: "http://api.geonames.org/neighbours?geonameId=2921044&username=etemlock", completion: {
+                        (data: Data?) in
+                        if data != nil {
+                            self.parser = XMLParser(data: data!)
+                            self.parser.delegate = self
+                            self.countryInfoItem = countryInfo(topoName: "", name: "", lat: 0, long: 0, geoId: 0, countryCode: "", countryName: "")
+                            let parseDidSucceed = self.parser.parse()
+                            DispatchQueue.main.async {
+                                print("\(parseDidSucceed)")
+                            }
+                        }
+                    })
+                }
+            }
+        } else {
+            validateRegistration()
+        }
     }
     
     func retrievePasswordClick(){
-        print("not gonna retrive your password haha!")
+        let nextVC = retrievePasswordViewController()
+        let backItem = UIBarButtonItem()
+        backItem.title = "Back"
+        navigationItem.backBarButtonItem = backItem
+        self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     
@@ -139,9 +177,11 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         if indexPath.section == 1 {
             if segmentIndexFlag == 0 {
                 cell.formTextField?.placeholder = "Enter Password"
+                cell.formTextField?.isSecureTextEntry = true
                 cell.formTextField?.setVal(val: 1)
             } else {
                 cell.formTextField?.placeholder = "Members birthday MM/DD/YYYY"
+                cell.formTextField?.isSecureTextEntry = false
                 cell.formTextField?.setVal(val: 3)
             }
         }
@@ -159,7 +199,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     }
     
     /*************************************************** textField functions *****************************************/
-    func userInputFieldDidEndEditing(userInputField: userInputField) {
+    func userInputFieldDidChange(userInputField: userInputField) {
         if let inputTypeInt = userInputField.getVal(){
             switch inputTypeInt {
             case 0:
@@ -179,5 +219,125 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
             }
         }
     }
+    
+    /************************************************* form Validations ***********************************************/
+    func validateLogin() -> Bool{
+        if loginInputs[0].isEmpty || loginInputs[1].isEmpty {
+            promptAlertWithDelay("Login Failed", inmessage: "all inputs must be filled", indelay: 5.0)
+            return false
+        }
+        return true
+    }
+    
+    func validateRegistration(){
+        let socialRegEx = "^[0-9]{4}$"
+        let birthDateRegEx = "(0[1-9]|1[0-2])[/](0[1-9]|[1-2][0-9]|3[0-1])[/]((19([0-9]{2}))|20([0-1][0-9]))"
+        let zipCodeRegEx = "^[0-9]{5}(-([0-9]{4}))?"
+        for input in createInputs{
+            if input.isEmpty {
+                promptAlertWithDelay("Create Username failed", inmessage: "all inputs must be filled", indelay: 5.0)
+                return
+            }
+        }
+        if !createInputs[0].validatePredicate(regex: socialRegEx){
+            promptAlertWithDelay("Create Username failed", inmessage: "social security input requires exactly 4 digits", indelay: 5.0)
+        } else if !createInputs[2].validatePredicate(regex: zipCodeRegEx){
+            promptAlertWithDelay("Create Username failed", inmessage: "zipcode input  requires format XXXXX or XXXXX-XXXX", indelay: 5.0)
+        } else if !createInputs[1].validatePredicate(regex: birthDateRegEx){
+            promptAlertWithDelay("Create Username failed", inmessage: "birthdate input requires format MM/DD/YYYY and must be a valid calendar date between 1900-2019", indelay: 5.0)
+        } else {
+            print("all inputs successful")
+        }
+    }
+    
+    /********************************************** xmlParserDelegate functions **************************************/
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        /*var tempMember = LoginMember(username: "", password: "", StyleSheet: "", SectionId: "")
+        if elementName == "Request"{
+            if let type = attributeDict["type"]{
+                if type == "LOGINMEMBER"{
+                    if let name = attributeDict["username"]{
+                        tempMember.username = name
+                    }
+                    if let pass = attributeDict["password"]{
+                        tempMember.password = pass
+                    }
+                    if let style = attributeDict["StyleSheet"]{
+                        tempMember.StyleSheet = style
+                    }
+                    if let id = attributeDict["SectionId"]{
+                        tempMember.SectionId = id
+                    }
+                }
+            }
+        }
+        loginUserArray.append(tempMember)*/
+        
+    }
+    
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+
+        if elementName == "geoname"{
+            if countryInfoItem?.countryName == countryWantedFound && countryInfoItem?.geoId == countryWantedFoundId {
+                print("found the country!!")
+            }
+            countryInfoArray.append(countryInfoItem)
+            countryInfoItem.clear()
+        } else {
+            foundCharacters = foundCharacters.trimmingCharacters(in: .newlines)
+            if elementName == "toponymName"{
+                countryInfoItem?.topoName = foundCharacters
+            }
+            if elementName == "name"{
+                countryInfoItem?.name = foundCharacters
+            }
+            if elementName == "lat"{
+                let s = foundCharacters as NSString
+                countryInfoItem?.lat = s.floatValue
+            }
+            if elementName == "lng"{
+                let s = foundCharacters as NSString
+                countryInfoItem?.long = s.floatValue
+            }
+            if elementName == "geonameId"{
+                let s = foundCharacters as NSString
+                countryInfoItem?.geoId = s.intValue
+            }
+            if elementName == "countryCode"{
+                countryInfoItem?.countryCode = foundCharacters
+            }
+            if elementName == "countryName"{
+                countryInfoItem?.countryName = foundCharacters
+            }
+        }
+        foundCharacters = ""
+        
+        
+        /*if let lastElementParsed = loginUserArray.last {
+            if lastElementParsed.username == loginInputs[0] && lastElementParsed.password == loginInputs[1] {
+                print("user confirmed")
+                parser.abortParsing()
+            }
+        }*/
+    }
+    
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        foundCharacters += string
+    }
+    
+    func parserDidEndDocument(_ parser: XMLParser) {
+        /*for item in loginUserArray {
+            print("\(item.username), \(item.password), \(item.StyleSheet), \(item.SectionId)")
+        }*/
+        for counrty in countryInfoArray {
+            print("\(counrty)\n")
+        }
+    }
+    
+    func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
+        print("failure Error: \(parseError)")
+    }
+    
+    
     
 }

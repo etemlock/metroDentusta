@@ -14,13 +14,15 @@ class userInputField : UITextField {
     
     override init(frame: CGRect){
         super.init(frame: frame)
-        self.addTarget(self, action: #selector(doTheThing), for: .editingDidEnd)
+        self.addTarget(self, action: #selector(doTheThing), for: .editingChanged)
+        //self.addTarget(self, action: #selector(doTheOtherThing), for: .editingChanged)
         self.clearButtonMode = .whileEditing
     }
     
     required init(coder aDecoder: NSCoder){
         super.init(coder: aDecoder)!
-        self.addTarget(self, action: #selector(doTheThing), for: .editingDidEnd)
+        self.addTarget(self, action: #selector(doTheThing), for: .editingChanged)
+        //self.addTarget(self, action: #selector(doTheOtherThing), for: .editingChanged)
         self.clearButtonMode = .whileEditing
     }
     
@@ -34,7 +36,7 @@ class userInputField : UITextField {
     }
     
     func doTheThing(){
-        userInputdelegate?.userInputFieldDidEndEditing(userInputField: self)
+        userInputdelegate?.userInputFieldDidChange(userInputField: self)
     }
 }
 
