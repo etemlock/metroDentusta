@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import Alamofire
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    static var xmlStringCache = [String: Data]()
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -52,14 +54,83 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let httpResponse = response as? HTTPURLResponse
                 if let httpStatusCode = httpResponse?.statusCode {
                     print("status code is \(httpStatusCode)")
-                }
+                } 
                 
                 completion(data)
             }
         })
         task.resume()
     }
-
+    
+    func searchDentists(urlstring: String, parameters: dentSearchParams, completion: @escaping (_ error: Error?, _ jsonResults: [[String: Any]]?)->Void){
+        if let myUrl = URL(string: urlstring){
+            /*570 ATLANTIC AVE LAWRENCE NY 11559*/
+            /*let xmlString = "<pposearch type='dentistearch'><parameters network='V190' patientzip='\(parameters.patientzip)' distance='\(parameters.distance)' specialty='\(parameters.specialty)' providername='\(parameters.dentName)' state='\(parameters.state)' county='' displaytype='J' linelist='Y'></parameters><orderby order=''></orderby><inhouse ></inhouse></pposearch>"*/
+ 
+            let xmlString = "<pposearch type='dentistearch'><parameters network='V190' patientzip='570 ATLANTIC AVE LAWRENCE NY 11559' distance='\(parameters.distance)' specialty='\(parameters.specialty)' providername='' state='\(parameters.state)' county='' displaytype='J' linelist='Y'></parameters><orderby order='distance'></orderby><inhouse ></inhouse></pposearch>"
+            var xmlRequest = URLRequest(url: myUrl)
+            xmlRequest.httpBody = xmlString.data(using: .utf8)
+            xmlRequest.httpMethod = "POST"
+            xmlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+           
+            
+            //if the request was made before during this users session
+            if let cachedData = AppDelegate.xmlStringCache[xmlString] {
+                print("this data was cached")
+                do {
+                    if let jsonDict = try JSONSerialization.jsonObject(with: cachedData, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]{
+                        if let results = jsonDict["results"] as? [[String: Any]] {
+                            completion(nil,results)
+                        }
+                    }
+                } catch let error {
+                    print("JSONSerialization Error : \(error)")
+                    completion(error,nil)
+                }
+            } else {
+                //otherwise send out
+                Alamofire.request(xmlRequest).responseData(completionHandler: { (response) in
+                    if response.result.isSuccess {
+                        if let status = response.response?.statusCode {
+                            print("status code is \(status)")
+                        }
+                        if let result = response.result.value {
+                            
+                            AppDelegate.xmlStringCache[xmlString] = result
+                            print("\(AppDelegate.xmlStringCache.count)")
+                            
+                            do {
+                                if let jsonDict = try JSONSerialization.jsonObject(with: result, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]{
+                                    if let results = jsonDict["results"] as? [[String: Any]] {
+                                        completion(nil,results)
+                                        
+                                        /*for result in results {
+                                         let providerInfo = result["providers"]
+                                         print("\(providerInfo)")
+                                         let name = result["practicename"]
+                                         print("\(name)")
+                                         }*/
+                                    }
+                                }
+                            } catch let error {
+                                print("JSONSerialization Error : \(error)")
+                            }
+                            
+                        }
+                    } else {
+                        if response.result.error != nil {
+                            print("Unsuccessful Response Error: \(response.result.error)")
+                        } else {
+                            print("unknown error")
+                        }
+                    }
+                    
+                })
+            }
+        }
+    }
+    
+            
 
 }
 

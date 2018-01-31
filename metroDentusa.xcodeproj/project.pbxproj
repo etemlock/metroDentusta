@@ -7,16 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28F8002F8EAC0FCD5E90ECE0 /* Pods_metroDentusa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C21FF1809A77DC20EB658C9 /* Pods_metroDentusa.framework */; };
 		541709D51FE27BD400DA8027 /* LoginSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D41FE27BD400DA8027 /* LoginSignUpViewController.swift */; };
 		541709D71FE2801B00DA8027 /* RevealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D61FE2801B00DA8027 /* RevealViewController.swift */; };
 		541709D91FE2832500DA8027 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D81FE2832500DA8027 /* Extensions.swift */; };
 		541D59C11FF8B296003ACC73 /* models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541D59C01FF8B296003ACC73 /* models.swift */; };
 		541D59C820024089003ACC73 /* findDentistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541D59C720024089003ACC73 /* findDentistViewController.swift */; };
+		5425FB1C200D7F1C00647A7F /* popUpPickerViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5425FB1B200D7F1C00647A7F /* popUpPickerViewView.swift */; };
 		54327FFE1FE2564500CC4DB4 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54327FFD1FE2564500CC4DB4 /* RootViewController.swift */; };
 		543280081FE26DA200CC4DB4 /* navBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543280071FE26DA200CC4DB4 /* navBarController.swift */; };
 		5456ECAD1FE37AF800C9D6E4 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5456ECAC1FE37AF800C9D6E4 /* SWRevealViewController.m */; };
 		5456ECB21FE4ACA500C9D6E4 /* formTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456ECB11FE4ACA500C9D6E4 /* formTableViewCell.swift */; };
 		5456ECB41FE4CBEE00C9D6E4 /* delegateMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456ECB31FE4CBEE00C9D6E4 /* delegateMethods.swift */; };
+		54A13997201D44F50055FC7C /* dentistInfoTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A13996201D44F50055FC7C /* dentistInfoTableCell.swift */; };
 		54B79E411FE2502E00692E5C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B79E401FE2502E00692E5C /* AppDelegate.swift */; };
 		54B79E461FE2502E00692E5C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 54B79E441FE2502E00692E5C /* Main.storyboard */; };
 		54B79E481FE2502E00692E5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B79E471FE2502E00692E5C /* Assets.xcassets */; };
@@ -44,17 +47,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14E70EF1317782F9BEC6B8C6 /* Pods-metroDentusa.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-metroDentusa.debug.xcconfig"; path = "Pods/Target Support Files/Pods-metroDentusa/Pods-metroDentusa.debug.xcconfig"; sourceTree = "<group>"; };
 		541709D41FE27BD400DA8027 /* LoginSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginSignUpViewController.swift; sourceTree = "<group>"; };
 		541709D61FE2801B00DA8027 /* RevealViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RevealViewController.swift; sourceTree = "<group>"; };
 		541709D81FE2832500DA8027 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		541D59C01FF8B296003ACC73 /* models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = models.swift; path = Models/models.swift; sourceTree = "<group>"; };
 		541D59C720024089003ACC73 /* findDentistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = findDentistViewController.swift; sourceTree = "<group>"; };
+		5425FB1B200D7F1C00647A7F /* popUpPickerViewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = popUpPickerViewView.swift; sourceTree = "<group>"; };
 		54327FFD1FE2564500CC4DB4 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		543280071FE26DA200CC4DB4 /* navBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = navBarController.swift; sourceTree = "<group>"; };
 		5456ECAB1FE37AF800C9D6E4 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWRevealViewController.h; path = "../../SWRevealViewController-master 2/SWRevealViewController/SWRevealViewController.h"; sourceTree = "<group>"; };
 		5456ECAC1FE37AF800C9D6E4 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWRevealViewController.m; path = "../../SWRevealViewController-master 2/SWRevealViewController/SWRevealViewController.m"; sourceTree = "<group>"; };
 		5456ECB11FE4ACA500C9D6E4 /* formTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = formTableViewCell.swift; sourceTree = "<group>"; };
 		5456ECB31FE4CBEE00C9D6E4 /* delegateMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = delegateMethods.swift; sourceTree = "<group>"; };
+		54A13996201D44F50055FC7C /* dentistInfoTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dentistInfoTableCell.swift; sourceTree = "<group>"; };
 		54B79E3D1FE2502E00692E5C /* metroDentusa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = metroDentusa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54B79E401FE2502E00692E5C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54B79E451FE2502E00692E5C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -68,6 +74,8 @@
 		54B79E601FE2502E00692E5C /* metroDentusaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = metroDentusaUITests.swift; sourceTree = "<group>"; };
 		54B79E621FE2502E00692E5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		54D8E5A81FF2393B00CC888B /* retrievePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = retrievePasswordViewController.swift; sourceTree = "<group>"; };
+		7C21FF1809A77DC20EB658C9 /* Pods_metroDentusa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_metroDentusa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB03A35629613006E8F145BC /* Pods-metroDentusa.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-metroDentusa.release.xcconfig"; path = "Pods/Target Support Files/Pods-metroDentusa/Pods-metroDentusa.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28F8002F8EAC0FCD5E90ECE0 /* Pods_metroDentusa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +104,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		482922D1C8A6DB7D1EEBC88A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				14E70EF1317782F9BEC6B8C6 /* Pods-metroDentusa.debug.xcconfig */,
+				BB03A35629613006E8F145BC /* Pods-metroDentusa.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		541D59C21FF8B2C3003ACC73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +125,8 @@
 			isa = PBXGroup;
 			children = (
 				541D59C720024089003ACC73 /* findDentistViewController.swift */,
+				5425FB1B200D7F1C00647A7F /* popUpPickerViewView.swift */,
+				54A13996201D44F50055FC7C /* dentistInfoTableCell.swift */,
 			);
 			name = findDentist;
 			sourceTree = "<group>";
@@ -128,6 +148,8 @@
 				54B79E541FE2502E00692E5C /* metroDentusaTests */,
 				54B79E5F1FE2502E00692E5C /* metroDentusaUITests */,
 				54B79E3E1FE2502E00692E5C /* Products */,
+				482922D1C8A6DB7D1EEBC88A /* Pods */,
+				71373BF2527B2F512139E49B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -190,6 +212,14 @@
 			path = "../../Downloads/SWRevealViewController-master/SWRevealViewController";
 			sourceTree = "<group>";
 		};
+		71373BF2527B2F512139E49B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7C21FF1809A77DC20EB658C9 /* Pods_metroDentusa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -197,9 +227,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 54B79E651FE2502E00692E5C /* Build configuration list for PBXNativeTarget "metroDentusa" */;
 			buildPhases = (
+				E259D67AD88364F5A6BCB634 /* [CP] Check Pods Manifest.lock */,
 				54B79E391FE2502D00692E5C /* Sources */,
 				54B79E3A1FE2502D00692E5C /* Frameworks */,
 				54B79E3B1FE2502D00692E5C /* Resources */,
+				CE0FDD29F9A16CC37B501937 /* [CP] Embed Pods Frameworks */,
+				7EB50279702AE69F6CB5C0E9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -320,6 +353,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		7EB50279702AE69F6CB5C0E9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-metroDentusa/Pods-metroDentusa-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CE0FDD29F9A16CC37B501937 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-metroDentusa/Pods-metroDentusa-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E259D67AD88364F5A6BCB634 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		54B79E391FE2502D00692E5C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -329,10 +410,12 @@
 				5456ECB21FE4ACA500C9D6E4 /* formTableViewCell.swift in Sources */,
 				541709D71FE2801B00DA8027 /* RevealViewController.swift in Sources */,
 				543280081FE26DA200CC4DB4 /* navBarController.swift in Sources */,
+				54A13997201D44F50055FC7C /* dentistInfoTableCell.swift in Sources */,
 				5456ECB41FE4CBEE00C9D6E4 /* delegateMethods.swift in Sources */,
 				541D59C820024089003ACC73 /* findDentistViewController.swift in Sources */,
 				5456ECAD1FE37AF800C9D6E4 /* SWRevealViewController.m in Sources */,
 				54327FFE1FE2564500CC4DB4 /* RootViewController.swift in Sources */,
+				5425FB1C200D7F1C00647A7F /* popUpPickerViewView.swift in Sources */,
 				541709D51FE27BD400DA8027 /* LoginSignUpViewController.swift in Sources */,
 				541709D91FE2832500DA8027 /* Extensions.swift in Sources */,
 				54D8E5A91FF2393B00CC888B /* retrievePasswordViewController.swift in Sources */,
@@ -486,6 +569,7 @@
 		};
 		54B79E661FE2502E00692E5C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 14E70EF1317782F9BEC6B8C6 /* Pods-metroDentusa.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 3ZCB692HH2;
@@ -503,6 +587,7 @@
 		};
 		54B79E671FE2502E00692E5C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BB03A35629613006E8F145BC /* Pods-metroDentusa.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 3ZCB692HH2;

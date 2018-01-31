@@ -24,12 +24,15 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     
     //data and other stuff
     var parser = XMLParser()
-    //var loginUserArray : [LoginMember] = []
+    var loginUserArray : [LoginMember] = []
+    //var tempMember : LoginMember!
     var foundCharacters = ""
-    var countryInfoItem : countryInfo!
-    var countryInfoArray : [countryInfo] = []
-    var countryWantedFound = "Czechia"
-    var countryWantedFoundId = Int32(3077311)
+    
+    
+    //var countryInfoItem : countryInfo!
+    //var countryInfoArray : [countryInfo] = []
+    //var countryWantedFound = "Czechia"
+    //var countryWantedFoundId = Int32(3077311)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,12 +108,12 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
             let isLoginValid = validateLogin()
             if isLoginValid {
                 DispatchQueue.global(qos: .background).async {
-                    AppDelegate().downloadDataFromURL(urlString: "http://api.geonames.org/neighbours?geonameId=2921044&username=etemlock", completion: {
+                    AppDelegate().downloadDataFromURL(urlString: "https://asonet.com/httpserver.ashx?obj=LOGINMEMBER", completion: {
                         (data: Data?) in
                         if data != nil {
+                            print("there was data")
                             self.parser = XMLParser(data: data!)
                             self.parser.delegate = self
-                            self.countryInfoItem = countryInfo(topoName: "", name: "", lat: 0, long: 0, geoId: 0, countryCode: "", countryName: "")
                             let parseDidSucceed = self.parser.parse()
                             DispatchQueue.main.async {
                                 print("\(parseDidSucceed)")
@@ -252,8 +255,9 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     
     /********************************************** xmlParserDelegate functions **************************************/
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-        /*var tempMember = LoginMember(username: "", password: "", StyleSheet: "", SectionId: "")
-        if elementName == "Request"{
+        print("yello!")
+        var tempMember = LoginMember(username: "", password: "", StyleSheet: "", SectionId: "")
+        if elementName == "request"{
             if let type = attributeDict["type"]{
                 if type == "LOGINMEMBER"{
                     if let name = attributeDict["username"]{
@@ -271,13 +275,12 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                 }
             }
         }
-        loginUserArray.append(tempMember)*/
-        
+        loginUserArray.append(tempMember)
     }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
 
-        if elementName == "geoname"{
+        /*if elementName == "geoname"{
             if countryInfoItem?.countryName == countryWantedFound && countryInfoItem?.geoId == countryWantedFoundId {
                 print("found the country!!")
             }
@@ -310,15 +313,16 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                 countryInfoItem?.countryName = foundCharacters
             }
         }
-        foundCharacters = ""
+        foundCharacters = ""*/
         
         
-        /*if let lastElementParsed = loginUserArray.last {
+        if let lastElementParsed = loginUserArray.last {
+            print(lastElementParsed)
             if lastElementParsed.username == loginInputs[0] && lastElementParsed.password == loginInputs[1] {
                 print("user confirmed")
                 parser.abortParsing()
             }
-        }*/
+        }
     }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
@@ -329,9 +333,9 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         /*for item in loginUserArray {
             print("\(item.username), \(item.password), \(item.StyleSheet), \(item.SectionId)")
         }*/
-        for counrty in countryInfoArray {
+        /*for counrty in countryInfoArray {
             print("\(counrty)\n")
-        }
+        }*/
     }
     
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {

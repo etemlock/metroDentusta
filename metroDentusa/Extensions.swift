@@ -20,6 +20,14 @@ extension UIViewController {
         }
     }
     
+    func createTransition(duration: CFTimeInterval, transitionSubType: String){
+        let transition = CATransition()
+        transition.duration = duration
+        transition.type = kCATransitionPush
+        transition.subtype = transitionSubType
+        self.view.window!.layer.add(transition, forKey: kCATransition)
+    }
+    
     func hideKeyBoardWhenTappedAround(){
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -32,6 +40,8 @@ extension UIViewController {
     
     
 }
+
+
 
 extension UIButton {
     func setUpDefaultType(title: String?){
@@ -51,7 +61,7 @@ extension String {
     
 }
 
-extension countryInfo {
+/*extension countryInfo {
     mutating func clear(){
         self.topoName = ""
         self.name = ""
@@ -61,7 +71,7 @@ extension countryInfo {
         self.countryCode = ""
         self.countryName = ""
     }
-}
+}*/
 
 
 

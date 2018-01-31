@@ -14,12 +14,10 @@ struct LoginMember{
     var SectionId: String
 }
 
-struct countryInfo{
-    var topoName : String
-    var name : String
-    var lat : Float
-    var long : Float
-    var geoId : Int32
-    var countryCode : String
-    var countryName: String
+struct dentSearchParams {
+    var patientzip: String
+    var distance: String
+    var specialty: String
+    var state: String
+    var dentName: String
 }

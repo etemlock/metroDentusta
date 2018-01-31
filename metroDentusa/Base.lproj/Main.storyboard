@@ -283,7 +283,6 @@
         <!--Navigation Controller-->
         <scene sceneID="rIf-FW-4eV">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aam-RG-WUq" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="fTj-Rk-Z5J" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6yz-ch-CRZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -293,6 +292,7 @@
                         <segue destination="2vI-kt-TRg" kind="relationship" relationship="rootViewController" id="dVg-C5-usu"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aam-RG-WUq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2407" y="167"/>
         </scene>
@@ -314,30 +314,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="orp-KC-nFg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3237" y="152"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="1pA-n4-SFV">
-            <objects>
-                <viewController id="Rtw-aS-rcE" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="IZw-uE-foo"/>
-                        <viewControllerLayoutGuide type="bottom" id="sXG-gq-LLw"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="NMo-gq-XIX">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hac-Zs-nYL">
-                                <rect key="frame" x="0.0" y="393" width="375" height="274"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </scrollView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3XF-HL-YS9" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4164" y="-113.79310344827587"/>
         </scene>
         <!--Login Sign Up View Controller-->
         <scene sceneID="RIK-2w-chR">
