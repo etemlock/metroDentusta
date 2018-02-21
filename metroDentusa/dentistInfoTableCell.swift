@@ -9,14 +9,15 @@
 import Foundation
 
 class dentistInfoTableCell : UITableViewCell {
-    var dentistNameLabel : UILabel!
-    var addressLabel1 = UILabel(frame: CGRect(x: 8, y: 29, width: 175, height: 20))
-    var addressLabel2 = UILabel(frame: CGRect(x: 8, y: 50, width: 220, height: 20))
-    var phoneNumLabel = UILabel(frame: CGRect(x: 8, y: 71, width: 120, height: 20))
-    var handicapAccLabel = UILabel(frame: CGRect(x: 8, y: 92, width: 155, height: 20))
-    var credentialLabel : UILabel!
-    var distanceLabel = UILabel(frame: CGRect(x: 242, y: 150, width: 125, height: 20))
+    var dentistNameLabel = UILabel(frame: CGRect(x: 8, y: 8, width: 260, height: 50))
+    var addressLabel1 = UILabel(frame: CGRect(x: 8, y: 62, width: 220, height: 17))
+    var addressLabel2 = UILabel(frame: CGRect(x: 8, y: 83, width: 220, height: 17))
+    var specialtiesLabel = UILabel(frame: CGRect(x: 8, y: 104, width: 236, height: 20))
+    var distanceLabel = UILabel(frame: CGRect(x: 247, y: 104, width: 120, height: 20))
+    var officeProfile = UIButton(frame: CGRect(x: 268, y: 35, width: 100, height: 40))
 
+    var setRowdelegate : setRowDelegate?
+    var row: Int?
     
     
     override init (style: UITableViewCellStyle, reuseIdentifier: String?){
@@ -29,33 +30,40 @@ class dentistInfoTableCell : UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
+    
     func setUpLabels(){
-        credentialLabel = UILabel(frame: CGRect(x: 8, y: 110, width: self.frame.width-16, height: 40))
-        credentialLabel.numberOfLines = 2
+        
         distanceLabel.textColor = RootViewController.themeColor
-        self.contentView.addSubview(credentialLabel)
+        distanceLabel.textAlignment = .right
         self.contentView.addSubview(addressLabel1)
         self.contentView.addSubview(addressLabel2)
-        self.contentView.addSubview(phoneNumLabel)
-        self.contentView.addSubview(handicapAccLabel)
-        self.contentView.addSubview(credentialLabel)
+        self.contentView.addSubview(specialtiesLabel)
         self.contentView.addSubview(distanceLabel)
         
         for case let label as UILabel in self.contentView.subviews {
             label.font = label.font.withSize(15)
         }
         
-        dentistNameLabel = UILabel(frame: CGRect(x: 8, y: 8, width: self.frame.width-16, height: 20))
+        dentistNameLabel.numberOfLines = 2
+        //dentistNameLabel.tex
         self.contentView.addSubview(dentistNameLabel)
     }
     
     func setUpButtons(){
-        let officeProfile = UIButton(frame: CGRect(x: 247, y: 30, width: 120, height: 40))
         officeProfile.setUpDefaultType(title: "Office Profile")
+        officeProfile.titleLabel?.font = officeProfile.titleLabel?.font.withSize(15)
+        //officeProfile.addTarget(self, action: #selector(setRowTrigger), for: .touchUpInside)
         self.contentView.addSubview(officeProfile)
     }
+    
+    func setRowTrigger(){
+        setRowdelegate?.setRow(row: self.row!)
+    }
+    
+
 }

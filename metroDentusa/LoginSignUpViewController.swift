@@ -9,7 +9,7 @@
 import Foundation
 
 
-class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, userInputFieldDelegate, XMLParserDelegate {
+class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, userInputFieldDelegate , XMLParserDelegate {
     
     //views and subviews
     private var segmentIndexFlag = 0
@@ -22,13 +22,14 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     let segmentController : UISegmentedControl = UISegmentedControl(items: ["Login", "Create Username"])
     
     
-    //data and other stuff
+    //********** XMLParser testing related stuff **********/
     var parser = XMLParser()
-    var loginUserArray : [LoginMember] = []
+    var statusSuccess : Bool = false
+    var tempUser : member?
+    var foundcharacters = ""
+    //var loginUserArray : [LoginMember] = []
     //var tempMember : LoginMember!
-    var foundCharacters = ""
-    
-    
+    //var foundCharacters = ""
     //var countryInfoItem : countryInfo!
     //var countryInfoArray : [countryInfo] = []
     //var countryWantedFound = "Czechia"
@@ -103,20 +104,44 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         }
     }
     
+    /*****************************************UIButton functions***********************************/
+    
     func continueClick(){
         if segmentIndexFlag == 0{
             let isLoginValid = validateLogin()
             if isLoginValid {
                 DispatchQueue.global(qos: .background).async {
-                    AppDelegate().downloadDataFromURL(urlString: "https://asonet.com/httpserver.ashx?obj=LOGINMEMBER", completion: {
-                        (data: Data?) in
+                    AppDelegate().makeHTTPPOSTRequestToGetUser(urlstring: "https://edi.asonet.com/httpserver.ashx?obj=LOGINMEMBER", loginInputs: self.loginInputs, completion: {
+                        (error: Error?, data: Data?) in
                         if data != nil {
                             print("there was data")
-                            self.parser = XMLParser(data: data!)
-                            self.parser.delegate = self
-                            let parseDidSucceed = self.parser.parse()
+                            if let dataString = String(data: data!, encoding: .utf8){
+                                let start = dataString.startIndex
+                                let end = dataString.index(start, offsetBy: 7)
+                                let range1 = Range(uncheckedBounds: (start, end))
+                                let range2 = Range(uncheckedBounds: (end,dataString.endIndex))
+                                let parseString = dataString[range1] + " status" + dataString[range2]
+                                print("\(parseString)")
+                                let newData = parseString.data(using: .utf8)
+                                self.parser = XMLParser(data: newData!)
+                                self.parser.delegate = self
+                                let parseDidSucceed = self.parser.parse()
+                                DispatchQueue.main.async {
+                                    print("\(parseDidSucceed)")
+                                    if self.statusSuccess && self.tempUser != nil {
+                                        let nextVC = welcomeUserViewController()
+                                        let backItem = UIBarButtonItem()
+                                        backItem.title = "Back"
+                                        self.navigationItem.backBarButtonItem = backItem
+                                        self.navigationController?.pushViewController(nextVC, animated: true)
+                                    } else {
+                                        self.promptAlertWithDelay("Error logging in", inmessage: "Username or password incorrect. Please try a different combination", indelay: 5.0)
+                                    }
+                                }
+                            }
+                        } else {
                             DispatchQueue.main.async {
-                                print("\(parseDidSucceed)")
+                                self.promptAlertWithDelay("Error logging in", inmessage: "Could not access data from www.asonet.com. We apologize for the inconvenience", indelay: 5.0)
                             }
                         }
                     })
@@ -255,27 +280,18 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     
     /********************************************** xmlParserDelegate functions **************************************/
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-        print("yello!")
-        var tempMember = LoginMember(username: "", password: "", StyleSheet: "", SectionId: "")
-        if elementName == "request"{
-            if let type = attributeDict["type"]{
-                if type == "LOGINMEMBER"{
-                    if let name = attributeDict["username"]{
-                        tempMember.username = name
-                    }
-                    if let pass = attributeDict["password"]{
-                        tempMember.password = pass
-                    }
-                    if let style = attributeDict["StyleSheet"]{
-                        tempMember.StyleSheet = style
-                    }
-                    if let id = attributeDict["SectionId"]{
-                        tempMember.SectionId = id
-                    }
+        if elementName == "status"{
+            if let status = attributeDict["status"]{
+                if status == "SUCCESSFUL" {
+                    statusSuccess = true
+                } else {
+                    statusSuccess = false
                 }
             }
+            if let id = attributeDict["memberid"]{
+                tempUser = member(id: id, usrname: loginInputs[0], pssword: loginInputs[1], ssId: "")
+            }
         }
-        loginUserArray.append(tempMember)
     }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
@@ -312,21 +328,15 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
             if elementName == "countryName"{
                 countryInfoItem?.countryName = foundCharacters
             }
-        }
-        foundCharacters = ""*/
+        }*/
+        self.foundcharacters = ""
         
         
-        if let lastElementParsed = loginUserArray.last {
-            print(lastElementParsed)
-            if lastElementParsed.username == loginInputs[0] && lastElementParsed.password == loginInputs[1] {
-                print("user confirmed")
-                parser.abortParsing()
-            }
-        }
     }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        foundCharacters += string
+        self.foundcharacters += string
+        print("\(self.foundcharacters)")
     }
     
     func parserDidEndDocument(_ parser: XMLParser) {
@@ -336,6 +346,10 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         /*for counrty in countryInfoArray {
             print("\(counrty)\n")
         }*/
+        if tempUser != nil {
+            expUser.setCurrUser(toSetModel: tempUser!)
+        }
+        print("\(expUser.getCurrUser())")
     }
     
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {

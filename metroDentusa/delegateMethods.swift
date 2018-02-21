@@ -13,3 +13,7 @@ protocol userInputFieldDelegate {
     
     //func userInputFieldDidChange(userInputField: userInputField)
 }
+
+protocol setRowDelegate {
+    func setRow(row: Int)
+}

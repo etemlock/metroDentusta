@@ -9,22 +9,34 @@
 import Foundation
 import MapKit
 
-class findDentistViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, XMLParserDelegate {
+/***
+ Contents:
+ 1. Functions to set up view
+ 2. Tableview delegate functions
+ 3. Function trigger by buttons
+ 4. Pickerview delegate and pickerview related functions
+ 5. scrollView delegate functions
+ 6. xmlParser delegate functions
+ **/
+
+class findDentistViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UISearchBarDelegate, XMLParserDelegate, setRowDelegate {
 
     var menuButton : UIBarButtonItem!
     //var mapView  = MKMapView(frame: CGRect(x: 0, y: 105, width: 375, height: 325))
     var scrollView : UIScrollView!
     var tableView: UITableView!
+    
     var divider : UIView!
+    var resultsCountLabel : UILabel!
     var rollTableViewButton : UIButton!
-    var heightOfTable: CGFloat!
     var addressTextField = UITextField(frame: CGRect(x: 8, y: 31, width: 360, height: 30))
     var dentistNameTextField = UITextField(frame: CGRect(x: 8, y: 276, width: 360, height: 30))
     var newPickerPop : popUpPickerViewView!
     var tableRolledDown : Bool = true
     
     //instead of a pickerView here, perhaps open a window from the bottom.
-    
+    var numResults = 0
+    var providerModelArray : [providerModel] = []
     var dentistPickerTrigger = UIButton()
     var distancePickerTrigger = UIButton()
     var statePickerTrigger = UIButton()
@@ -58,14 +70,13 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         self.hideKeyBoardWhenTappedAround()
         menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
         self.navigationItem.leftBarButtonItem = menuButton
-        self.navigationItem.title = "ASO Benifit Plan"
+        self.navigationItem.title = "Find Your Dentist"
         if self.revealViewController() != nil {
             menuButton.target = self.revealViewController()
             menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         //centerMapView(pos: nil, regionRadius: 16000)
-        heightOfTable = self.view.frame.height
         setUpScrollView()
         setUpSearchFields()
         setUpNonTriggerButtons()
@@ -142,7 +153,7 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
     func setUpScrollView(){
         scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
         scrollView.backgroundColor = UIColor.clear
-        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: heightOfTable)
+        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.height)
         scrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         scrollView.alwaysBounceVertical = false
         scrollView.bounces = false
@@ -151,6 +162,7 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
     
     
     func setUpTableView(){
+        //divider with roll up button
         divider = UIView(frame: CGRect(x: 0, y: 386, width: scrollView.frame.size.width, height: 30))
         divider.backgroundColor = UIColor(red: 206/255, green: 205/255, blue: 212/255, alpha: 1)
         rollTableViewButton = UIButton(frame: CGRect(x: 167, y: 0, width: 20, height: 30))
@@ -158,15 +170,23 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         rollTableViewButton.setTitleColor(UIColor(red: 60/255, green: 136/255, blue: 255/255, alpha: 1), for: .normal)
         rollTableViewButton.addTarget(self, action: #selector(rollUpTable), for: .touchUpInside)
         divider.addSubview(rollTableViewButton)
-        
         scrollView.addSubview(divider)
+        
+        //tableView
         tableView = UITableView(frame: CGRect(x: 0, y: 416, width: scrollView.frame.size.width, height: scrollView.frame.size.height-416))
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "headingCell")
         tableView.register(dentistInfoTableCell.self, forCellReuseIdentifier: "infoCell")
         tableView.alwaysBounceVertical = false
         tableView.tableFooterView = UIView()
         scrollView.addSubview(tableView)
+        
+        //the label that is to be added later to a dequed headerCell
+        resultsCountLabel = UILabel(frame: CGRect(x: tableView.center.x - 130, y: 5, width: 260, height: 20))
+        resultsCountLabel.font = resultsCountLabel.font.withSize(15)
+        resultsCountLabel.textAlignment = .center
+        resultsCountLabel.textColor = UIColor.darkGray
     }
     
     func setUpNonTriggerButtons(){
@@ -176,35 +196,8 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         scrollView.addSubview(findDentistButton)
     }
     
-    func findDentists(){
-        print("clicked findDentist!")
-        dismissPopUpPicker()
-        let params = setUpSearchParams()
-        DispatchQueue.global(qos: .background).async {
-            let start = DispatchTime.now()
-            AppDelegate().searchDentists(urlstring: "https://www.asonet.com/httpserver.ashx?obj=getPPOjson", parameters: params, completion: {
-                (error: Error?, jsonResult: [[String: Any]]?) in
     
-                if jsonResult != nil {
-                    print("\(jsonResult)")
-                    /*for result in jsonResult! {
-                        let providerInfo = result["practicename"]
-                        let state = result["state"]
-                        print("\(state),\(providerInfo)")
-                    }*/
-                    let end = DispatchTime.now()
-                    let nanotime = end.uptimeNanoseconds - start.uptimeNanoseconds
-                    let timeInterval = Double(nanotime)/1000000000
-                    print("time to complete is \(timeInterval)")
-                }
-                DispatchQueue.main.async {
-                    print("done\n\n\n\n")
-                }
-            })
-        }
-    }
-    
-    /*This function basically finds the appropriate values to set to strings"*/
+    /*This function basically finds the appropriate values to set to query string"*/
     func setUpSearchParams() -> dentSearchParams {
         var currType = ""
         var currDistance = ""
@@ -214,8 +207,18 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         switch selectedDentistType {
             case 1:
                 currType = "GP"
+            case 2:
+                currType = "PER"
+            case 3:
+                currType = "END"
+            case 4:
+                currType = "ORT"
             case 5:
                 currType = "ORS"
+            case 6:
+                currType = "PRO"
+            case 7:
+                currType = "PED"
             default:
                 break
         }
@@ -271,48 +274,175 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
     }
     
     
-    /********************************** tableView functions ***************************************/
-   
+    
+    /************************************ tableView functions ***************************************/
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if section == 0 {
+            return 1
+        }
+        return numResults
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell", for: indexPath) as! dentistInfoTableCell
-        cell.dentistNameLabel.text = "DR ANA SCOPU"
-        cell.addressLabel1.text = "62-22 Myrtle Ave "
-        cell.addressLabel2.text = "Glendale , NY 11385"
-        cell.phoneNumLabel.text = "718-821-7432"
-        cell.handicapAccLabel.text = "Handicap Access: Yes"
-        cell.credentialLabel.text = "ANA SCOPU - NYU (2007) - General Dentistry"
-        cell.distanceLabel.text = "(0.16 miles) away"
-        return cell
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "headingCell", for: indexPath)
+            cell.contentView.addSubview(resultsCountLabel)
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell", for: indexPath) as! dentistInfoTableCell
+            cell.row = indexPath.row
+            cell.setRowdelegate = self
+            let providerForCell = providerModelArray[indexPath.row]
+            cell.dentistNameLabel.text = providerForCell.instName
+            cell.addressLabel1.text = providerForCell.address
+            cell.addressLabel2.text = providerForCell.city + ", " + providerForCell.stateZip
+            cell.specialtiesLabel.text = ""
+            cell.officeProfile.addTarget(self, action: #selector(loadProviderProfile), for: .touchUpInside)
+            cell.officeProfile.addTarget(cell, action: #selector(cell.setRowTrigger), for: .touchUpInside)
+            var specialties : [String] = []
+            for doctor in providerForCell.doctors {
+                if specialties.count == 0 {
+                    cell.specialtiesLabel.text = doctor.specialty
+                    specialties.append(doctor.specialty)
+                } else if !specialties.contains(doctor.specialty) {
+                    cell.specialtiesLabel.text = cell.specialtiesLabel.text! + ", \(doctor.specialty)"
+                    specialties.append(doctor.specialty)
+                }
+            }
+            //cell.phoneNumLabel.text = providerForCell.telephone
+            //cell.handicapAccLabel.text = "Handicap Access: \(providerForCell.handicapAccess)"
+            /*cell.credentialLabel.text = ""
+            for doctor in providerForCell.doctors {
+                if doctor.school != "" {
+                    cell.credentialLabel.text = cell.credentialLabel.text! + "\(doctor.name.uppercased()) - \(doctor.school) (\(doctor.graduationDate)) - \(doctor.specialty)\n"
+                } else {
+                    cell.credentialLabel.text = cell.credentialLabel.text! + "\(doctor.name.uppercased()) - \(doctor.specialty)\n"
+                }
+            }*/
+            cell.distanceLabel.text = "\(providerForCell.distance) miles away"
+            return cell
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        heightOfTable = heightOfTable + tableView.rowHeight
-        return 180
+        if indexPath.section == 0 {
+            return 30
+        }
+        return 130
+    }
+    
+    /****************************************** UIButton functions *************************************/
+    
+    func findDentists(){
+        print("clicked findDentist!")
+        dismissPopUpPicker()
+        let params = setUpSearchParams()
+        DispatchQueue.global(qos: .background).async {
+            let start = DispatchTime.now()
+            AppDelegate().makeHTTPPostRequestToSearchDentists(urlstring: "https://www.asonet.com/httpserver.ashx?obj=getPPOjson", parameters: params, completion: {
+                (error: Error?, jsonResult: [[String: Any]]?) in
+                
+                if jsonResult != nil {
+                    self.numResults = (jsonResult?.count)!
+                    self.providerModelArray.removeAll()
+                    
+                    //print("\(jsonResult!)")
+                    for result in jsonResult! {
+                        var newProvider = providerModel(instName: "", provName: "", languages: "", address: "", city: "", stateZip: "", lat: -1, long: -1, distance: -1, telephone: "", hours: "", handicapAccess: "", webAddress: "", doctors: [])
+                        
+                        
+                        newProvider.instName = String(describing: (result["practicename"])!)
+                        newProvider.provName = String(describing: (result["uftpracticename"])!)
+                        newProvider.languages = String(describing: (result["languages"])!)
+                        newProvider.address = String(describing: (result["address"])!) + String(describing: (result["address2"])!)
+                        newProvider.city = String(describing: (result["city"])!)
+                        newProvider.stateZip = String(describing: (result["state"])!) + " " + String(describing: (result["zip"])!)
+                        if let latitude = Double(String(describing: (result["lattitude"])!)){
+                            newProvider.lat = latitude
+                        }
+                        if let longitude = Double(String(describing: (result["longitude"])!)){
+                            newProvider.long = longitude
+                        }
+                        if let distance = Double(String(describing: (result["distance"])!)){
+                            newProvider.distance = distance
+                        }
+                        newProvider.telephone = String(describing: (result["telephone"])!)
+                        newProvider.hours = String(describing: (result["eveninghours"])!) + " " + String(describing: (result["weekendhours"])!)
+                        newProvider.handicapAccess = String(describing: (result["handicapaccess"])!).uppercased()
+                        if newProvider.handicapAccess != "YES" {
+                            newProvider.handicapAccess = "NO"
+                        }
+                        newProvider.webAddress = String(describing: (result["webaddress"])!)
+                        if let providerInfoArray = result["providers"] as? [[String:Any]] {
+                            for providerInfo in providerInfoArray {
+                                var doctor : (name: String, specialty: String, school: String, graduationDate: String) = ("","","","")
+                                doctor.name = String(describing: (providerInfo["providerfirstname"])!) + " " + String(describing: (providerInfo["providerlastname"])!)
+                                doctor.specialty = String(describing: (providerInfo["specialtydescription"])!)
+                                doctor.school = String(describing: (providerInfo["providerschool"])!)
+                                doctor.graduationDate = String(describing: (providerInfo["provideryeargraduated"])!)
+                                newProvider.doctors.append(doctor)
+                            }
+                        }
+                        self.providerModelArray.append(newProvider)
+                    }
+                } else {
+                    self.numResults = 0
+                }
+                self.resultsCountLabel.text = String(self.numResults) + " providers matched your search"
+                self.rollUpTable()
+                self.tableView.reloadData()
+                
+                let end = DispatchTime.now()
+                let nanotime = end.uptimeNanoseconds - start.uptimeNanoseconds
+                let timeInterval = Double(nanotime)/1000000000
+                print("time to complete is \(timeInterval)")
+                
+                DispatchQueue.main.async {
+                    print("done\n\n\n")
+                }
+            })
+        }
     }
     
     func rollUpTable(){
         if tableRolledDown {
             UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveLinear, animations: {
-                self.divider.frame.origin.y = 71
-                self.tableView.frame.origin.y = 101
-                self.tableView.frame.size.height = self.scrollView.frame.height - 101
+                self.divider.frame.origin.y = 61
+                self.tableView.frame.origin.y = 91
+                self.tableView.frame.size.height = self.scrollView.frame.height - 91
                 self.rollTableViewButton.setTitle("\u{25BC}", for: .normal)
                 self.tableRolledDown = false
             }, completion: nil)
         } else {
             UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveLinear, animations: {
                 self.divider.frame.origin.y = 386
+                //self.divider2.frame.origin.y = 416
                 self.tableView.frame.origin.y = 416
-                self.tableView.frame.size.height = self.scrollView.frame.height - 416
+                self.tableView.frame.size.height = self.scrollView.frame.height - 426
                 self.rollTableViewButton.setTitle("\u{25B2}", for: .normal)
                 self.tableRolledDown = true
             }, completion: nil)
         }
+    }
+    
+    
+    
+    func loadProviderProfile(sender: UIButton){
+        
+        let nextVC = providerProfileViewController()
+        let backItem = UIBarButtonItem()
+        backItem.title = "Back"
+        navigationItem.backBarButtonItem = backItem
+        self.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func setRow(row: Int) {
+        expProvider.setSingleton(toSetModel: providerModelArray[row])
     }
     
     /************************************** pickerView functions **********************************/
@@ -402,6 +532,7 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
             break
         }
     }
+    
     
     /***************************************** xmlParserDelegate functions **************************/
    /* func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {

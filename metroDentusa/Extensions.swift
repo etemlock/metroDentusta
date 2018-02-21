@@ -59,6 +59,27 @@ extension String {
         return predicate.evaluate(with: self)
     }
     
+    func seperateNumbers() -> String {
+        var trimmedString = ""
+        let digitRegex = "^[0-9]$"
+        for index in self.characters.indices {
+            let char = String(self[index])
+            if char.validatePredicate(regex: digitRegex){
+                trimmedString += char
+            }
+        }
+        return trimmedString
+    }
+    
+    func estimateFrameForText(maxWidth: CGFloat, maxHeight: CGFloat, font: CGFloat?) -> CGRect {
+        let size = CGSize(width: maxWidth, height: maxHeight)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        if font != nil {
+            return NSString(string: self).boundingRect(with: size, options: options, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: font!)], context: nil)
+        }
+        return NSString(string: self).boundingRect(with: size, options: options, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 15.0)], context: nil)
+        
+    }
 }
 
 /*extension countryInfo {

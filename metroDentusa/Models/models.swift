@@ -6,12 +6,46 @@
 //  Copyright © 2017 ASO. All rights reserved.
 //
 
-
-struct LoginMember{
-    var username : String
-    var password : String
-    var StyleSheet : String
-    var SectionId: String
+struct member{
+    private var Id: String
+    private var username: String
+    private var password: String
+    private var sessionId: String
+    
+    init(id: String, usrname: String, pssword: String, ssId: String){
+        Id = id
+        username = usrname
+        password = pssword
+        sessionId = ssId
+    }
+    
+    mutating func setSessionId(ssId: String){
+        sessionId = ssId
+    }
+    
+    mutating func setUsername(name: String){
+        username = name
+    }
+    
+    mutating func setPassword(pass: String){
+        password = pass
+    }
+    
+    func getId() -> String {
+        return Id
+    }
+    
+    func getSessionId() -> String {
+        return sessionId
+    }
+    
+    func getUsername() -> String {
+        return username
+    }
+    
+    func getPassword() -> String {
+        return password
+    }
 }
 
 struct dentSearchParams {
@@ -20,4 +54,44 @@ struct dentSearchParams {
     var specialty: String
     var state: String
     var dentName: String
+}
+
+struct providerModel {
+    var instName: String
+    var provName: String
+    var languages: String
+    var address: String
+    var city: String
+    var stateZip: String
+    var lat: Double
+    var long: Double
+    var distance: Double
+    var telephone: String
+    var hours: String
+    var handicapAccess: String
+    var webAddress: String
+    var doctors : [(name: String, specialty: String, school: String, graduationDate: String)]
+}
+
+struct expProvider {
+    static private var singleton = providerModel(instName: "", provName: "", languages: "", address: "", city: "", stateZip: "", lat: -1, long: -1, distance: -1, telephone: "", hours: "", handicapAccess: "", webAddress: "", doctors: [])
+    static func getSingleton() -> providerModel {
+        return singleton 
+    }
+    
+    static func setSingleton(toSetModel: providerModel){
+        singleton = toSetModel
+    }
+}
+
+struct expUser {
+    static private var currUser : member?
+    
+    static func getCurrUser() -> member? {
+        return currUser
+    }
+    
+    static func setCurrUser(toSetModel: member){
+        currUser = toSetModel
+    }
 }
