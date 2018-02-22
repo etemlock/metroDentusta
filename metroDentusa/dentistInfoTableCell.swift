@@ -38,7 +38,7 @@ class dentistInfoTableCell : UITableViewCell {
     
     func setUpLabels(){
         
-        distanceLabel.textColor = RootViewController.themeColor
+        distanceLabel.textColor = LoginSignUpViewController.themeColor
         distanceLabel.textAlignment = .right
         self.contentView.addSubview(addressLabel1)
         self.contentView.addSubview(addressLabel2)

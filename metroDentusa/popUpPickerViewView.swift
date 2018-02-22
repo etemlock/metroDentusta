@@ -28,7 +28,7 @@ class popUpPickerViewView : UIView {
     
     private func setUpViews(){
         barView = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 30))
-        barView.backgroundColor = RootViewController.themeColor
+        barView.backgroundColor = LoginSignUpViewController.themeColor
         barLabel = UILabel(frame: CGRect(x: barView.center.x - 100, y: 5, width: 200, height: 20))
         barLabel.textAlignment = .center
         barLabel.textColor = UIColor.white

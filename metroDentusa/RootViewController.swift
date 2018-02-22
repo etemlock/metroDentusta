@@ -6,6 +6,9 @@
 //  Copyright © 2017 ASO. All rights reserved.
 //
 
+
+/****** Depracated ****/
+
 import UIKit
 
 class RootViewController : UIViewController {
@@ -62,13 +65,6 @@ class RootViewController : UIViewController {
         self.view.addSubview(otherLabel)
         self.view.bringSubview(toFront: otherLabel)
         
-        /*let WelcomeLabel = UILabel(frame: CGRect(x: 87, y: 350, width: 200, height: 50))
-        WelcomeLabel.font = WelcomeLabel.font.withSize(22)
-        WelcomeLabel.textColor = RootViewController.themeColor
-        WelcomeLabel.text = "Welcome!"
-        WelcomeLabel.textAlignment = NSTextAlignment.center
-        WelcomeLabel.layer.borderColor = RootViewController.themeColor.cgColor
-        self.view.addSubview(WelcomeLabel)*/
     }
     
 }

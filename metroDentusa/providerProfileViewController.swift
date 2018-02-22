@@ -67,7 +67,7 @@ class providerProfileViewController : UIViewController {
        instTitle.text = providerInfo.instName
        instTitle.textAlignment = .center
        instTitle.font = instTitle.font.withSize(19)
-       instTitle.textColor = RootViewController.themeColor
+       instTitle.textColor = LoginSignUpViewController.themeColor
         
        let addStr = "\(providerInfo.address) \(providerInfo.city), \(providerInfo.stateZip)"
        let estRect2 = addStr.estimateFrameForText(maxWidth: 359, maxHeight: 40, font: 15)

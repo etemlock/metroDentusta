@@ -84,7 +84,7 @@ struct expProvider {
     }
 }
 
-struct expUser {
+/*struct expUser {
     static private var currUser : member?
     
     static func getCurrUser() -> member? {
@@ -94,4 +94,4 @@ struct expUser {
     static func setCurrUser(toSetModel: member){
         currUser = toSetModel
     }
-}
+}*/

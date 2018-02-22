@@ -8,19 +8,103 @@
 
 import Foundation
 
+class BenefitCardView: UIView {
+    private var user: member!
+    private var session: URLSession!
+    var innerView: UIView!
+    private var CardFrame = CGRect(x: 8, y: 110, width: 359, height: 458)
+    var dismissButton : UIButton!
+
+    init(user: member, session: URLSession){
+        super.init(frame: CardFrame)
+        self.user = user
+        self.session = session
+        self.backgroundColor = UIColor(red: 238/255, green: 236/255, blue: 246/255, alpha: 1)
+        self.backgroundColor?.withAlphaComponent(0.5)
+        setUpInnerView()
+    }
+    
+    required init?(coder aDecoder: NSCoder){
+        super.init(coder: aDecoder)!
+    }
+    
+    func setUpInnerView(){
+        innerView = UIView(frame: CGRect(x: 4, y: 4, width: 351, height: 450))
+        innerView.backgroundColor = UIColor.white
+        
+        let header = UILabel(frame: CGRect(x: 8, y: 8, width: 220, height: 50))
+        header.font = UIFont.boldSystemFont(ofSize: 19)
+        header.numberOfLines = 2
+        header.text = "ASO MEMBER BENEFIT PLAN"
+        
+        let logo = UIImageView(frame: CGRect(x: 230, y: 8, width: 113, height: 50))
+        logo.image = UIImage(named: "Logo Icon")
+        logo.contentMode = .scaleAspectFit
+        
+        let divider = UIView(frame: CGRect(x: 0, y: header.frame.maxY+5, width: innerView.frame.width, height: 5))
+        divider.backgroundColor = LoginSignUpViewController.themeColor
+        
+        let nameLabel = UILabel(frame: CGRect(x: 8, y: divider.frame.maxY + 5, width: 150, height: 20))
+        nameLabel.text = user.getUsername()
+        
+        let groupLabel = UILabel(frame: CGRect(x: innerView.frame.maxX - 108, y: divider.frame.maxY + 5, width: 100, height: 20))
+        groupLabel.text = "Group: #V190"
+        
+        let idLabel = UILabel(frame: CGRect(x: 8, y: nameLabel.frame.maxY + 5, width: 150, height: 20))
+        idLabel.text = "ID#:\(user.getId())"
+        
+        let activeLabel = UILabel(frame: CGRect(x: innerView.frame.maxX - 108, y: groupLabel.frame.maxY + 5, width: 100, height: 20))
+        activeLabel.text = "Level: ACTIVE"
+        
+        dismissButton = UIButton(frame: CGRect(x: self.center.x - 50 , y: idLabel.frame.maxY + 10, width: 100, height: 40))
+        dismissButton.setUpDefaultType(title: "Dismiss")
+        
+        let disclaimer = UILabel(frame: CGRect(x: 8, y: 208, width: innerView.frame.width-16, height: 230))
+        disclaimer.text = "You may receive care from any licensed dentist.\n\nThis plan is subject to maximums and frequency limitations. You are responsible to your dentist for all amounts not covered by the Plan.\n\nYour plan is subject to certain limitations and exclusions. Predeterminations are recommended in order to verify coverage for major work including surgical, periodontal, orthodontia, bridges and implants.\n\nClaim forms should be submitted within 30 days of treatment to:\n\n \tElectronic Claims: Payer ID# CX076\n\tpaper Claims: ASO, PO Box 9005, Lynbrook, NY 11559"
+        disclaimer.numberOfLines = 16
+        disclaimer.font = disclaimer.font.withSize(12)
+        //dismissButton.addTarget(self, action: #selector(hideBenefitCard), for: .touchUpInside)
+        
+        innerView.addSubview(header)
+        innerView.addSubview(logo)
+        innerView.addSubview(divider)
+        innerView.addSubview(nameLabel)
+        innerView.addSubview(groupLabel)
+        innerView.addSubview(idLabel)
+        innerView.addSubview(activeLabel)
+        innerView.addSubview(dismissButton)
+        
+        for case let label as UILabel in innerView.subviews {
+            label.font = label.font.withSize(15)
+        }
+        
+        innerView.addSubview(disclaimer)
+        
+        self.addSubview(innerView)
+    }
+    
+}
+
 
 class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, userInputFieldDelegate , XMLParserDelegate {
     
+
+
     //views and subviews
+    var scrollView : UIScrollView!
     private var segmentIndexFlag = 0
+    static var themeColor = UIColor(red: 26/255, green: 122/255, blue: 1, alpha: 1)
+    var logoView : UIImageView!
+    var homePic: UIImageView!
+    var menuButton : UIBarButtonItem!
+    var subPicLabel: UILabel!
     var loginInputs : [String] = ["",""]
     var createInputs : [String] = ["","",""]
-    var menuButton : UIBarButtonItem!
     var formTableView : UITableView!
-    let continueButton  = UIButton(frame: CGRect(x: 92, y: 395, width: 190, height: 44))
-    let forgotPasswordBtn = UIButton(frame: CGRect(x: 25, y: 460, width: 320, height: 44))
+    var continueButton : UIButton!
+    var forgotPasswordBtn : UIButton!
     let segmentController : UISegmentedControl = UISegmentedControl(items: ["Login", "Create Username"])
-    
+    var benefitCard: BenefitCardView?
     
     //********** XMLParser testing related stuff **********/
     var parser = XMLParser()
@@ -40,12 +124,15 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         self.hideKeyBoardWhenTappedAround()
         menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
         self.navigationItem.leftBarButtonItem = menuButton
-        self.navigationItem.title = "Sign Up or Login!"
+        self.navigationItem.title = "Welcome to ASO Data Services!"
         if self.revealViewController() != nil {
             menuButton.target = self.revealViewController()
             menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
+        setUpScrollView()
+        setUpImages()
+        setUpLabel()
         setUpSegmentController()
         setUpTableView()
         setUpButtons()
@@ -55,32 +142,79 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         super.didReceiveMemoryWarning()
     }
     
+    func setUpScrollView(){
+        scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+        scrollView.backgroundColor = UIColor.clear
+        scrollView.contentSize = CGSize(width: self.view.frame.width, height: 800)
+        scrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        scrollView.alwaysBounceVertical = false
+        scrollView.bounces = false
+        self.view.addSubview(scrollView)
+    }
+    
+    func setUpImages(){
+        logoView = UIImageView(frame: CGRect(x: scrollView.center.x - 70, y: 15, width: 140, height: 40))
+        logoView.image = UIImage(named: "Logo Icon")
+        logoView.contentMode = .scaleAspectFit
+        
+        homePic = UIImageView(frame: CGRect(x: 0, y: logoView.frame.maxY + 25, width: scrollView.frame.width, height: 200))
+        homePic.image = UIImage(named: "HomePic")
+        homePic.contentMode = .scaleAspectFill
+        
+        scrollView.addSubview(logoView)
+        scrollView.addSubview(homePic)
+    }
+    
+    func setUpLabel(){
+        let otherLabel = UILabel(frame: CGRect(x: 50, y: homePic.frame.minY + 50, width: 220, height: 40))
+        otherLabel.font = UIFont.boldSystemFont(ofSize: 15)
+        otherLabel.numberOfLines = 2
+        otherLabel.text = "Serving members and their families since 1970"
+        
+        subPicLabel = UILabel(frame: CGRect(x: scrollView.center.x - 125, y: homePic.frame.maxY + 5, width: 250, height: 40))
+        subPicLabel.textColor = UIColor.lightGray
+        subPicLabel.numberOfLines = 2
+        subPicLabel.font = subPicLabel.font.withSize(13)
+        subPicLabel.text = "Login below for more details about plans and benefits"
+        scrollView.addSubview(subPicLabel)
+        scrollView.addSubview(otherLabel)
+        scrollView.bringSubview(toFront: otherLabel)
+    }
+    
     func setUpSegmentController(){
-        segmentController.frame = CGRect(x: 47, y: 196, width: 280, height: 30)
+        //segmentController.frame = CGRect(x: scrollView.center.x - 140, y: 196, width: 280, height: 30)
+        segmentController.frame = CGRect(x: scrollView.center.x - 140, y: subPicLabel.frame.maxY + 45, width: 280, height: 30)
         segmentController.tintColor = UIColor.black
         segmentController.addTarget(self, action: #selector(changeIndex(sender:)), for: .valueChanged)
         segmentController.selectedSegmentIndex = 0
-        self.view.addSubview(segmentController)
+        scrollView.addSubview(segmentController)
     }
     
     func setUpTableView(){
-        formTableView = UITableView(frame: CGRect(x: 47, y: 250, width: 280, height: 200))
+        //formTableView = UITableView(frame: CGRect(x: 47, y: 250, width: 280, height: 200))
+        formTableView = UITableView(frame: CGRect(x: scrollView.center.x - 140, y: segmentController.frame.maxY + 25, width: 280, height: 200))
         formTableView.dataSource = self
         formTableView.delegate = self
         formTableView.register(formTableViewCell.self, forCellReuseIdentifier: "formCell")
         formTableView.alwaysBounceVertical = false
-        self.view.addSubview(formTableView)
+        scrollView.addSubview(formTableView)
     }
     
     func setUpButtons(){
+        
+       // = UIButton(frame: CGRect(x: 92, y: 395, width: 190, height: 44))
+      //    = UIButton(frame: CGRect(x: 25, y: 460, width: 320, height: 44))
+        
+        continueButton = UIButton(frame: CGRect(x: scrollView.center.x - 95, y: formTableView.frame.minY + 145, width: 190, height: 44))
         continueButton.addTarget(self, action: #selector(continueClick), for: .touchUpInside)
         continueButton.setUpDefaultType(title: "Sign In")
         
+        forgotPasswordBtn = UIButton(frame: CGRect(x: scrollView.center.x - 160, y: continueButton.frame.maxY + 20, width: 320, height: 44))
         forgotPasswordBtn.addTarget(self, action: #selector(retrievePasswordClick), for: .touchUpInside)
         forgotPasswordBtn.setUpDefaultType(title: "Forgot Password? Click to Retrieve")
         forgotPasswordBtn.isHidden = false
-        self.view.addSubview(continueButton)
-        self.view.addSubview(forgotPasswordBtn)
+        scrollView.addSubview(continueButton)
+        scrollView.addSubview(forgotPasswordBtn)
     }
     
     func changeIndex(sender: UISegmentedControl){
@@ -129,11 +263,8 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                                 DispatchQueue.main.async {
                                     print("\(parseDidSucceed)")
                                     if self.statusSuccess && self.tempUser != nil {
-                                        let nextVC = welcomeUserViewController()
-                                        let backItem = UIBarButtonItem()
-                                        backItem.title = "Back"
-                                        self.navigationItem.backBarButtonItem = backItem
-                                        self.navigationController?.pushViewController(nextVC, animated: true)
+                                        self.presentBenefitCard()
+                                        //self.clearLoginInputsandText()
                                     } else {
                                         self.promptAlertWithDelay("Error logging in", inmessage: "Username or password incorrect. Please try a different combination", indelay: 5.0)
                                     }
@@ -152,12 +283,42 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         }
     }
     
+    
+    
     func retrievePasswordClick(){
         let nextVC = retrievePasswordViewController()
         let backItem = UIBarButtonItem()
         backItem.title = "Back"
         navigationItem.backBarButtonItem = backItem
         self.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    func presentBenefitCard(){
+        let alert = UIAlertController(title: "", message: "Would you like to view your benefit Card", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "View", style: .default, handler: { (action: UIAlertAction) in
+            if self.tempUser != nil {
+                if self.benefitCard != nil {
+                    self.benefitCard?.isHidden = false
+                } else {
+                    self.benefitCard = BenefitCardView(user: self.tempUser!, session: URLSession.shared)
+                    self.benefitCard?.dismissButton.addTarget(self, action: #selector(self.dismissCard), for: .touchUpInside)
+                    self.view.addSubview(self.benefitCard!)
+                }
+            } else {
+                self.promptAlertWithDelay("Unable to display Benefit Card", inmessage: "we're experiencing problems retrieving your information. Try logging in again", indelay: 5.0)
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action: UIAlertAction) in
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
+    
+    func dismissCard(){
+        benefitCard?.isHidden = true
     }
     
     
@@ -226,6 +387,15 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         return cell
     }
     
+    func clearLoginInputsandText(){
+        for row in formTableView.visibleCells{
+            let cell = row as! formTableViewCell
+            cell.formTextField?.text = ""
+        }
+        loginInputs[0] = ""
+        loginInputs[1] = ""
+    }
+    
     /*************************************************** textField functions *****************************************/
     func userInputFieldDidChange(userInputField: userInputField) {
         if let inputTypeInt = userInputField.getVal(){
@@ -290,48 +460,13 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
             }
             if let id = attributeDict["memberid"]{
                 tempUser = member(id: id, usrname: loginInputs[0], pssword: loginInputs[1], ssId: "")
+                
             }
         }
     }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-
-        /*if elementName == "geoname"{
-            if countryInfoItem?.countryName == countryWantedFound && countryInfoItem?.geoId == countryWantedFoundId {
-                print("found the country!!")
-            }
-            countryInfoArray.append(countryInfoItem)
-            countryInfoItem.clear()
-        } else {
-            foundCharacters = foundCharacters.trimmingCharacters(in: .newlines)
-            if elementName == "toponymName"{
-                countryInfoItem?.topoName = foundCharacters
-            }
-            if elementName == "name"{
-                countryInfoItem?.name = foundCharacters
-            }
-            if elementName == "lat"{
-                let s = foundCharacters as NSString
-                countryInfoItem?.lat = s.floatValue
-            }
-            if elementName == "lng"{
-                let s = foundCharacters as NSString
-                countryInfoItem?.long = s.floatValue
-            }
-            if elementName == "geonameId"{
-                let s = foundCharacters as NSString
-                countryInfoItem?.geoId = s.intValue
-            }
-            if elementName == "countryCode"{
-                countryInfoItem?.countryCode = foundCharacters
-            }
-            if elementName == "countryName"{
-                countryInfoItem?.countryName = foundCharacters
-            }
-        }*/
         self.foundcharacters = ""
-        
-        
     }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
@@ -340,16 +475,8 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     }
     
     func parserDidEndDocument(_ parser: XMLParser) {
-        /*for item in loginUserArray {
-            print("\(item.username), \(item.password), \(item.StyleSheet), \(item.SectionId)")
-        }*/
-        /*for counrty in countryInfoArray {
-            print("\(counrty)\n")
-        }*/
-        if tempUser != nil {
-            expUser.setCurrUser(toSetModel: tempUser!)
-        }
-        print("\(expUser.getCurrUser())")
+        print("\(tempUser)")
+        //print("\(expUser.getCurrUser())")
     }
     
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {

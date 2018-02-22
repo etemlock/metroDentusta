@@ -11,6 +11,7 @@ import Foundation
 
 class navBarController : UITableViewController {
     //var textLabelArray = ["Home","Find Your Dentist","Forms","FAQs","Dental Health","Contact US","Sign In/Sign Up"]
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +19,7 @@ class navBarController : UITableViewController {
     
         
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 5
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -28,10 +29,15 @@ class navBarController : UITableViewController {
         if(indexPath.section == 1){
             performSegue(withIdentifier: "findDentistSegue", sender: self)
         }
-        if(indexPath.section == 6){
+        /*if(indexPath.section == 6){
             performSegue(withIdentifier: "toSignUp", sender: self)
-        }
+        }*/
     }
+    
+    
+    
+    
+
     
     
 }

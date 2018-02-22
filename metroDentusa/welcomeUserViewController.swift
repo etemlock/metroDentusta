@@ -11,7 +11,18 @@ import Foundation
 class welcomeUserViewController: UIViewController {
     var welcomeLabel : UILabel!
     var idLabel: UILabel!
-    var currUser: member!
+    private var currUser: member!
+    private var session: URLSession!
+    
+    convenience init(user: member, session: URLSession){
+        self.init(user: user, session: session)
+        self.currUser = user
+        self.session = session
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +34,6 @@ class welcomeUserViewController: UIViewController {
         view.backgroundColor = UIColor.white
         
         self.hideKeyBoardWhenTappedAround()
-        currUser = expUser.getCurrUser()
         setUpLabels()
     }
     
