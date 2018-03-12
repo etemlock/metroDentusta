@@ -10,7 +10,6 @@ import Foundation
 import MapKit
 
 class providerProfileViewController : UIViewController {
-    var menuButton : UIBarButtonItem!
     var headingView: UIView!
     var mapView: MKMapView!
     var midView: UIView!

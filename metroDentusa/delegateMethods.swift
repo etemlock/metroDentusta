@@ -17,3 +17,7 @@ protocol userInputFieldDelegate {
 protocol setRowDelegate {
     func setRow(row: Int)
 }
+
+protocol openViewDelegate {
+    func openView(navBar: navBarController)
+}

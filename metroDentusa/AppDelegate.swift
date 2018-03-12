@@ -63,44 +63,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         task.resume()
     }
     
-    func makeHTTPPOSTRequestToGetUser(urlstring: String, loginInputs: [String], completion: @escaping (_ error: Error?, _ data: Data?)->Void){
+    func AlamofireHandlePostRequest(request: URLRequest, postStmt: String, completion: @escaping (_ error: Error?, _ data: Data?) -> Void){
+        
+        if let cachedData = AppDelegate.xmlStringCache[postStmt]{
+            print("This data was cached")
+            completion(nil,cachedData)
+        } else {
+            Alamofire.request(request).responseData(completionHandler: { (response) in
+                if response.result.isSuccess {
+                    if let status = response.response?.statusCode {
+                        print("status code is \(status)")
+                    }
+                    
+                    if let result = response.data{
+                        AppDelegate.xmlStringCache[postStmt] = result
+                        completion(nil,result)
+                    }
+                } else {
+                    if let error = response.result.error {
+                        print("Unsuccessful response error: \(error)")
+                        completion(error,nil)
+                    } else {
+                        print("unknown error")
+                        completion(nil,nil)
+                    }
+                }
+            })
+        }
+    }
+    
+    
+    func makeHTTPPOSTRequestToGetUser(urlstring: String, loginInputs: [String], completion: @escaping ( _ data: Data?)->Void){
         if let myUrl = URL(string: urlstring){
             let queryString = "<request type='LOGINMEMBER'  username='\(loginInputs[0])' password='\(loginInputs[1])' StyleSheet='xml' SessionID=''></request>"
-            
             var request = URLRequest(url: myUrl)
             request.httpBody = queryString.data(using: .utf8)
             request.httpMethod = "POST"
             request.addValue("application/xml", forHTTPHeaderField: "Content-Type")
             
-            if let cachedData = AppDelegate.xmlStringCache[queryString]{
-                print("This data was cached")
-                completion(nil,cachedData)
-            } else {
-                Alamofire.request(request).responseData(completionHandler: { (response) in
-                    if response.result.isSuccess {
-                        if let status = response.response?.statusCode {
-                            print("status code is \(status)")
-                        }
-
-                        if let result = response.data{
-                            AppDelegate.xmlStringCache[queryString] = result
-                            completion(nil,result)
-                        }
-                    } else {
-                        if let error = response.result.error {
-                            print("Unsuccessful response error: \(error)")
-                            completion(error,nil)
-                        } else {
-                            print("unknown error")
-                            completion(nil,nil)
-                        }
-                    }
-                })
-            }
+            AlamofireHandlePostRequest(request: request, postStmt: queryString, completion: { (error: Error?, data: Data?) in
+                if data != nil {
+                    completion(data)
+                }
+            })
         }
     }
     
-    func makeHTTPPostRequestToSearchDentists(urlstring: String, parameters: dentSearchParams, completion: @escaping (_ error: Error?, _ jsonResults: [[String: Any]]?)->Void){
+        
+    
+    func makeHTTPPostRequestToSearchDentists(urlstring: String, parameters: dentSearchParams, completion: @escaping (_ jsonResults: [[String: Any]]?)->Void){
         if let myUrl = URL(string: urlstring){
             /*570 ATLANTIC AVE LAWRENCE NY 11559*/
             var searchBy = "city"
@@ -113,55 +124,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             xmlRequest.httpBody = xmlString.data(using: .utf8)
             xmlRequest.httpMethod = "POST"
             xmlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-           
             
-            //if the request was made before during this users session
-            if let cachedData = AppDelegate.xmlStringCache[xmlString] {
-                print("this data was cached")
-                do {
-                    if let jsonDict = try JSONSerialization.jsonObject(with: cachedData, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]{
-                        if let results = jsonDict["results"] as? [[String: Any]] {
-                            completion(nil,results)
-                        }
-                    }
-                } catch let error {
-                    print("JSONSerialization Error : \(error)")
-                    completion(error,nil)
-                }
-            } else {
-                //otherwise send out
-                Alamofire.request(xmlRequest).responseData(completionHandler: { (response) in
-                    if response.result.isSuccess {
-                        if let status = response.response?.statusCode {
-                            print("status code is \(status)")
-                        }
-                        if let result = response.result.value {
-                            
-                            do {
-                                if let jsonDict = try JSONSerialization.jsonObject(with: result, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]{
-                                    if let results = jsonDict["results"] as? [[String: Any]] {
-                                        AppDelegate.xmlStringCache[xmlString] = result
-                                        completion(nil,results)
-                                    }
-                                }
-                            } catch let error {
-                                print("JSONSerialization Error : \(error)")
-                                completion(error,nil)
+            AlamofireHandlePostRequest(request: xmlRequest, postStmt: xmlString, completion: { (error: Error?, data: Data?) in
+                if data != nil {
+                    do {
+                        if let jsonDict = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]{
+                            if let results = jsonDict["results"] as? [[String: Any]] {
+                                completion(results)
                             }
-                            
                         }
-                    } else {
-                        if response.result.error != nil {
-                            print("Unsuccessful Response Error: \(response.result.error)")
-                            completion(response.result.error!,nil)
-                        } else {
-                            print("unknown error")
-                            completion(nil,nil)
-                        }
+                    } catch let error {
+                        print("JSONSerialization Error : \(error)")
+                        completion(nil)
                     }
-                    
-                })
-            }
+                }
+            })
         }
     }
     

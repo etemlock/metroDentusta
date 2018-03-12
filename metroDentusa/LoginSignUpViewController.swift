@@ -8,82 +8,6 @@
 
 import Foundation
 
-class BenefitCardView: UIView {
-    private var user: member!
-    private var session: URLSession!
-    var innerView: UIView!
-    private var CardFrame = CGRect(x: 8, y: 110, width: 359, height: 458)
-    var dismissButton : UIButton!
-
-    init(user: member, session: URLSession){
-        super.init(frame: CardFrame)
-        self.user = user
-        self.session = session
-        self.backgroundColor = UIColor(red: 238/255, green: 236/255, blue: 246/255, alpha: 1)
-        self.backgroundColor?.withAlphaComponent(0.5)
-        setUpInnerView()
-    }
-    
-    required init?(coder aDecoder: NSCoder){
-        super.init(coder: aDecoder)!
-    }
-    
-    func setUpInnerView(){
-        innerView = UIView(frame: CGRect(x: 4, y: 4, width: 351, height: 450))
-        innerView.backgroundColor = UIColor.white
-        
-        let header = UILabel(frame: CGRect(x: 8, y: 8, width: 220, height: 50))
-        header.font = UIFont.boldSystemFont(ofSize: 19)
-        header.numberOfLines = 2
-        header.text = "ASO MEMBER BENEFIT PLAN"
-        
-        let logo = UIImageView(frame: CGRect(x: 230, y: 8, width: 113, height: 50))
-        logo.image = UIImage(named: "Logo Icon")
-        logo.contentMode = .scaleAspectFit
-        
-        let divider = UIView(frame: CGRect(x: 0, y: header.frame.maxY+5, width: innerView.frame.width, height: 5))
-        divider.backgroundColor = LoginSignUpViewController.themeColor
-        
-        let nameLabel = UILabel(frame: CGRect(x: 8, y: divider.frame.maxY + 5, width: 150, height: 20))
-        nameLabel.text = user.getUsername()
-        
-        let groupLabel = UILabel(frame: CGRect(x: innerView.frame.maxX - 108, y: divider.frame.maxY + 5, width: 100, height: 20))
-        groupLabel.text = "Group: #V190"
-        
-        let idLabel = UILabel(frame: CGRect(x: 8, y: nameLabel.frame.maxY + 5, width: 150, height: 20))
-        idLabel.text = "ID#:\(user.getId())"
-        
-        let activeLabel = UILabel(frame: CGRect(x: innerView.frame.maxX - 108, y: groupLabel.frame.maxY + 5, width: 100, height: 20))
-        activeLabel.text = "Level: ACTIVE"
-        
-        dismissButton = UIButton(frame: CGRect(x: self.center.x - 50 , y: idLabel.frame.maxY + 10, width: 100, height: 40))
-        dismissButton.setUpDefaultType(title: "Dismiss")
-        
-        let disclaimer = UILabel(frame: CGRect(x: 8, y: 208, width: innerView.frame.width-16, height: 230))
-        disclaimer.text = "You may receive care from any licensed dentist.\n\nThis plan is subject to maximums and frequency limitations. You are responsible to your dentist for all amounts not covered by the Plan.\n\nYour plan is subject to certain limitations and exclusions. Predeterminations are recommended in order to verify coverage for major work including surgical, periodontal, orthodontia, bridges and implants.\n\nClaim forms should be submitted within 30 days of treatment to:\n\n \tElectronic Claims: Payer ID# CX076\n\tpaper Claims: ASO, PO Box 9005, Lynbrook, NY 11559"
-        disclaimer.numberOfLines = 16
-        disclaimer.font = disclaimer.font.withSize(12)
-        //dismissButton.addTarget(self, action: #selector(hideBenefitCard), for: .touchUpInside)
-        
-        innerView.addSubview(header)
-        innerView.addSubview(logo)
-        innerView.addSubview(divider)
-        innerView.addSubview(nameLabel)
-        innerView.addSubview(groupLabel)
-        innerView.addSubview(idLabel)
-        innerView.addSubview(activeLabel)
-        innerView.addSubview(dismissButton)
-        
-        for case let label as UILabel in innerView.subviews {
-            label.font = label.font.withSize(15)
-        }
-        
-        innerView.addSubview(disclaimer)
-        
-        self.addSubview(innerView)
-    }
-    
-}
 
 
 class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, userInputFieldDelegate , XMLParserDelegate {
@@ -104,32 +28,33 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     var continueButton : UIButton!
     var forgotPasswordBtn : UIButton!
     let segmentController : UISegmentedControl = UISegmentedControl(items: ["Login", "Create Username"])
-    var benefitCard: BenefitCardView?
+    //var benefitCard: BenefitCardView?
     
     //********** XMLParser testing related stuff **********/
     var parser = XMLParser()
     var statusSuccess : Bool = false
-    var tempUser : member?
+    var currUser : member?
+    var currSession: URLSession?
     var foundcharacters = ""
-    //var loginUserArray : [LoginMember] = []
-    //var tempMember : LoginMember!
-    //var foundCharacters = ""
-    //var countryInfoItem : countryInfo!
-    //var countryInfoArray : [countryInfo] = []
-    //var countryWantedFound = "Czechia"
-    //var countryWantedFoundId = Int32(3077311)
     
+    init(user: member?, session: URLSession?){
+        super.init(nibName: nil, bundle: nil)
+        self.currUser = user
+        self.currSession = session
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("\(currUser)")
         self.hideKeyBoardWhenTappedAround()
+        self.view.backgroundColor = UIColor.white
         menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
-        self.navigationItem.leftBarButtonItem = menuButton
         self.navigationItem.title = "Welcome to ASO Data Services!"
-        if self.revealViewController() != nil {
-            menuButton.target = self.revealViewController()
-            menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
-            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        }
+        self.toggleMenuButton(menuButton: menuButton)
         setUpScrollView()
         setUpImages()
         setUpLabel()
@@ -217,6 +142,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         scrollView.addSubview(forgotPasswordBtn)
     }
     
+    
     func changeIndex(sender: UISegmentedControl){
         switch sender.selectedSegmentIndex {
         case 0:
@@ -244,27 +170,28 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         if segmentIndexFlag == 0{
             let isLoginValid = validateLogin()
             if isLoginValid {
+                let activityIndicator = setUpActivityIndicator()
                 DispatchQueue.global(qos: .background).async {
+                    activityIndicator.startAnimating()
                     AppDelegate().makeHTTPPOSTRequestToGetUser(urlstring: "https://edi.asonet.com/httpserver.ashx?obj=LOGINMEMBER", loginInputs: self.loginInputs, completion: {
-                        (error: Error?, data: Data?) in
+                        (/*error: Error?,*/ data: Data?) in
                         if data != nil {
                             print("there was data")
                             if let dataString = String(data: data!, encoding: .utf8){
-                                let start = dataString.startIndex
-                                let end = dataString.index(start, offsetBy: 7)
-                                let range1 = Range(uncheckedBounds: (start, end))
-                                let range2 = Range(uncheckedBounds: (end,dataString.endIndex))
-                                let parseString = dataString[range1] + " status" + dataString[range2]
-                                print("\(parseString)")
-                                let newData = parseString.data(using: .utf8)
-                                self.parser = XMLParser(data: newData!)
+                                print("\(dataString)")
+                                self.parser = XMLParser(data: data!)
                                 self.parser.delegate = self
                                 let parseDidSucceed = self.parser.parse()
                                 DispatchQueue.main.async {
+                                    activityIndicator.stopAnimating()
                                     print("\(parseDidSucceed)")
-                                    if self.statusSuccess && self.tempUser != nil {
-                                        self.presentBenefitCard()
-                                        //self.clearLoginInputsandText()
+                                    if self.statusSuccess && self.currUser != nil {
+                                        if let navBar = self.revealViewController().rearViewController as? navBarController {
+                                            navBar.setUser(member: self.currUser!)
+                                            navBar.tableView.reloadData()
+                                        }
+                                        self.promptAlertWithDelay("Welcome Back", inmessage: "Welcome back \((self.currUser?.getUsername())!)", indelay: 1000)
+                                        //self.presentBenefitCard()
                                     } else {
                                         self.promptAlertWithDelay("Error logging in", inmessage: "Username or password incorrect. Please try a different combination", indelay: 5.0)
                                     }
@@ -293,33 +220,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
-    func presentBenefitCard(){
-        let alert = UIAlertController(title: "", message: "Would you like to view your benefit Card", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "View", style: .default, handler: { (action: UIAlertAction) in
-            if self.tempUser != nil {
-                if self.benefitCard != nil {
-                    self.benefitCard?.isHidden = false
-                } else {
-                    self.benefitCard = BenefitCardView(user: self.tempUser!, session: URLSession.shared)
-                    self.benefitCard?.dismissButton.addTarget(self, action: #selector(self.dismissCard), for: .touchUpInside)
-                    self.view.addSubview(self.benefitCard!)
-                }
-            } else {
-                self.promptAlertWithDelay("Unable to display Benefit Card", inmessage: "we're experiencing problems retrieving your information. Try logging in again", indelay: 5.0)
-            }
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action: UIAlertAction) in
-            alert.dismiss(animated: true, completion: nil)
-        }))
-        
-        present(alert, animated: true, completion: nil)
-        
-    }
-    
-    
-    func dismissCard(){
-        benefitCard?.isHidden = true
-    }
+
     
     
     
@@ -387,14 +288,6 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         return cell
     }
     
-    func clearLoginInputsandText(){
-        for row in formTableView.visibleCells{
-            let cell = row as! formTableViewCell
-            cell.formTextField?.text = ""
-        }
-        loginInputs[0] = ""
-        loginInputs[1] = ""
-    }
     
     /*************************************************** textField functions *****************************************/
     func userInputFieldDidChange(userInputField: userInputField) {
@@ -450,7 +343,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     
     /********************************************** xmlParserDelegate functions **************************************/
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-        if elementName == "status"{
+        if elementName == "response"{
             if let status = attributeDict["status"]{
                 if status == "SUCCESSFUL" {
                     statusSuccess = true
@@ -459,8 +352,9 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                 }
             }
             if let id = attributeDict["memberid"]{
-                tempUser = member(id: id, usrname: loginInputs[0], pssword: loginInputs[1], ssId: "")
-                
+                if statusSuccess {
+                    currUser = member(id: id, usrname: loginInputs[0], pssword: loginInputs[1], ssId: "")
+                }
             }
         }
     }
@@ -475,14 +369,118 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     }
     
     func parserDidEndDocument(_ parser: XMLParser) {
-        print("\(tempUser)")
-        //print("\(expUser.getCurrUser())")
+        //print("\(currUser)")
     }
     
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
         print("failure Error: \(parseError)")
     }
     
+    /*********************************************** depracated benefitCard functions ***************************************/
     
+    /*class BenefitCardView: UIView {
+             private var user: member!
+             private var session: URLSession!
+             var innerView: UIView!
+             private var CardFrame = CGRect(x: 8, y: 110, width: 359, height: 458)
+             var dismissButton : UIButton!
+             
+             init(user: member, session: URLSession){
+             super.init(frame: CardFrame)
+             self.user = user
+             self.session = session
+             self.backgroundColor = UIColor(red: 238/255, green: 236/255, blue: 246/255, alpha: 1)
+             self.backgroundColor?.withAlphaComponent(0.5)
+             setUpInnerView()
+         }
+         
+         required init?(coder aDecoder: NSCoder){
+             super.init(coder: aDecoder)!
+         }
+         
+         func setUpInnerView(){
+             innerView = UIView(frame: CGRect(x: 4, y: 4, width: 351, height: 450))
+             innerView.backgroundColor = UIColor.white
+             
+             let header = UILabel(frame: CGRect(x: 8, y: 8, width: 220, height: 50))
+             header.font = UIFont.boldSystemFont(ofSize: 19)
+             header.numberOfLines = 2
+             header.text = "ASO MEMBER BENEFIT PLAN"
+             
+             let logo = UIImageView(frame: CGRect(x: 230, y: 8, width: 113, height: 50))
+             logo.image = UIImage(named: "Logo Icon")
+             logo.contentMode = .scaleAspectFit
+             
+             let divider = UIView(frame: CGRect(x: 0, y: header.frame.maxY+5, width: innerView.frame.width, height: 5))
+             divider.backgroundColor = LoginSignUpViewController.themeColor
+             
+             let nameLabel = UILabel(frame: CGRect(x: 8, y: divider.frame.maxY + 5, width: 150, height: 20))
+             nameLabel.text = user.getUsername()
+             
+             let groupLabel = UILabel(frame: CGRect(x: innerView.frame.maxX - 108, y: divider.frame.maxY + 5, width: 100, height: 20))
+             groupLabel.text = "Group: #V190"
+             
+             let idLabel = UILabel(frame: CGRect(x: 8, y: nameLabel.frame.maxY + 5, width: 150, height: 20))
+             idLabel.text = "ID#:\(user.getId())"
+             
+             let activeLabel = UILabel(frame: CGRect(x: innerView.frame.maxX - 108, y: groupLabel.frame.maxY + 5, width: 100, height: 20))
+             activeLabel.text = "Level: ACTIVE"
+             
+             dismissButton = UIButton(frame: CGRect(x: self.center.x - 50 , y: idLabel.frame.maxY + 10, width: 100, height: 40))
+             dismissButton.setUpDefaultType(title: "Dismiss")
+             
+             let disclaimer = UILabel(frame: CGRect(x: 8, y: 208, width: innerView.frame.width-16, height: 230))
+             disclaimer.text = "You may receive care from any licensed dentist.\n\nThis plan is subject to maximums and frequency limitations. You are responsible to your dentist for all amounts not covered by the Plan.\n\nYour plan is subject to certain limitations and exclusions. Predeterminations are recommended in order to verify coverage for major work including surgical, periodontal, orthodontia, bridges and implants.\n\nClaim forms should be submitted within 30 days of treatment to:\n\n \tElectronic Claims: Payer ID# CX076\n\tpaper Claims: ASO, PO Box 9005, Lynbrook, NY 11559"
+             disclaimer.numberOfLines = 16
+             disclaimer.font = disclaimer.font.withSize(12)
+             //dismissButton.addTarget(self, action: #selector(hideBenefitCard), for: .touchUpInside)
+             
+             innerView.addSubview(header)
+             innerView.addSubview(logo)
+             innerView.addSubview(divider)
+             innerView.addSubview(nameLabel)
+             innerView.addSubview(groupLabel)
+             innerView.addSubview(idLabel)
+             innerView.addSubview(activeLabel)
+             innerView.addSubview(dismissButton)
+             
+             for case let label as UILabel in innerView.subviews {
+             label.font = label.font.withSize(15)
+             }
+             
+             innerView.addSubview(disclaimer)
+             
+             self.addSubview(innerView)
+         }
+     
+     }
+    
+    func dismissCard(){
+        benefitCard?.isHidden = true
+    }
+     
+     func presentBenefitCard(){
+         let alert = UIAlertController(title: "", message: "Would you like to view your benefit Card", preferredStyle: UIAlertControllerStyle.alert)
+         alert.addAction(UIAlertAction(title: "View", style: .default, handler: { (action: UIAlertAction) in
+         if self.currUser != nil {
+         if self.benefitCard != nil {
+         self.benefitCard?.isHidden = false
+         } else {
+         self.benefitCard = BenefitCardView(user: self.currUser!, session: URLSession.shared)
+         self.benefitCard?.dismissButton.addTarget(self, action: #selector(self.dismissCard), for: .touchUpInside)
+         self.view.addSubview(self.benefitCard!)
+         }
+         } else {
+         self.promptAlertWithDelay("Unable to display Benefit Card", inmessage: "we're experiencing problems retrieving your information. Try logging in again", indelay: 5.0)
+         }
+         }))
+         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action: UIAlertAction) in
+         alert.dismiss(animated: true, completion: nil)
+         }))
+         
+         present(alert, animated: true, completion: nil)
+     }
+    
+    */
     
 }

@@ -56,6 +56,27 @@ struct dentSearchParams {
     var dentName: String
 }
 
+struct blogPostParams {
+    var title : String
+    var date: String
+    var author: String
+    var categories : [String]
+    var description: String
+    var blogLink: String
+    var image: UIImage?
+    
+    
+    mutating func clearParams(){
+        self.title = ""
+        self.date = ""
+        self.author = ""
+        self.categories = []
+        self.description = ""
+        self.blogLink = ""
+        self.image = nil
+    }
+}
+
 struct providerModel {
     var instName: String
     var provName: String

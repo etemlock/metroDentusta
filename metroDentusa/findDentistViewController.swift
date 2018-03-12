@@ -69,14 +69,8 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         super.viewDidLoad()
         self.hideKeyBoardWhenTappedAround()
         menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
-        self.navigationItem.leftBarButtonItem = menuButton
         self.navigationItem.title = "Find Your Dentist"
-        if self.revealViewController() != nil {
-            menuButton.target = self.revealViewController()
-            menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
-            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        }
-        //centerMapView(pos: nil, regionRadius: 16000)
+        self.toggleMenuButton(menuButton: menuButton)
         setUpScrollView()
         setUpSearchFields()
         setUpNonTriggerButtons()
@@ -85,18 +79,6 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         scrollView.addSubview(self.newPickerPop)
     }
     
-   /* func centerMapView(pos: CLLocationCoordinate2D?, regionRadius: CLLocationDistance){
-        var coordinateRegion : MKCoordinateRegion!
-        if pos != nil {
-            let location = CLLocation(latitude: (pos?.latitude)!, longitude: (pos?.longitude)!)
-            coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
-        } else {
-            let initLocation = CLLocation(latitude: 40.6691088, longitude: -73.5566163)
-            coordinateRegion = MKCoordinateRegionMakeWithDistance(initLocation.coordinate, regionRadius, regionRadius)
-        }
-        mapView.setRegion(coordinateRegion, animated: true)
-        self.view.addSubview(mapView)
-    }*/
     
     func setUpSearchFields(){
         scrollView.addSubview(addressTextField)
@@ -313,17 +295,11 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
                     specialties.append(doctor.specialty)
                 }
             }
-            //cell.phoneNumLabel.text = providerForCell.telephone
-            //cell.handicapAccLabel.text = "Handicap Access: \(providerForCell.handicapAccess)"
-            /*cell.credentialLabel.text = ""
-            for doctor in providerForCell.doctors {
-                if doctor.school != "" {
-                    cell.credentialLabel.text = cell.credentialLabel.text! + "\(doctor.name.uppercased()) - \(doctor.school) (\(doctor.graduationDate)) - \(doctor.specialty)\n"
-                } else {
-                    cell.credentialLabel.text = cell.credentialLabel.text! + "\(doctor.name.uppercased()) - \(doctor.specialty)\n"
-                }
-            }*/
-            cell.distanceLabel.text = "\(providerForCell.distance) miles away"
+            if addressTextField.text != "" {
+                cell.distanceLabel.text = "\(providerForCell.distance) miles away"
+            } else {
+                cell.distanceLabel.text = "Info not available"
+            }
             return cell
         }
         
@@ -345,7 +321,7 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         DispatchQueue.global(qos: .background).async {
             let start = DispatchTime.now()
             AppDelegate().makeHTTPPostRequestToSearchDentists(urlstring: "https://www.asonet.com/httpserver.ashx?obj=getPPOjson", parameters: params, completion: {
-                (error: Error?, jsonResult: [[String: Any]]?) in
+                (jsonResult: [[String: Any]]?) in
                 
                 if jsonResult != nil {
                     self.numResults = (jsonResult?.count)!
@@ -368,7 +344,7 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
                         if let longitude = Double(String(describing: (result["longitude"])!)){
                             newProvider.long = longitude
                         }
-                        if let distance = Double(String(describing: (result["distance"])!)){
+                        if let distance = Double(String(describing: (result["distance"])!)) {
                             newProvider.distance = distance
                         }
                         newProvider.telephone = String(describing: (result["telephone"])!)

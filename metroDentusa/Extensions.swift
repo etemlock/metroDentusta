@@ -28,6 +28,14 @@ extension UIViewController {
         self.view.window!.layer.add(transition, forKey: kCATransition)
     }
     
+    func setUpActivityIndicator() -> UIActivityIndicatorView {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        self.view.addSubview(activityIndicator)
+        return activityIndicator
+    }
+    
     func hideKeyBoardWhenTappedAround(){
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -38,9 +46,28 @@ extension UIViewController {
         view.endEditing(true)
     }
     
+    func toggleMenuButton(menuButton: UIBarButtonItem){
+        if self.navigationController != nil {
+            self.navigationItem.leftBarButtonItem = menuButton
+            if self.revealViewController() != nil {
+                menuButton.target = self.revealViewController()
+                menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
+                self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+                self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
+            }
+        }
+    }
+    
+    /*public func revealController(_ revealController: SWRevealViewController!, willMoveTo position: FrontViewPosition) {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(revealController.revealToggle(_:)))
+        if position == FrontViewPositionLeftSide {
+            tap.isEnabled = true
+        } else if position == FrontViewPositionLeft {
+            tap.isEnabled = false
+        }
+    }*/
     
 }
-
 
 
 extension UIButton {
