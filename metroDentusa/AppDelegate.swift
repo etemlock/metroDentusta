@@ -13,7 +13,7 @@ import Alamofire
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    static var xmlStringCache = [String: Data]()
+    //static var xmlStringCache = [String: Data]()
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -65,10 +65,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func AlamofireHandlePostRequest(request: URLRequest, postStmt: String, completion: @escaping (_ error: Error?, _ data: Data?) -> Void){
         
-        if let cachedData = AppDelegate.xmlStringCache[postStmt]{
+        /*if let cachedData = AppDelegate.xmlStringCache[postStmt]{
             print("This data was cached")
             completion(nil,cachedData)
-        } else {
+        } else {*/
             Alamofire.request(request).responseData(completionHandler: { (response) in
                 if response.result.isSuccess {
                     if let status = response.response?.statusCode {
@@ -76,7 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     
                     if let result = response.data{
-                        AppDelegate.xmlStringCache[postStmt] = result
+                        //AppDelegate.xmlStringCache[postStmt] = result
                         completion(nil,result)
                     }
                 } else {
@@ -89,7 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
             })
-        }
+        //}
     }
     
     

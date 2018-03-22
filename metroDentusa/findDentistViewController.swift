@@ -258,6 +258,7 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
     
     
     /************************************ tableView functions ***************************************/
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -370,8 +371,13 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
                     self.numResults = 0
                 }
                 self.resultsCountLabel.text = String(self.numResults) + " providers matched your search"
-                self.rollUpTable()
+               
+                if self.tableView.numberOfRows(inSection: 0) > 0 {
+                   self.tableView.scrollToFirstRow(sectionNum: 0)
+                }
                 self.tableView.reloadData()
+                self.rollUpTable()
+                self.tableView.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
                 
                 let end = DispatchTime.now()
                 let nanotime = end.uptimeNanoseconds - start.uptimeNanoseconds
@@ -406,14 +412,13 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         }
     }
     
+
     
     
     func loadProviderProfile(sender: UIButton){
         
         let nextVC = providerProfileViewController()
-        let backItem = UIBarButtonItem()
-        backItem.title = "Back"
-        navigationItem.backBarButtonItem = backItem
+        self.setUpBackBarButton(title: "Find Dentists")
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     

@@ -16,6 +16,7 @@
 		5425FB1C200D7F1C00647A7F /* popUpPickerViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5425FB1B200D7F1C00647A7F /* popUpPickerViewView.swift */; };
 		54327FFE1FE2564500CC4DB4 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54327FFD1FE2564500CC4DB4 /* RootViewController.swift */; };
 		543280081FE26DA200CC4DB4 /* navBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543280071FE26DA200CC4DB4 /* navBarController.swift */; };
+		54359B90205C56E8001F6259 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54359B8F205C56E8001F6259 /* NavigationController.swift */; };
 		544FD5A22045F67500B11AD9 /* benefitCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544FD5A12045F67500B11AD9 /* benefitCardViewController.swift */; };
 		544FD5AC204A0AA600B11AD9 /* BlogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544FD5AB204A0AA600B11AD9 /* BlogViewController.swift */; };
 		544FD5AE204A53DB00B11AD9 /* blogTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544FD5AD204A53DB00B11AD9 /* blogTableCell.swift */; };
@@ -24,6 +25,8 @@
 		5456ECB21FE4ACA500C9D6E4 /* formTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456ECB11FE4ACA500C9D6E4 /* formTableViewCell.swift */; };
 		5456ECB41FE4CBEE00C9D6E4 /* delegateMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456ECB31FE4CBEE00C9D6E4 /* delegateMethods.swift */; };
 		5489A2C42056FEFF006644D6 /* FAQsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489A2C32056FEFF006644D6 /* FAQsViewController.swift */; };
+		5489A2C620573372006644D6 /* genericTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489A2C520573372006644D6 /* genericTableViewCell.swift */; };
+		5489A2CA205748B5006644D6 /* FAQsAnswerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489A2C9205748B5006644D6 /* FAQsAnswerViewController.swift */; };
 		54A13997201D44F50055FC7C /* dentistInfoTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A13996201D44F50055FC7C /* dentistInfoTableCell.swift */; };
 		54A13999202CECCB0055FC7C /* providerProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A13998202CECCB0055FC7C /* providerProfileViewController.swift */; };
 		54B79E411FE2502E00692E5C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B79E401FE2502E00692E5C /* AppDelegate.swift */; };
@@ -63,6 +66,7 @@
 		5425FB1B200D7F1C00647A7F /* popUpPickerViewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = popUpPickerViewView.swift; sourceTree = "<group>"; };
 		54327FFD1FE2564500CC4DB4 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		543280071FE26DA200CC4DB4 /* navBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = navBarController.swift; sourceTree = "<group>"; };
+		54359B8F205C56E8001F6259 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		544FD5A12045F67500B11AD9 /* benefitCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = benefitCardViewController.swift; sourceTree = "<group>"; };
 		544FD5AB204A0AA600B11AD9 /* BlogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlogViewController.swift; sourceTree = "<group>"; };
 		544FD5AD204A53DB00B11AD9 /* blogTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = blogTableCell.swift; sourceTree = "<group>"; };
@@ -72,6 +76,8 @@
 		5456ECB11FE4ACA500C9D6E4 /* formTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = formTableViewCell.swift; sourceTree = "<group>"; };
 		5456ECB31FE4CBEE00C9D6E4 /* delegateMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = delegateMethods.swift; sourceTree = "<group>"; };
 		5489A2C32056FEFF006644D6 /* FAQsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAQsViewController.swift; sourceTree = "<group>"; };
+		5489A2C520573372006644D6 /* genericTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = genericTableViewCell.swift; sourceTree = "<group>"; };
+		5489A2C9205748B5006644D6 /* FAQsAnswerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAQsAnswerViewController.swift; sourceTree = "<group>"; };
 		54A13996201D44F50055FC7C /* dentistInfoTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dentistInfoTableCell.swift; sourceTree = "<group>"; };
 		54A13998202CECCB0055FC7C /* providerProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = providerProfileViewController.swift; sourceTree = "<group>"; };
 		54B79E3D1FE2502E00692E5C /* metroDentusa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = metroDentusa.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +152,15 @@
 			name = findDentist;
 			sourceTree = "<group>";
 		};
+		54359B8E205C56CA001F6259 /* navigation */ = {
+			isa = PBXGroup;
+			children = (
+				543280071FE26DA200CC4DB4 /* navBarController.swift */,
+				54359B8F205C56E8001F6259 /* NavigationController.swift */,
+			);
+			name = navigation;
+			sourceTree = "<group>";
+		};
 		544FD59E2045F61900B11AD9 /* clientInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +183,8 @@
 			children = (
 				544FD5B02050C8BE00B11AD9 /* contactUsViewController.swift */,
 				5489A2C32056FEFF006644D6 /* FAQsViewController.swift */,
+				5489A2C520573372006644D6 /* genericTableViewCell.swift */,
+				5489A2C9205748B5006644D6 /* FAQsAnswerViewController.swift */,
 			);
 			name = HelpViews;
 			sourceTree = "<group>";
@@ -210,9 +227,9 @@
 			children = (
 				541D59C21FF8B2C3003ACC73 /* Models */,
 				54B79E6F1FE250F900692E5C /* SWRevealViewController */,
+				54359B8E205C56CA001F6259 /* navigation */,
 				54B79E401FE2502E00692E5C /* AppDelegate.swift */,
 				54B79E441FE2502E00692E5C /* Main.storyboard */,
-				543280071FE26DA200CC4DB4 /* navBarController.swift */,
 				541709D81FE2832500DA8027 /* Extensions.swift */,
 				544FD59E2045F61900B11AD9 /* clientInfo */,
 				544FD5AA204A0A8B00B11AD9 /* DentistHealth */,
@@ -452,6 +469,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				544FD5A22045F67500B11AD9 /* benefitCardViewController.swift in Sources */,
+				54359B90205C56E8001F6259 /* NavigationController.swift in Sources */,
 				54B79E411FE2502E00692E5C /* AppDelegate.swift in Sources */,
 				5456ECB21FE4ACA500C9D6E4 /* formTableViewCell.swift in Sources */,
 				544FD5B12050C8BF00B11AD9 /* contactUsViewController.swift in Sources */,
@@ -460,6 +478,7 @@
 				544FD5AE204A53DB00B11AD9 /* blogTableCell.swift in Sources */,
 				54CDE62720365BB500A063D1 /* welcomeUserViewController.swift in Sources */,
 				54A13997201D44F50055FC7C /* dentistInfoTableCell.swift in Sources */,
+				5489A2C620573372006644D6 /* genericTableViewCell.swift in Sources */,
 				5456ECB41FE4CBEE00C9D6E4 /* delegateMethods.swift in Sources */,
 				54A13999202CECCB0055FC7C /* providerProfileViewController.swift in Sources */,
 				541D59C820024089003ACC73 /* findDentistViewController.swift in Sources */,
@@ -469,6 +488,7 @@
 				541709D51FE27BD400DA8027 /* LoginSignUpViewController.swift in Sources */,
 				5489A2C42056FEFF006644D6 /* FAQsViewController.swift in Sources */,
 				544FD5AC204A0AA600B11AD9 /* BlogViewController.swift in Sources */,
+				5489A2CA205748B5006644D6 /* FAQsAnswerViewController.swift in Sources */,
 				541709D91FE2832500DA8027 /* Extensions.swift in Sources */,
 				54D8E5A91FF2393B00CC888B /* retrievePasswordViewController.swift in Sources */,
 				541D59C11FF8B296003ACC73 /* models.swift in Sources */,

@@ -9,72 +9,56 @@
 import Foundation
 import MessageUI
 
-class numberTableViewCell: UITableViewCell {
-    private var numberLabel = UILabel(frame: CGRect(x: 60, y: 14, width: 120, height: 20))
-    private var cellImage = UIImageView(frame: CGRect(x: 8, y: 9, width: 30, height: 30))
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?){
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        cellImage.image = UIImage(named: "Phone Icon")
-        cellImage.contentMode = .scaleAspectFit
-        self.contentView.addSubview(cellImage)
-        self.contentView.addSubview(numberLabel)
-        self.contentView.layer.borderWidth = 1
-        self.contentView.layer.borderColor = UIColor.black.cgColor
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
-    func setNumber(number: String){
-        numberLabel.text = number
-    }
-    
-    func getNumber() -> String?{
-        return numberLabel.text
-    }
-}
 
 class contactUsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, userInputFieldDelegate, MFMailComposeViewControllerDelegate {
     var menuButton : UIBarButtonItem!
     var byEmail: UILabel!
-    var byPhone: UILabel!
     var messageBox: UITextView!
     var formTableView: UITableView!
-    var numbersTableView: UITableView!
     var submitButton: UIButton!
     var formInputs : [String] = ["",""]
-    var numbers = ["844-628-3368"]
     var messagePlaceHolder = "Enter Message (Required)"
     
-    override func viewDidLoad() {
+    
+    //var byPhone: UILabel!
+    //var numbersTableView: UITableView!
+    //var numbers = ["844-628-3368"]
+    
+    /*override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyBoardWhenTappedAround()
         menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
-        self.navigationItem.title = "Contact US"
+        self.navigationItem.title = "Contact Us"
         self.toggleMenuButton(menuButton: menuButton)
         setUpView()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }*/
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidLoad()
+        self.hideKeyBoardWhenTappedAround()
+        menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
+        self.navigationItem.title = "By Email"
+        self.view.backgroundColor = UIColor.white
+        self.toggleMenuButton(menuButton: menuButton)
+        self.navigationItem.leftBarButtonItem = navigationItem.backBarButtonItem
+        self.navigationItem.rightBarButtonItem = menuButton
+        setUpView()
     }
     
     func setUpView(){
-        byEmail = UILabel(frame: CGRect(x: self.view.center.x - 50, y: 80, width: 100, height: 20))
-        byEmail.text = "By Email"
+        byEmail = UILabel(frame: CGRect(x: self.view.center.x - 50, y: self.view.center.y - 150, width: 100, height: 20))
+        byEmail.text = "Contact Us"
         self.view.addSubview(byEmail)
         
         setUpTables()
         
-        byPhone = UILabel(frame: CGRect(x: self.view.center.x - 50, y: numbersTableView.frame.minY - 50, width: 100, height: 20))
-        byPhone.text = "By Phone"
-        self.view.addSubview(byPhone)
+        //byPhone = UILabel(frame: CGRect(x: self.view.center.x - 50, y: numbersTableView.frame.minY - 50, width: 100, height: 20))
+        //byPhone.text = "By Phone"
+       // self.view.addSubview(byPhone)
         
         for case let label as UILabel in self.view.subviews {
             label.textColor = LoginSignUpViewController.themeColor
@@ -94,15 +78,20 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
         setUpMessageView()
         setUpButton()
         
-        numbersTableView = UITableView(frame: CGRect(x: self.view.center.x - 140, y: submitButton.frame.maxY + 80, width: 280, height: 144))
+        /*numbersTableView = UITableView(frame: CGRect(x: self.view.center.x - 140, y: submitButton.frame.maxY + 80, width: 280, height: CGFloat(numbers.count*48)))
         numbersTableView.delegate = self
         numbersTableView.dataSource = self
-        numbersTableView.register(numberTableViewCell.self, forCellReuseIdentifier: "phoneCell")
+        numbersTableView.register(genericTableViewCell.self, forCellReuseIdentifier: "phoneCell")
         numbersTableView.alwaysBounceVertical = false
+        
+        let tempButton = UIButton(frame: CGRect(x: self.view.center.x - 50, y: numbersTableView.frame.maxY + 5, width: 100, height: 30))
+        tempButton.setUpDefaultType(title: "toFAQS")
+        tempButton.addTarget(self, action: #selector(loadFAQs), for: .touchUpInside)*/
         
         
         self.view.addSubview(formTableView)
-        self.view.addSubview(numbersTableView)
+       // self.view.addSubview(numbersTableView)
+        //self.view.addSubview(tempButton)
     }
     
     func setUpMessageView(){
@@ -129,18 +118,20 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
     func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == formTableView {
             return 2
-        } else if tableView == numbersTableView {
-            return 1
         }
+       /* } else if tableView == numbersTableView {
+            return 1
+        }*/
         return 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == formTableView {
             return 1
-        } else if tableView == numbersTableView {
-            return numbers.count
         }
+       /* } else if tableView == numbersTableView {
+            return numbers.count
+        }*/
         return 0
     }
     
@@ -157,35 +148,31 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == formTableView {
             return 45
-        } else if tableView == numbersTableView {
-            return 48
         }
+      /*  } else if tableView == numbersTableView {
+            return 48
+        }*/
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = UITableViewCell()
-        if tableView == formTableView {
-            let ftvc = tableView.dequeueReusableCell(withIdentifier: "formCells", for: indexPath) as! formTableViewCell
-            ftvc.formTextField?.userInputdelegate = self
-            if indexPath.section == 0 {
-                ftvc.formTextField?.placeholder = "First and Last Name"
-                ftvc.formTextField?.setVal(val: 0)
-            }
-            if indexPath.section == 1 {
-                ftvc.formTextField?.placeholder = "Subject (Optional)"
-                ftvc.formTextField?.setVal(val: 1)
-            }
-            cell = ftvc
-        } else if tableView == numbersTableView {
-            let ntvc = tableView.dequeueReusableCell(withIdentifier: "phoneCell", for: indexPath) as! numberTableViewCell
-            ntvc.setNumber(number: numbers[indexPath.row])
-            cell = ntvc
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "formCells", for: indexPath) as! formTableViewCell
+        cell.layoutIfNeeded()
+        cell.setUpFormTextField()
+        cell.formTextField.userInputdelegate = self
+        if indexPath.section == 0 {
+            cell.formTextField.placeholder = "First and Last Name"
+            cell.formTextField.setVal(val: 0)
+        }
+        if indexPath.section == 1 {
+            cell.formTextField.placeholder = "Subject (Optional)"
+            cell.formTextField.setVal(val: 1)
         }
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    /*func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == numbersTableView {
             let number = numbers[indexPath.row]
             let callAlert = UIAlertController(title: "Call \(number)?", message: "", preferredStyle: UIAlertControllerStyle.alert)
@@ -200,7 +187,7 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
             }))
             present(callAlert, animated: true, completion: nil)
         }
-    }
+    }*/
     
     /***************************************** textField and textView functions *****************************/
     func userInputFieldDidChange(userInputField: userInputField) {
@@ -263,6 +250,10 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
             self.promptAlertWithDelay("Success!", inmessage: "Message has been sent. We will have someone address your concerns at our earliest convenience", indelay: 5.0)
         }
 
+    }
+    
+    func loadFAQs(){
+        self.performSegue(withIdentifier: "tempSegue", sender: self)
     }
     
     

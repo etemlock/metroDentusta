@@ -25,9 +25,9 @@ class navBarController : UITableViewController {
     //You need a reload table delegate in order to actually acheive this
     override func numberOfSections(in tableView: UITableView) -> Int {
         if user != nil {
-            return 7
+            return 6
         }
-        return 6
+        return 5
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -38,15 +38,12 @@ class navBarController : UITableViewController {
             performSegue(withIdentifier: "findDentistSegue", sender: self)
         }
         if(indexPath.section == 3){
-            performSegue(withIdentifier: "FAQsSegue", sender: self)
-        }
-        if(indexPath.section == 4){
             performSegue(withIdentifier: "dentalHealthSegue", sender: self)
         }
-        if(indexPath.section == 5){
-            performSegue(withIdentifier: "ContactSegue", sender: self)
+        if(indexPath.section == 4){
+            performSegue(withIdentifier: "HelpSegue", sender: self)
         }
-        if(indexPath.section == 6){
+        if(indexPath.section == 5){
             if self.user != nil {
                 performSegue(withIdentifier: "viewCardSegue", sender: self)
             } else {

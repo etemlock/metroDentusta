@@ -133,39 +133,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection id="FCW-Fp-CMA">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="T1X-ey-Snh">
-                                        <rect key="frame" x="0.0" y="173" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T1X-ey-Snh" id="5qk-h8-1KS">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r7Z-bx-0Fq">
-                                                    <rect key="frame" x="24" y="0.0" width="351" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <color key="backgroundColor" red="0.1013190097" green="0.47979477190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <attributedString key="attributedText">
-                                                        <fragment content="FAQs">
-                                                            <attributes>
-                                                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <font key="NSFont" metaFont="system" size="17"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="15" tighteningFactorForTruncation="0.0"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                    </attributedString>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                             <tableViewSection id="Rve-39-JqQ">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="aoe-xK-7Vi">
-                                        <rect key="frame" x="0.0" y="219" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="173" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aoe-xK-7Vi" id="MjA-Ll-vP1">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -194,7 +165,7 @@
                             <tableViewSection id="1ib-ur-VCm">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="5Du-oS-heh">
-                                        <rect key="frame" x="0.0" y="265" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="219" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5Du-oS-heh" id="cKM-Wx-4S5">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -205,7 +176,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" red="0.1013190097" green="0.47979477190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <attributedString key="attributedText">
-                                                        <fragment content="Contact Us">
+                                                        <fragment content="Help">
                                                             <attributes>
                                                                 <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <font key="NSFont" metaFont="system" size="17"/>
@@ -223,7 +194,7 @@
                             <tableViewSection id="WnM-dk-bRC">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1yQ-Cy-8aT">
-                                        <rect key="frame" x="0.0" y="311" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="265" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1yQ-Cy-8aT" id="zqO-uv-Fpf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -260,8 +231,7 @@
                         <segue destination="fTj-Rk-Z5J" kind="custom" identifier="findDentistSegue" customClass="SWRevealViewControllerSeguePushController" id="BWd-1a-8jL"/>
                         <segue destination="lhv-SC-63R" kind="custom" identifier="viewCardSegue" customClass="SWRevealViewControllerSeguePushController" id="ejs-Td-RHa"/>
                         <segue destination="2I1-q2-5dL" kind="custom" identifier="dentalHealthSegue" customClass="SWRevealViewControllerSeguePushController" id="BRV-Zb-VO3"/>
-                        <segue destination="NfO-94-4yg" kind="custom" identifier="ContactSegue" customClass="SWRevealViewControllerSeguePushController" id="URK-FQ-KyK"/>
-                        <segue destination="NZ7-GL-Uiy" kind="custom" identifier="FAQsSegue" customClass="SWRevealViewControllerSeguePushController" id="buT-dF-pIr"/>
+                        <segue destination="NfO-94-4yg" kind="custom" identifier="HelpSegue" customClass="SWRevealViewControllerSeguePushController" id="URK-FQ-KyK"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r4U-pY-4Z5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -271,7 +241,7 @@
         <!--Navigation Controller-->
         <scene sceneID="foz-lS-w5v">
             <objects>
-                <navigationController id="lhv-SC-63R" sceneMemberID="viewController">
+                <navigationController id="lhv-SC-63R" customClass="NavigationController" customModule="metroDentusa" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="qSV-UQ-XbW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -287,77 +257,23 @@
         <!--Navigation Controller-->
         <scene sceneID="U5G-6w-zlh">
             <objects>
-                <navigationController id="NfO-94-4yg" sceneMemberID="viewController">
+                <navigationController id="NfO-94-4yg" customClass="NavigationController" customModule="metroDentusa" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ksf-Xc-tcK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="n9Q-z2-pPa" kind="relationship" relationship="rootViewController" id="Lrt-FG-7CG"/>
+                        <segue destination="Z64-HD-px2" kind="relationship" relationship="rootViewController" id="7TD-Rt-noI"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Guu-2Q-iK4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1521" y="2224"/>
-        </scene>
-        <!--Contact Us View Controller-->
-        <scene sceneID="cZg-u6-ypF">
-            <objects>
-                <viewController id="n9Q-z2-pPa" customClass="contactUsViewController" customModule="metroDentusa" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="n0P-dt-3U2"/>
-                        <viewControllerLayoutGuide type="bottom" id="fnx-zA-hPG"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="glz-fN-gez">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="c06-xR-45I"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tqN-tR-rJH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2510" y="2428"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="RNe-jZ-1RS">
-            <objects>
-                <navigationController id="NZ7-GL-Uiy" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="uJv-T2-XcP">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="jXT-a6-295" kind="relationship" relationship="rootViewController" id="wJn-ov-alq"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1aZ-dl-wIg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2510" y="1678"/>
+            <point key="canvasLocation" x="2004" y="1576"/>
         </scene>
         <!--Qs View Controller-->
-        <scene sceneID="obY-BD-QMZ">
-            <objects>
-                <viewController id="jXT-a6-295" customClass="FAQsViewController" customModule="metroDentusa" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="TmO-if-Ucz"/>
-                        <viewControllerLayoutGuide type="bottom" id="P5u-Oc-zIq"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="0tz-If-kb6">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="QzB-28-J7U"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Be9-0I-Jkg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3452" y="1678"/>
-        </scene>
-        <!--View Controller-->
         <scene sceneID="HOj-2a-JTd">
             <objects>
-                <viewController id="Z64-HD-px2" sceneMemberID="viewController">
+                <viewController id="Z64-HD-px2" customClass="FAQsViewController" customModule="metroDentusa" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="AoL-q8-Dhc"/>
                         <viewControllerLayoutGuide type="bottom" id="bdG-qo-tnh"/>
@@ -367,10 +283,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="UAF-O3-cxq"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nwg-qP-VP9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4252" y="2427"/>
+            <point key="canvasLocation" x="2959" y="1576"/>
         </scene>
         <!--Benefit Card View Controller-->
         <scene sceneID="s2c-3G-imi">
@@ -394,7 +311,7 @@
         <!--Navigation Controller-->
         <scene sceneID="rIf-FW-4eV">
             <objects>
-                <navigationController id="fTj-Rk-Z5J" sceneMemberID="viewController">
+                <navigationController id="fTj-Rk-Z5J" customClass="NavigationController" customModule="metroDentusa" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6yz-ch-CRZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -410,7 +327,7 @@
         <!--Navigation Controller-->
         <scene sceneID="eY8-WL-8WQ">
             <objects>
-                <navigationController id="2I1-q2-5dL" sceneMemberID="viewController">
+                <navigationController id="2I1-q2-5dL" customClass="NavigationController" customModule="metroDentusa" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="d3B-Ct-u3I">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -464,7 +381,7 @@
         <!--Navigation Controller-->
         <scene sceneID="OjQ-4Q-bfa">
             <objects>
-                <navigationController id="HuP-Q4-bS7" sceneMemberID="viewController">
+                <navigationController id="HuP-Q4-bS7" customClass="NavigationController" customModule="metroDentusa" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Uwv-ti-nur">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

@@ -58,15 +58,14 @@ extension UIViewController {
         }
     }
     
-    /*public func revealController(_ revealController: SWRevealViewController!, willMoveTo position: FrontViewPosition) {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(revealController.revealToggle(_:)))
-        if position == FrontViewPositionLeftSide {
-            tap.isEnabled = true
-        } else if position == FrontViewPositionLeft {
-            tap.isEnabled = false
+    func setUpBackBarButton(title: String?){
+        if self.navigationController != nil {
+            let backItem = UIBarButtonItem()
+            backItem.title = title
+            self.navigationItem.backBarButtonItem = backItem
         }
-    }*/
-    
+    }
+  
 }
 
 
@@ -75,6 +74,7 @@ extension UIButton {
         self.setTitle(title, for: .normal)
         self.backgroundColor = LoginSignUpViewController.themeColor
         self.titleLabel?.textColor = UIColor.white
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 20
     }
@@ -109,17 +109,12 @@ extension String {
     }
 }
 
-/*extension countryInfo {
-    mutating func clear(){
-        self.topoName = ""
-        self.name = ""
-        self.lat = 0
-        self.long = 0
-        self.geoId = 0
-        self.countryCode = ""
-        self.countryName = ""
+extension UITableView {
+    func scrollToFirstRow(sectionNum: Int){
+        let indexPath = IndexPath(row: 0, section: sectionNum)
+        self.scrollToRow(at: indexPath, at: .top, animated: true)
     }
-}*/
+}
 
 
 
