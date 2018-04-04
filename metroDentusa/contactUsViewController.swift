@@ -12,30 +12,19 @@ import MessageUI
 
 class contactUsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, userInputFieldDelegate, MFMailComposeViewControllerDelegate {
     var menuButton : UIBarButtonItem!
-    var byEmail: UILabel!
-    var messageBox: UITextView!
-    var formTableView: UITableView!
-    var submitButton: UIButton!
-    var formInputs : [String] = ["",""]
+    var contactUsLabel = UILabel()
+    //var byEmail: UILabel!
+    var scrollView = UIScrollView()
+    var contentView = UIView()
+    var invisibleTopView = UIView()
+    var messageBox = UITextView()
+    var formTableView =  UITableView()
+    var submitButton =  UIButton()
+    var formInputs : [String] = ["","",""]
     var messagePlaceHolder = "Enter Message (Required)"
     
     
-    //var byPhone: UILabel!
-    //var numbersTableView: UITableView!
-    //var numbers = ["844-628-3368"]
-    
-    /*override func viewDidLoad() {
-        super.viewDidLoad()
-        self.hideKeyBoardWhenTappedAround()
-        menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
-        self.navigationItem.title = "Contact Us"
-        self.toggleMenuButton(menuButton: menuButton)
-        setUpView()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }*/
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidLoad()
@@ -46,30 +35,49 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
         self.toggleMenuButton(menuButton: menuButton)
         self.navigationItem.leftBarButtonItem = navigationItem.backBarButtonItem
         self.navigationItem.rightBarButtonItem = menuButton
+        
+        self.setUpScrollViewAndContentView(scrollView: self.scrollView, contentView: self.contentView)
         setUpView()
+        contentView.bottomAnchor.constraint(equalTo: submitButton.bottomAnchor, constant: 30).isActive = true
+        contentView.layoutIfNeeded()
+        scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
     }
     
     func setUpView(){
-        byEmail = UILabel(frame: CGRect(x: self.view.center.x - 50, y: self.view.center.y - 150, width: 100, height: 20))
-        byEmail.text = "Contact Us"
-        self.view.addSubview(byEmail)
+        invisibleTopView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(invisibleTopView)
+        invisibleTopView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        invisibleTopView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        invisibleTopView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        invisibleTopView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.2).isActive = true
+        invisibleTopView.backgroundColor = UIColor.clear
+        contentView.sendSubview(toBack: invisibleTopView)
+        
+        
+        contactUsLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(contactUsLabel)
+        contactUsLabel.topAnchor.constraint(equalTo: invisibleTopView.bottomAnchor).isActive = true
+        contactUsLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        contactUsLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        contactUsLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
+        contactUsLabel.text = "Contact Us"
+        contactUsLabel.textColor = LoginSignUpViewController.themeColor
+        contactUsLabel.textAlignment = .center
+        contactUsLabel.font = UIFont.systemFont(ofSize: 19)
+        
         
         setUpTables()
-        
-        //byPhone = UILabel(frame: CGRect(x: self.view.center.x - 50, y: numbersTableView.frame.minY - 50, width: 100, height: 20))
-        //byPhone.text = "By Phone"
-       // self.view.addSubview(byPhone)
-        
-        for case let label as UILabel in self.view.subviews {
-            label.textColor = LoginSignUpViewController.themeColor
-            label.textAlignment = .center
-            label.font = byEmail.font.withSize(19)
-        }
-        
     }
     
+    
     func setUpTables(){
-        formTableView = UITableView(frame: CGRect(x: self.view.center.x - 140, y: byEmail.frame.maxY + 25, width: 280, height: 120))
+        //formTableView = UITableView(frame: CGRect(x: self.view.center.x - 140, y: byEmail.frame.maxY + 25, width: 280, height: 120))
+        formTableView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(formTableView)
+        formTableView.topAnchor.constraint(equalTo: contactUsLabel.bottomAnchor, constant: 25).isActive = true
+        formTableView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        formTableView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.75).isActive = true
+        formTableView.heightAnchor.constraint(equalToConstant: 180).isActive = true
         formTableView.delegate = self
         formTableView.dataSource = self
         formTableView.register(formTableViewCell.self, forCellReuseIdentifier: "formCells")
@@ -78,24 +86,16 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
         setUpMessageView()
         setUpButton()
         
-        /*numbersTableView = UITableView(frame: CGRect(x: self.view.center.x - 140, y: submitButton.frame.maxY + 80, width: 280, height: CGFloat(numbers.count*48)))
-        numbersTableView.delegate = self
-        numbersTableView.dataSource = self
-        numbersTableView.register(genericTableViewCell.self, forCellReuseIdentifier: "phoneCell")
-        numbersTableView.alwaysBounceVertical = false
-        
-        let tempButton = UIButton(frame: CGRect(x: self.view.center.x - 50, y: numbersTableView.frame.maxY + 5, width: 100, height: 30))
-        tempButton.setUpDefaultType(title: "toFAQS")
-        tempButton.addTarget(self, action: #selector(loadFAQs), for: .touchUpInside)*/
-        
-        
-        self.view.addSubview(formTableView)
-       // self.view.addSubview(numbersTableView)
-        //self.view.addSubview(tempButton)
     }
     
     func setUpMessageView(){
-        messageBox = UITextView(frame: CGRect(x: formTableView.frame.minX, y: formTableView.frame.maxY+1, width: formTableView.frame.width, height: 100))
+        //messageBox = UITextView(frame: CGRect(x: formTableView.frame.minX, y: formTableView.frame.maxY+1, width: formTableView.frame.width, height: 100))
+        messageBox.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(messageBox)
+        messageBox.topAnchor.constraint(equalTo: formTableView.bottomAnchor, constant: 1).isActive = true
+        messageBox.leadingAnchor.constraint(equalTo: formTableView.leadingAnchor).isActive = true
+        messageBox.trailingAnchor.constraint(equalTo: formTableView.trailingAnchor).isActive = true
+        messageBox.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.17).isActive = true
         messageBox.backgroundColor = UIColor(red: 229/255, green: 226/255, blue: 233/255, alpha: 1)
         messageBox.layer.cornerRadius = 5
         messageBox.layer.borderWidth = 1
@@ -104,24 +104,25 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
         messageBox.text = messagePlaceHolder
         messageBox.textColor = UIColor.lightGray
         messageBox.delegate = self
-        self.view.addSubview(messageBox)
     }
     
     func setUpButton(){
-        submitButton = UIButton(frame: CGRect(x: self.view.center.x - 50, y: messageBox.frame.maxY + 30, width: 100, height: 40))
+        //submitButton = UIButton(frame: CGRect(x: self.view.center.x - 50, y: messageBox.frame.maxY + 30, width: 100, height: 40))
+        submitButton.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(submitButton)
+        submitButton.topAnchor.constraint(equalTo: messageBox.bottomAnchor, constant: 30).isActive = true
+        submitButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        submitButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.27).isActive = true
+        submitButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         submitButton.setUpDefaultType(title: "Submit")
         submitButton.addTarget(self, action: #selector(submitMessage), for: .touchUpInside)
-        self.view.addSubview(submitButton)
     }
     
     /********************************** tableView functions *********************************/
     func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == formTableView {
-            return 2
+            return 3
         }
-       /* } else if tableView == numbersTableView {
-            return 1
-        }*/
         return 0
     }
     
@@ -129,9 +130,6 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
         if tableView == formTableView {
             return 1
         }
-       /* } else if tableView == numbersTableView {
-            return numbers.count
-        }*/
         return 0
     }
     
@@ -149,9 +147,6 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
         if tableView == formTableView {
             return 45
         }
-      /*  } else if tableView == numbersTableView {
-            return 48
-        }*/
         return 0
     }
     
@@ -168,6 +163,10 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
         if indexPath.section == 1 {
             cell.formTextField.placeholder = "Subject (Optional)"
             cell.formTextField.setVal(val: 1)
+        }
+        if indexPath.section == 2 {
+            cell.formTextField.placeholder = "Phone Number (Optional)"
+            cell.formTextField.setVal(val: 2)
         }
         return cell
     }
@@ -197,6 +196,8 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
                 formInputs[0] = userInputField.text!
             case 1:
                 formInputs[1] = userInputField.text!
+            case 2:
+                formInputs[2] = userInputField.text!
             default:
                 break
             }
@@ -226,7 +227,14 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
             
             composeVC.setCcRecipients(["ttmemail@ttmail.com"])
             composeVC.setSubject("\(formInputs[1])")
-            composeVC.setMessageBody("\((messageBox.text)!)\n\n\(formInputs[0])", isHTML: false)
+            var messageBody = "\((messageBox.text)!)\n\n\(formInputs[0])"
+            if formInputs[2] != "" {
+                let numberRegex = "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$"
+                if formInputs[2].validatePredicate(regex: numberRegex) {
+                    messageBody += "\nPhone number: \(formInputs[2])"
+                }
+            }
+            composeVC.setMessageBody(messageBody, isHTML: false)
             
             if !MFMailComposeViewController.canSendMail() {
                 print("Mail services are not available")

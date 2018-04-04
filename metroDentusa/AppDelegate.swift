@@ -63,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         task.resume()
     }
     
-    func AlamofireHandlePostRequest(request: URLRequest, postStmt: String, completion: @escaping (_ error: Error?, _ data: Data?) -> Void){
+    func AlamofireHandlePostRequest(request: URLRequest, completion: @escaping (_ error: Error?, _ data: Data?) -> Void){
         
         /*if let cachedData = AppDelegate.xmlStringCache[postStmt]{
             print("This data was cached")
@@ -101,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             request.httpMethod = "POST"
             request.addValue("application/xml", forHTTPHeaderField: "Content-Type")
             
-            AlamofireHandlePostRequest(request: request, postStmt: queryString, completion: { (error: Error?, data: Data?) in
+            AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
                 if data != nil {
                     completion(data)
                 }
@@ -125,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             xmlRequest.httpMethod = "POST"
             xmlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
             
-            AlamofireHandlePostRequest(request: xmlRequest, postStmt: xmlString, completion: { (error: Error?, data: Data?) in
+            AlamofireHandlePostRequest(request: xmlRequest, completion: { (error: Error?, data: Data?) in
                 if data != nil {
                     do {
                         if let jsonDict = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]{
@@ -140,6 +140,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             })
         }
+    }
+    
+    func makeHTTPPostRequestToGetPlanDocuments(urlString: String, parameters: [String], completion: @escaping (_ data : Data?) -> Void){
+        if let myUrl = URL(string: urlString){
+            let queryString = "<request type='plandocumentsHTML'  StyleSheet='xml' memberid='\(parameters[0]) ' ClientID='\(parameters[1])' sessionguid='a'></request>"
+            var request = URLRequest(url: myUrl)
+            request.httpBody = queryString.data(using: .utf8)
+            request.httpMethod = "POST"
+            request.addValue("application/xml", forHTTPHeaderField: "Content-Type")
+            
+            AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
+                if data != nil {
+                    completion(data)
+                }
+            })
+        }
+    }
+    
+    func makeHTTPPostRequestToViewClaims(urlString: String, userDetails: member, completion: @escaping (_ data: Data?) -> Void ){
+        if let myUrl = URL(string: urlString){
+            let queryString = "<request type='serviceHistoryHTML' UserID='' MemberID='\(userDetails.getId())' ClientID='\(userDetails.getClientId())' StartDate='' EndDate='' Specialty='' FamilyID='' ShowFilter='Y' Tooth='' Code='' Benefit='' Order='' Claim='' ShowServiceDetail='true' MemberServices='' SessionID='' sessionguid='a' StyleSheet='xml'></request>"
+            var request = URLRequest(url: myUrl)
+            request.httpBody = queryString.data(using: .utf8)
+            request.httpMethod = "POST"
+            request.addValue("application/xml", forHTTPHeaderField: "Content-Type")
+            
+            AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
+                if data != nil {
+                    completion(data)
+                }
+            })
+        }
+        
     }
     
             

@@ -12,7 +12,7 @@ class BlogViewController : UIViewController, UITableViewDelegate, UITableViewDat
     var menuButton : UIBarButtonItem!
     var scrollView: UIScrollView!
     var logoView: UIImageView!
-    var tableView: UITableView!
+    var tableView = UITableView()
     
     /**********XML Parsing data *********/
     var parser = XMLParser()
@@ -33,6 +33,15 @@ class BlogViewController : UIViewController, UITableViewDelegate, UITableViewDat
         setUpParser()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        let orient = UIDevice.current.orientation
+        for cell in tableView.visibleCells  {
+            let bCell = cell as! blogTableCell
+            bCell.parentViewDidTransition(orientation: orient)
+        }
+        super.viewWillTransition(to: size, with: coordinator)
+    }
+    
     func setUpScrollView(){
         scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
         scrollView.backgroundColor = UIColor.clear
@@ -51,14 +60,23 @@ class BlogViewController : UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func setUpTableView(){
-        let tableminY = logoView.frame.maxY + 25
-        tableView = UITableView(frame: CGRect(x: 0, y: tableminY, width: scrollView.frame.width, height: scrollView.frame.height - tableminY))
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(tableView)
+        tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 25).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        
+        
+        //let tableminY = logoView.frame.maxY + 25
+        //tableView = UITableView(frame: CGRect(x: 0, y: tableminY, width: scrollView.frame.width, height: scrollView.frame.height - tableminY))
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(blogTableCell.self, forCellReuseIdentifier: "blogCell")
         tableView.alwaysBounceVertical = false
         tableView.tableFooterView = UIView()
-        scrollView.addSubview(tableView)
+        //scrollView.addSubview(tableView)
     }
     
     func setUpParser(){

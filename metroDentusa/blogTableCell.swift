@@ -28,19 +28,32 @@ class blogTableCell : UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    
     public func setUpCell(params: blogPostParams){
         /**************** assign link ******************/
         link = params.blogLink
         
         /****************** set up content***************/
-        let labelWidth = self.contentView.frame.width - 16
-        let estRect1 = params.title.estimateFrameForText(maxWidth: labelWidth, maxHeight: 45, font: 17)
-        title.frame = CGRect(x: 8, y: 23, width: labelWidth, height: estRect1.height)
+        //let standardWidth = self.frame.width - 16
+        
+        title.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(title)
+        title.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
+        title.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8).isActive = true
+        title.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8).isActive = true
+       // var estHeight = params.title.estimateFrameForText(maxWidth: standardWidth, maxHeight: 45, font: 17).height
+        //title.heightAnchor.constraint(equalToConstant: estHeight).isActive = true
         title.text = params.title
         title.textColor = LoginSignUpViewController.themeColor
         title.numberOfLines = 2
+
         
-        authorDate.frame = CGRect(x: 8, y: title.frame.maxY + 4, width: labelWidth, height: 17)
+        authorDate.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(authorDate)
+        authorDate.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 4).isActive = true
+        authorDate.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8).isActive = true
+        authorDate.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8).isActive = true
+        authorDate.heightAnchor.constraint(equalToConstant: 17).isActive = true
         authorDate.text = params.date + " by " + params.author
         authorDate.font = authorDate.font.withSize(13)
         authorDate.textColor = UIColor.darkGray
@@ -51,14 +64,26 @@ class blogTableCell : UITableViewCell {
         }
         let endIndex = categoryString.index(categoryString.endIndex, offsetBy: -2)
         categoryString = categoryString.substring(to: endIndex)
-        let estRect2 = categoryString.estimateFrameForText(maxWidth: labelWidth, maxHeight: 35, font: 13)
-        categoryLabel.frame = CGRect(x: 8, y: authorDate.frame.maxY + 2, width: labelWidth, height: estRect2.height)
+        //estHeight = categoryString.estimateFrameForText(maxWidth: standardWidth, maxHeight: 35, font: 13).height
+        categoryLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(categoryLabel)
+        categoryLabel.topAnchor.constraint(equalTo: authorDate.bottomAnchor, constant: 2).isActive = true
+        categoryLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8).isActive = true
+        categoryLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8).isActive = true
         categoryLabel.text = categoryString
         categoryLabel.font = categoryLabel.font.withSize(13)
         categoryLabel.numberOfLines = 2
         categoryLabel.textColor = UIColor.darkGray
         
-        cellImageView.frame = CGRect(x: 0, y: 195, width: self.contentView.frame.width, height: 140)
+        parentViewDidTransition(orientation: UIDevice.current.orientation)
+
+        
+        cellImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(cellImageView)
+        cellImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        cellImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        cellImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        cellImageView.heightAnchor.constraint(equalToConstant: 145).isActive = true
         if params.image != nil {
             cellImageView.image = params.image
         } else {
@@ -66,17 +91,32 @@ class blogTableCell : UITableViewCell {
         }
         cellImageView.contentMode = .scaleAspectFit
         
-        let descriptionHeight = cellImageView.frame.minY - categoryLabel.frame.maxY - 8
-        descriptionText.frame = CGRect(x: 8, y: categoryLabel.frame.maxY + 4, width: labelWidth, height: descriptionHeight)
+        
+        descriptionText.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(descriptionText)
+        descriptionText.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8).isActive = true
+        descriptionText.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8).isActive = true
+        descriptionText.topAnchor.constraint(equalTo: categoryLabel.bottomAnchor, constant: 4).isActive = true
+        descriptionText.bottomAnchor.constraint(equalTo: cellImageView.topAnchor, constant: -4).isActive = true
         descriptionText.text = params.description
         descriptionText.font = descriptionText.font.withSize(15)
         descriptionText.numberOfLines = 4
         
-        self.contentView.addSubview(title)
-        self.contentView.addSubview(authorDate)
-        self.contentView.addSubview(categoryLabel)
-        self.contentView.addSubview(cellImageView)
-        self.contentView.addSubview(descriptionText)
+    }
+    
+    func parentViewDidTransition(orientation: UIDeviceOrientation){
+        switch orientation {
+        case .portrait:
+            title.textAlignment = .left
+            authorDate.textAlignment = .left
+            categoryLabel.textAlignment = .left
+        case .landscapeLeft, .landscapeRight:
+            title.textAlignment = .center
+            authorDate.textAlignment = .center
+            categoryLabel.textAlignment = .center
+        default:
+            break
+        }
     }
     
 

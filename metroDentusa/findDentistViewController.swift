@@ -19,7 +19,7 @@ import MapKit
  6. xmlParser delegate functions
  **/
 
-class findDentistViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UISearchBarDelegate, XMLParserDelegate, setRowDelegate {
+class findDentistViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource,  XMLParserDelegate, setRowDelegate {
 
     var menuButton : UIBarButtonItem!
     //var mapView  = MKMapView(frame: CGRect(x: 0, y: 105, width: 375, height: 325))
@@ -443,7 +443,6 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
             self.newPickerPop.frame.origin.y = 386
             self.newPickerPop.frame.size.height = self.scrollView.frame.height - 386
         }, completion: nil)
-        newPickerPop.updatePickerView()
         newPickerPop.pickerView.delegate = self
         newPickerPop.pickerView.dataSource = self
         

@@ -10,12 +10,14 @@ struct member{
     private var Id: String
     private var username: String
     private var password: String
+    private var clientId: String
     private var sessionId: String
     
-    init(id: String, usrname: String, pssword: String, ssId: String){
+    init(id: String, usrname: String, pssword: String, group: String, ssId: String){
         Id = id
         username = usrname
         password = pssword
+        clientId = group
         sessionId = ssId
     }
     
@@ -29,6 +31,10 @@ struct member{
     
     mutating func setPassword(pass: String){
         password = pass
+    }
+    
+    mutating func setClientId(group: String){
+        clientId = group
     }
     
     func getId() -> String {
@@ -45,6 +51,10 @@ struct member{
     
     func getPassword() -> String {
         return password
+    }
+    
+    func getClientId() -> String {
+        return clientId
     }
 }
 
@@ -75,6 +85,17 @@ struct blogPostParams {
         self.blogLink = ""
         self.image = nil
     }
+}
+
+struct DocumentModel{
+    var name: String
+    var docURL: String
+    
+    mutating func clearParams(){
+        self.name = ""
+        self.docURL = ""
+    }
+    
 }
 
 struct providerModel {

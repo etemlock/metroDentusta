@@ -341,9 +341,17 @@ class benefitCardViewController: UIViewController {
         
         viewClaimsButton.setUpDefaultType(title: "View My Claims")
         sendInfoButton.setUpDefaultType(title: "Send My Benefit Info")
-        
-        
-        
+    }
+    
+    
+    /********************************************* UIButton actions ******************************************/
+    func viewClaims(){
+        AppDelegate().makeHTTPPostRequestToViewClaims(urlString: "https://edi.asonet.com/httpserver.ashx?obj=serviceHistoryHTML", userDetails: user, completion: { (data: Data?) in
+            if data != nil {
+                print("there was data")
+                print("not sure what to do with this data")
+            }
+        })
     }
     
     

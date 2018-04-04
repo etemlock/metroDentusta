@@ -20,6 +20,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     var contentView = UIView()
     private var segmentIndexFlag = 0
     static var themeColor = UIColor(red: 26/255, green: 122/255, blue: 1, alpha: 1)
+    static var defaultButtonTextColor = UIColor(red: 22/255, green: 118/255, blue: 1, alpha: 1)
     var logoView = UIImageView()
     var homePic =  UIImageView()
     var homePicConstraints : [String: NSLayoutConstraint?] = ["x": nil, "y": nil, "width" : nil, "height": nil] //left, top, width, height
@@ -58,6 +59,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
         self.navigationItem.title = "Welcome to ASO Data Services!"
         self.toggleMenuButton(menuButton: menuButton)
+        
         setUpScrollAndContentView()
         setUpImages()
         setUpLabel()
@@ -65,7 +67,8 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         setUpTableView()
         setUpButtons()
         
-        contentView.bottomAnchor.constraint(equalTo: forgotPasswordBtn.bottomAnchor, constant: 30).isActive = true
+        
+        contentView.bottomAnchor.constraint(equalTo: forgotPasswordBtn.bottomAnchor, constant: 90).isActive = true
         contentView.layoutIfNeeded()
         scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
     }
@@ -73,6 +76,22 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        let orient = UIDevice.current.orientation
+        for constraint in homePicConstraints {
+            constraint.value?.isActive = false
+        }
+        switch orient {
+        case .portrait:
+            setHomePicPotrait()
+        case .landscapeLeft, .landscapeRight:
+            setHomePicLandScape()
+        default:
+            break
+        }
+        super.viewWillTransition(to: size, with: coordinator)
     }
     
     
@@ -134,6 +153,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
             break
         }
     }
+    
     
     func setHomePicPotrait(){
         homePicConstraints["x"] = homePic.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
@@ -326,7 +346,12 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                 }
             }
         } else {
-            validateRegistration()
+            if validateRegistration(){
+                print("all inputs successful")
+                let nextVC = userCreationViewController()
+                self.setUpBackBarButton(title: "Back")
+                self.navigationController?.pushViewController(nextVC, animated: true)
+            }
         }
     }
     
@@ -440,25 +465,27 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         return true
     }
     
-    func validateRegistration(){
+    func validateRegistration() -> Bool {
         let socialRegEx = "^[0-9]{4}$"
         let birthDateRegEx = "(0[1-9]|1[0-2])[/](0[1-9]|[1-2][0-9]|3[0-1])[/]((19([0-9]{2}))|20([0-1][0-9]))"
         let zipCodeRegEx = "^[0-9]{5}(-([0-9]{4}))?"
         for input in createInputs{
             if input.isEmpty {
                 promptAlertWithDelay("Create Username failed", inmessage: "all inputs must be filled", indelay: 5.0)
-                return
+                return false
             }
         }
         if !createInputs[0].validatePredicate(regex: socialRegEx){
             promptAlertWithDelay("Create Username failed", inmessage: "social security input requires exactly 4 digits", indelay: 5.0)
+            return false
         } else if !createInputs[2].validatePredicate(regex: zipCodeRegEx){
             promptAlertWithDelay("Create Username failed", inmessage: "zipcode input  requires format XXXXX or XXXXX-XXXX", indelay: 5.0)
+            return false
         } else if !createInputs[1].validatePredicate(regex: birthDateRegEx){
             promptAlertWithDelay("Create Username failed", inmessage: "birthdate input requires format MM/DD/YYYY and must be a valid calendar date between 1900-2019", indelay: 5.0)
-        } else {
-            print("all inputs successful")
+            return false
         }
+        return true
     }
     
     /********************************************** xmlParserDelegate functions **************************************/
@@ -473,7 +500,17 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
             }
             if let id = attributeDict["memberid"]{
                 if statusSuccess {
-                    currUser = member(id: id, usrname: loginInputs[0], pssword: loginInputs[1], ssId: "")
+                    currUser = member(id: id, usrname: loginInputs[0], pssword: loginInputs[1], group: "", ssId: "")
+                }
+            }
+            if let client = attributeDict["client"]{
+                if statusSuccess && currUser != nil {
+                    currUser?.setClientId(group: client)
+                }
+            }
+            if let sessionId = attributeDict["sessionguid"] {
+                if statusSuccess && currUser != nil {
+                    currUser?.setSessionId(ssId: sessionId)
                 }
             }
         }

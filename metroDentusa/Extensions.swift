@@ -65,6 +65,26 @@ extension UIViewController {
             self.navigationItem.backBarButtonItem = backItem
         }
     }
+    
+    func setUpScrollViewAndContentView(scrollView: UIScrollView, contentView: UIView){
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = UIColor.clear
+        self.view.addSubview(scrollView)
+        scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        contentView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        
+        scrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        scrollView.alwaysBounceVertical = false
+        scrollView.bounces = false
+    }
   
 }
 
@@ -109,11 +129,33 @@ extension String {
     }
 }
 
+public protocol genericTableViewCell : class {
+    static var reuseIdentifier : String { get }
+    
+}
+
+extension genericTableViewCell {
+    public static var reuseIdentifier : String {
+        return String(describing: self)
+    }
+}
+
+
 extension UITableView {
     func scrollToFirstRow(sectionNum: Int){
         let indexPath = IndexPath(row: 0, section: sectionNum)
         self.scrollToRow(at: indexPath, at: .top, animated: true)
     }
+    
+    public func register<T: genericTableViewCell>(cellClass: T.Type){
+        register(cellClass, forCellReuseIdentifier: cellClass.reuseIdentifier)
+    }
+    
+    public func dequeueReusableCell<T: genericTableViewCell>(ofType cellClass: T.Type, for indexPath: IndexPath) -> T{
+        return dequeueReusableCell(withIdentifier: cellClass.reuseIdentifier, for: indexPath) as! T
+    }
+    
+    
 }
 
 

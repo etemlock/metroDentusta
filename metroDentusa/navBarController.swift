@@ -37,6 +37,9 @@ class navBarController : UITableViewController {
         if(indexPath.section == 1){
             performSegue(withIdentifier: "findDentistSegue", sender: self)
         }
+        if(indexPath.section == 2){
+            performSegue(withIdentifier: "formSegue", sender: self)
+        }
         if(indexPath.section == 3){
             performSegue(withIdentifier: "dentalHealthSegue", sender: self)
         }
@@ -53,6 +56,9 @@ class navBarController : UITableViewController {
                 performSegue(withIdentifier: "backHome", sender: self)
             }
         }
+        if(indexPath.section == 6){
+            performSegue(withIdentifier: "tempSegue", sender: self)
+        }
     }
     
     func setUser(member: member){
@@ -67,6 +73,9 @@ class navBarController : UITableViewController {
         if let navController = segue.destination as? UINavigationController {
             if segue.identifier == "backHome" {
                 navController.viewControllers = [LoginSignUpViewController(user: self.user, session: nil)]
+            }
+            if segue.identifier == "formSegue" {
+                navController.viewControllers = [formViewController(user: self.user)]
             }
             if segue.identifier == "viewCardSegue" {
                 navController.viewControllers = [benefitCardViewController(user: (self.user)!, session: nil)]
