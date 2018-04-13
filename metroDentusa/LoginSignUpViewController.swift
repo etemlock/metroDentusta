@@ -9,7 +9,6 @@
 import Foundation
 
 
-
 class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, userInputFieldDelegate , XMLParserDelegate {
     
 
@@ -18,6 +17,8 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     //views and subviews
     var scrollView = UIScrollView()
     var contentView = UIView()
+    var retrieveView = retrievePasswordView()
+    var retrieveViewTop : NSLayoutConstraint!
     private var segmentIndexFlag = 0
     static var themeColor = UIColor(red: 26/255, green: 122/255, blue: 1, alpha: 1)
     static var defaultButtonTextColor = UIColor(red: 22/255, green: 118/255, blue: 1, alpha: 1)
@@ -25,8 +26,6 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     var homePic =  UIImageView()
     var homePicConstraints : [String: NSLayoutConstraint?] = ["x": nil, "y": nil, "width" : nil, "height": nil] //left, top, width, height
     var subPicLabel = UILabel()
-    var loginInputs : [String] = ["",""]
-    var createInputs : [String] = ["","",""]
     var formTableView = UITableView()
     var continueButton = UIButton()
     var continueTop : NSLayoutConstraint!
@@ -34,10 +33,16 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     let segmentController : UISegmentedControl = UISegmentedControl(items: ["Login", "Create Username"])
     //var benefitCard: BenefitCardView?
     
-    //********** XMLParser testing related stuff **********/
+    /*********** data *********/
+    private var loginInputW = loginInputWrapper()
+    private var createInputW = createInputWrapper()
+    
+    //********** XMLParser testing related variables **********/
     var parser = XMLParser()
     var statusSuccess : Bool = false
+    var errorMsg = ""
     var currUser : member?
+    var newUser: member?
     var currSession: URLSession?
     var foundcharacters = ""
     
@@ -71,6 +76,8 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         contentView.bottomAnchor.constraint(equalTo: forgotPasswordBtn.bottomAnchor, constant: 90).isActive = true
         contentView.layoutIfNeeded()
         scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
+        
+        initRetrieveView()
     }
     
     
@@ -279,6 +286,16 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         forgotPasswordBtn.isHidden = false
     }
     
+    func initRetrieveView(){
+         retrieveView.translatesAutoresizingMaskIntoConstraints = false
+         contentView.addSubview(retrieveView)
+         retrieveViewTop = retrieveView.topAnchor.constraint(equalTo: contentView.bottomAnchor)
+         retrieveViewTop.isActive = true
+         retrieveView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+         retrieveView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+         retrieveView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+    }
+    
     
     func changeIndex(sender: UISegmentedControl){
         switch sender.selectedSegmentIndex {
@@ -308,59 +325,152 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     
     func continueClick(){
         if segmentIndexFlag == 0{
-            let isLoginValid = validateLogin()
-            if isLoginValid {
-                let activityIndicator = setUpActivityIndicator()
-                DispatchQueue.global(qos: .background).async {
-                    activityIndicator.startAnimating()
-                    AppDelegate().makeHTTPPOSTRequestToGetUser(urlstring: "https://edi.asonet.com/httpserver.ashx?obj=LOGINMEMBER", loginInputs: self.loginInputs, completion: {
-                        (/*error: Error?,*/ data: Data?) in
-                        if data != nil {
-                            print("there was data")
-                            if let dataString = String(data: data!, encoding: .utf8){
-                                print("\(dataString)")
-                                self.parser = XMLParser(data: data!)
-                                self.parser.delegate = self
-                                let parseDidSucceed = self.parser.parse()
-                                DispatchQueue.main.async {
-                                    activityIndicator.stopAnimating()
-                                    print("\(parseDidSucceed)")
-                                    if self.statusSuccess && self.currUser != nil {
-                                        if let navBar = self.revealViewController().rearViewController as? navBarController {
-                                            navBar.setUser(member: self.currUser!)
-                                            navBar.tableView.reloadData()
-                                        }
-                                        self.promptAlertWithDelay("Welcome Back", inmessage: "Welcome back \((self.currUser?.getUsername())!)", indelay: 1000)
-                                        //self.presentBenefitCard()
-                                    } else {
-                                        self.promptAlertWithDelay("Error logging in", inmessage: "Username or password incorrect. Please try a different combination", indelay: 5.0)
+            performLoginRequest()
+        } else {
+            performRegisterRequest()
+        }
+    }
+    
+    func performLoginRequest(){
+        let isLoginValid = validateLogin()
+        if isLoginValid {
+            let activityIndicator = setUpActivityIndicator()
+            DispatchQueue.global(qos: .background).async {
+                activityIndicator.startAnimating()
+                var loginParams = ["",""]
+                for pos in 0...1 {
+                    loginParams[pos] = self.loginInputW.getInput(pos: pos)
+                }
+                AppDelegate().makeHTTPPOSTRequestToGetUser(urlstring: "https://edi.asonet.com/httpserver.ashx?obj=LOGINMEMBER", loginInputs: loginParams, completion: {
+                    (/*error: Error?,*/ data: Data?) in
+                    if data != nil {
+                        print("there was data")
+                        if let dataString = String(data: data!, encoding: .utf8){
+                            print("\(dataString)")
+                            self.parser = XMLParser(data: data!)
+                            self.parser.delegate = self
+                            self.parser.parse()
+                            DispatchQueue.main.async {
+                                activityIndicator.stopAnimating()
+                                if self.statusSuccess && self.currUser != nil {
+                                    if let navBar = self.revealViewController().rearViewController as? navBarController {
+                                        navBar.setUser(member: self.currUser!)
+                                        navBar.tableView.reloadData()
                                     }
+                                    self.promptAlertWithDelay("Welcome Back", inmessage: "Welcome back \((self.currUser?.getUsername())!)", indelay: 1000)
+                                    self.statusSuccess = false
+                                    //self.presentBenefitCard()
+                                } else {
+                                    self.promptAlertWithDelay("Error logging in", inmessage: "Username or password incorrect. Please try a different combination", indelay: 5.0)
                                 }
                             }
-                        } else {
-                            DispatchQueue.main.async {
-                                self.promptAlertWithDelay("Error logging in", inmessage: "Could not access data from www.asonet.com. We apologize for the inconvenience", indelay: 5.0)
-                            }
                         }
-                    })
-                }
-            }
-        } else {
-            if validateRegistration(){
-                print("all inputs successful")
-                let nextVC = userCreationViewController()
-                self.setUpBackBarButton(title: "Back")
-                self.navigationController?.pushViewController(nextVC, animated: true)
+                    } else {
+                        DispatchQueue.main.async {
+                            self.promptAlertWithDelay("Error logging in", inmessage: "Could not access data from www.asonet.com. We apologize for the inconvenience", indelay: 5.0)
+                        }
+                    }
+                })
             }
         }
     }
     
+    func performRegisterRequest(){
+        let registrationValid = validateRegistration()
+        if registrationValid {
+            let activityIndicator = setUpActivityIndicator()
+            DispatchQueue.global(qos: .background).async {
+                activityIndicator.startAnimating()
+                var createParams = ["","",""]
+                for pos in 0...2 {
+                    createParams[pos] = self.createInputW.getInput(pos: pos)
+                }
+                AppDelegate().makeHTTPPostRequestToCreateUser(urlString: "https://edi.asonet.com/httpserver.ashx?obj=saveNewUserProfile", createInputs: createParams, completion: {
+                    (data: Data?) in
+                    if data != nil {
+                        if let dataString = String(data: data!, encoding: .utf8){
+                            print("\(dataString)")
+                        }
+                        print("there was data")
+                        self.parser = XMLParser(data: data!)
+                        self.parser.delegate = self
+                        self.parser.parse()
+                        
+                        //probably could use a feature that ensures that parser finishes before it completes.
+                        DispatchQueue.main.async {
+                            activityIndicator.stopAnimating()
+                            if self.statusSuccess && self.newUser != nil {
+                                let nextVC = userCreationViewController(user: self.newUser!)
+                                self.setUpBackBarButton(title: "Back")
+                                self.navigationController?.pushViewController(nextVC, animated: true)
+                            } else {
+                                self.promptAlertWithDelay("Error Registering", inmessage: self.errorMsg, indelay: 5.0)
+                            }
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.promptAlertWithDelay("Error Registering", inmessage: "Can not proceed with user creation with the inputs provided", indelay: 5.0)
+                        }
+                    }
+                })
+                
+            }
+        }
+    }
     
+    /****************************** retrieve Password View **************************/
     
     func retrievePasswordClick(){
-        let nextVC = retrievePasswordViewController()
+        retrieveViewTop.isActive = false
+        retrieveViewTop = retrieveView.topAnchor.constraint(equalTo: formTableView.topAnchor)
+        retrieveViewTop.isActive = true
+        
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveLinear, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+        
+        
+        retrieveView.closeBtn.addTarget(self, action: #selector(dismissRetrieveView), for: .touchUpInside)
+        retrieveView.retrieveQsBtn.addTarget(self, action: #selector(getQuestions), for: .touchUpInside)
+        retrieveView.submitBtn.addTarget(self, action: #selector(getPassword), for: .touchUpInside)
+        
+        
+        /*let nextVC = retrievePasswordViewController()
         self.setUpBackBarButton(title: "Back to Login")
-        self.navigationController?.pushViewController(nextVC, animated: true)
+        self.navigationController?.pushViewController(nextVC, animated: true)*/
+    }
+    
+    func dismissRetrieveView(){
+        retrieveViewTop.isActive = false
+        retrieveViewTop = retrieveView.topAnchor.constraint(equalTo: contentView.bottomAnchor)
+        retrieveViewTop.isActive = true
+        
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveLinear, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+        
+        retrieveView.didDismissView()
+    }
+    
+    func getQuestions(){
+        retrieveView.getQuestions(completion: { (result: String?) in
+            if result != "" && result != nil {
+                self.promptAlertWithDelay("Error", inmessage: result!, indelay: 5.0)
+            }
+        })
+    }
+    
+    func getPassword(){
+        retrieveView.submitQuestions(completion: { (result: String?) in
+            if result != "" && result != nil {
+                if result! == "success" {
+                    self.promptAlertWithDelay(result!, inmessage: "Your password should be sent to the email you provided shortly", indelay: 5.0)
+                } else {
+                    self.promptAlertWithDelay("Error", inmessage: result!, indelay: 5.0)
+                }
+            }
+            
+        })
     }
     
 
@@ -426,9 +536,11 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         }
         
         if segmentIndexFlag == 0{
-            cell.formTextField.text = loginInputs[indexPath.section]
+            cell.formTextField.text = loginInputW.getInput(pos: indexPath.row)
+            //loginInputs[indexPath.section]
         } else {
-            cell.formTextField.text = createInputs[indexPath.section]
+            cell.formTextField.text = createInputW.getInput(pos: indexPath.row)
+            //createInputs[indexPath.section]
         }
         return cell
     }
@@ -439,17 +551,17 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         if let inputTypeInt = userInputField.getVal(){
             switch inputTypeInt {
             case 0:
-                loginInputs[0] = userInputField.text!
+                loginInputW.setInput(input: userInputField.text!, pos: 0)
                 break
             case 1:
-                loginInputs[1] = userInputField.text!
+                loginInputW.setInput(input: userInputField.text!, pos: 1)
                 break
             case 2:
-                createInputs[0] = userInputField.text!
+                createInputW.setInput(input: userInputField.text!, pos: 0)
             case 3:
-                createInputs[1] = userInputField.text!
+                createInputW.setInput(input: userInputField.text!, pos: 1)
             case 4:
-                createInputs[2] = userInputField.text!
+                createInputW.setInput(input: userInputField.text!, pos: 2)
             default:
                 break
             }
@@ -458,7 +570,10 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     
     /************************************************* form Validations ***********************************************/
     func validateLogin() -> Bool{
-        if loginInputs[0].isEmpty || loginInputs[1].isEmpty {
+        //if loginInputs[0].isEmpty || loginInputs[1].isEmpty {
+        let userName = loginInputW.getInput(pos: 0)
+        let passWrd = loginInputW.getInput(pos: 1)
+        if userName.isEmpty || passWrd.isEmpty {
             promptAlertWithDelay("Login Failed", inmessage: "all inputs must be filled", indelay: 5.0)
             return false
         }
@@ -469,19 +584,23 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         let socialRegEx = "^[0-9]{4}$"
         let birthDateRegEx = "(0[1-9]|1[0-2])[/](0[1-9]|[1-2][0-9]|3[0-1])[/]((19([0-9]{2}))|20([0-1][0-9]))"
         let zipCodeRegEx = "^[0-9]{5}(-([0-9]{4}))?"
-        for input in createInputs{
+        //for input in createInputs{
+        for x in 0...2{
+            let input = createInputW.getInput(pos: x)
             if input.isEmpty {
                 promptAlertWithDelay("Create Username failed", inmessage: "all inputs must be filled", indelay: 5.0)
                 return false
             }
         }
-        if !createInputs[0].validatePredicate(regex: socialRegEx){
+        if !createInputW.getInput(pos: 0).validatePredicate(regex: socialRegEx) {
             promptAlertWithDelay("Create Username failed", inmessage: "social security input requires exactly 4 digits", indelay: 5.0)
             return false
-        } else if !createInputs[2].validatePredicate(regex: zipCodeRegEx){
+        }
+        if !createInputW.getInput(pos: 2).validatePredicate(regex: zipCodeRegEx) {
             promptAlertWithDelay("Create Username failed", inmessage: "zipcode input  requires format XXXXX or XXXXX-XXXX", indelay: 5.0)
             return false
-        } else if !createInputs[1].validatePredicate(regex: birthDateRegEx){
+        }
+        if !createInputW.getInput(pos: 1).validatePredicate(regex: birthDateRegEx){
             promptAlertWithDelay("Create Username failed", inmessage: "birthdate input requires format MM/DD/YYYY and must be a valid calendar date between 1900-2019", indelay: 5.0)
             return false
         }
@@ -496,11 +615,23 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                     statusSuccess = true
                 } else {
                     statusSuccess = false
+                    if let msg = attributeDict["message"]{
+                        errorMsg = msg
+                    }
                 }
             }
-            if let id = attributeDict["memberid"]{
+            if let id = attributeDict["userid"]{
                 if statusSuccess {
-                    currUser = member(id: id, usrname: loginInputs[0], pssword: loginInputs[1], group: "", ssId: "")
+                    newUser = member(id: id, usrname: "", pssword: "", memId: "", group: "",  ssId: "")
+                }
+            }
+            if let memId = attributeDict["memberid"]{
+                if statusSuccess {
+                    if segmentIndexFlag == 0 {
+                        currUser = member(id: "", usrname: loginInputW.getInput(pos: 0), pssword: loginInputW.getInput(pos: 1), memId: memId, group: "", ssId: "")
+                    } else {
+                        newUser?.setMemberId(memId: memId)
+                    }
                 }
             }
             if let client = attributeDict["client"]{
@@ -509,21 +640,27 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                 }
             }
             if let sessionId = attributeDict["sessionguid"] {
-                if statusSuccess && currUser != nil {
-                    currUser?.setSessionId(ssId: sessionId)
+                if statusSuccess  {
+                    if segmentIndexFlag == 0 && currUser != nil {
+                        currUser?.setSessionId(ssId: sessionId)
+                    }
+                    else if segmentIndexFlag == 1 && newUser != nil {
+                        newUser?.setSessionId(ssId: sessionId)
+                    }
                 }
+                
             }
         }
     }
     
-    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+    /*func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         self.foundcharacters = ""
     }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         self.foundcharacters += string
         print("\(self.foundcharacters)")
-    }
+    }*/
     
     func parserDidEndDocument(_ parser: XMLParser) {
         //print("\(currUser)")
@@ -533,5 +670,38 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         print("failure Error: \(parseError)")
     }
     
+}
+
+class loginInputWrapper {
+    private var loginInputs : [String] = ["",""]
+
+    func setInput(input: String, pos: Int){
+        if 0...1 ~= pos {
+            loginInputs[pos] = input
+        }
+    }
     
+    func getInput(pos: Int) -> String {
+        if 0...1 ~= pos {
+            return loginInputs[pos]
+        }
+        return ""
+    }
+}
+
+class createInputWrapper {
+    private var createInputs: [String] = ["","",""]
+    
+    func setInput(input: String, pos: Int){
+        if 0...2 ~= pos {
+            createInputs[pos] = input
+        }
+    }
+    
+    func getInput(pos: Int) -> String {
+        if 0...2 ~= pos {
+            return createInputs[pos]
+        }
+        return ""
+    }
 }

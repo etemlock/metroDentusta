@@ -88,6 +88,16 @@ extension UIViewController {
   
 }
 
+extension UIView {
+    func setUpActivityIndicator() -> UIActivityIndicatorView {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+        activityIndicator.center = self.center
+        activityIndicator.hidesWhenStopped = true
+        self.addSubview(activityIndicator)
+        return activityIndicator
+    }
+}
+
 
 extension UIButton {
     func setUpDefaultType(title: String?){

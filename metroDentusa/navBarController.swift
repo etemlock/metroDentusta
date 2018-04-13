@@ -15,6 +15,7 @@ class navBarController : UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.tableFooterView = UIView()
     }
     
         
@@ -82,7 +83,6 @@ class navBarController : UITableViewController {
             }
         }
     }
-    
 
     
     

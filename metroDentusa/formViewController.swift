@@ -75,7 +75,8 @@ class formViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
                                  "131", "V207", "031", "029", "V216", "V50", "113",
                                  "132", "V112", "049", "056", "091", "V3"]
     
-    private var parameters : [String] = ["",""]
+    //private var parameters : [String] = ["",""]
+    private var selClientId = ""
     var tableRolledDown: Bool = true
     var headingCellId = "headingCell"
     
@@ -126,7 +127,7 @@ class formViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         super.didReceiveMemoryWarning()
     }
     
-    func initPickerPop(){
+    /*func initPickerPop(){
 
         pickerPop.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(pickerPop)
@@ -138,7 +139,7 @@ class formViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     }
     
     
-    /*func setUpScrollAndContentView(){
+    func setUpScrollAndContentView(){
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(scrollView)
         scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
@@ -270,12 +271,12 @@ class formViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
             promptAlertWithDelay("Log in to view your forms", inmessage: "Please log in to get your view your forms", indelay: 5.0)
             return
         }
-        parameters[0] = (user?.getId())!
-        parameters[1] = (user?.getClientId())!
+        //parameters[0] = (user?.getId())!
+        //parameters[1] = (user?.getClientId())!
         let activityIndicator = setUpActivityIndicator()
         DispatchQueue.global(qos: .background).async {
             activityIndicator.startAnimating()
-            AppDelegate().makeHTTPPostRequestToGetPlanDocuments(urlString: "https://edi.asonet.com/httpserver.ashx?obj=plandocumentsHTML", parameters: self.parameters, completion: { (data: Data?) in
+            AppDelegate().makeHTTPPostRequestToGetPlanDocuments(urlString: "https://edi.asonet.com/httpserver.ashx?obj=plandocumentsHTML", user: self.user!, completion: { (data: Data?) in
                 if data != nil {
                     self.parser = XMLParser(data: data!)
                     self.parser.delegate = self
@@ -450,7 +451,7 @@ class formViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         planTrigger.setTitle(planTypes[row], for: .normal)
-        parameters[1] = clientIdArray[row]
+        selClientId = clientIdArray[row]
     }
     
     /*********************************************** xmlParserDelegate functions **************************************/

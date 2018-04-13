@@ -10,8 +10,6 @@ import Foundation
 
 protocol userInputFieldDelegate {
     func userInputFieldDidChange(userInputField: userInputField)
-    
-    //func userInputFieldDidChange(userInputField: userInputField)
 }
 
 protocol setRowDelegate {

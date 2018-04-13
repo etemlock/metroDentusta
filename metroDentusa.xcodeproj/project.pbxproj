@@ -13,10 +13,10 @@
 		541709D91FE2832500DA8027 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541709D81FE2832500DA8027 /* Extensions.swift */; };
 		541D59C11FF8B296003ACC73 /* models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541D59C01FF8B296003ACC73 /* models.swift */; };
 		541D59C820024089003ACC73 /* findDentistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541D59C720024089003ACC73 /* findDentistViewController.swift */; };
+		541D79B42077D43B0019A4E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 541D79B32077D43B0019A4E3 /* Main.storyboard */; };
 		5425FB1C200D7F1C00647A7F /* popUpPickerViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5425FB1B200D7F1C00647A7F /* popUpPickerViewView.swift */; };
 		542F957B20683B2000312E16 /* formViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542F957A20683B2000312E16 /* formViewController.swift */; };
 		542F9582206AEF4300312E16 /* documentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542F9581206AEF4300312E16 /* documentTableViewCell.swift */; };
-		542F9584206B29A400312E16 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 542F9583206B29A400312E16 /* Main.storyboard */; };
 		542F95862072F9D300312E16 /* testingScrollVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542F95852072F9D200312E16 /* testingScrollVC.swift */; };
 		54327FFE1FE2564500CC4DB4 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54327FFD1FE2564500CC4DB4 /* RootViewController.swift */; };
 		543280081FE26DA200CC4DB4 /* navBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543280071FE26DA200CC4DB4 /* navBarController.swift */; };
@@ -40,7 +40,7 @@
 		54B79E561FE2502E00692E5C /* metroDentusaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B79E551FE2502E00692E5C /* metroDentusaTests.swift */; };
 		54B79E611FE2502E00692E5C /* metroDentusaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B79E601FE2502E00692E5C /* metroDentusaUITests.swift */; };
 		54CDE62720365BB500A063D1 /* welcomeUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CDE62620365BB500A063D1 /* welcomeUserViewController.swift */; };
-		54D8E5A91FF2393B00CC888B /* retrievePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D8E5A81FF2393B00CC888B /* retrievePasswordViewController.swift */; };
+		54D8E5A91FF2393B00CC888B /* retrievePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D8E5A81FF2393B00CC888B /* retrievePasswordView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,10 +67,10 @@
 		541709D81FE2832500DA8027 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		541D59C01FF8B296003ACC73 /* models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = models.swift; path = Models/models.swift; sourceTree = "<group>"; };
 		541D59C720024089003ACC73 /* findDentistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = findDentistViewController.swift; sourceTree = "<group>"; };
+		541D79B32077D43B0019A4E3 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		5425FB1B200D7F1C00647A7F /* popUpPickerViewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = popUpPickerViewView.swift; sourceTree = "<group>"; };
 		542F957A20683B2000312E16 /* formViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = formViewController.swift; sourceTree = "<group>"; };
 		542F9581206AEF4300312E16 /* documentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = documentTableViewCell.swift; sourceTree = "<group>"; };
-		542F9583206B29A400312E16 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = ../../.Trash/Main.storyboard; sourceTree = "<group>"; };
 		542F95852072F9D200312E16 /* testingScrollVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testingScrollVC.swift; sourceTree = "<group>"; };
 		54327FFD1FE2564500CC4DB4 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		543280071FE26DA200CC4DB4 /* navBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = navBarController.swift; sourceTree = "<group>"; };
@@ -101,7 +101,7 @@
 		54B79E601FE2502E00692E5C /* metroDentusaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = metroDentusaUITests.swift; sourceTree = "<group>"; };
 		54B79E621FE2502E00692E5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		54CDE62620365BB500A063D1 /* welcomeUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = welcomeUserViewController.swift; sourceTree = "<group>"; };
-		54D8E5A81FF2393B00CC888B /* retrievePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = retrievePasswordViewController.swift; sourceTree = "<group>"; };
+		54D8E5A81FF2393B00CC888B /* retrievePasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = retrievePasswordView.swift; sourceTree = "<group>"; };
 		7C21FF1809A77DC20EB658C9 /* Pods_metroDentusa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_metroDentusa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB03A35629613006E8F145BC /* Pods-metroDentusa.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-metroDentusa.release.xcconfig"; path = "Pods/Target Support Files/Pods-metroDentusa/Pods-metroDentusa.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -202,7 +202,7 @@
 		5456ECB01FE4AC6000C9D6E4 /* loginSignUp */ = {
 			isa = PBXGroup;
 			children = (
-				54D8E5A81FF2393B00CC888B /* retrievePasswordViewController.swift */,
+				54D8E5A81FF2393B00CC888B /* retrievePasswordView.swift */,
 				5456ECB11FE4ACA500C9D6E4 /* formTableViewCell.swift */,
 				541709D41FE27BD400DA8027 /* LoginSignUpViewController.swift */,
 				54CDE62620365BB500A063D1 /* welcomeUserViewController.swift */,
@@ -236,7 +236,7 @@
 		54B79E3F1FE2502E00692E5C /* metroDentusa */ = {
 			isa = PBXGroup;
 			children = (
-				542F9583206B29A400312E16 /* Main.storyboard */,
+				541D79B32077D43B0019A4E3 /* Main.storyboard */,
 				541D59C21FF8B2C3003ACC73 /* Models */,
 				54B79E6F1FE250F900692E5C /* SWRevealViewController */,
 				54359B8E205C56CA001F6259 /* navigation */,
@@ -405,7 +405,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				542F9584206B29A400312E16 /* Main.storyboard in Resources */,
+				541D79B42077D43B0019A4E3 /* Main.storyboard in Resources */,
 				54B79E4B1FE2502E00692E5C /* LaunchScreen.storyboard in Resources */,
 				54B79E481FE2502E00692E5C /* Assets.xcassets in Resources */,
 			);
@@ -506,7 +506,7 @@
 				5489A2CA205748B5006644D6 /* FAQsAnswerViewController.swift in Sources */,
 				542F957B20683B2000312E16 /* formViewController.swift in Sources */,
 				541709D91FE2832500DA8027 /* Extensions.swift in Sources */,
-				54D8E5A91FF2393B00CC888B /* retrievePasswordViewController.swift in Sources */,
+				54D8E5A91FF2393B00CC888B /* retrievePasswordView.swift in Sources */,
 				541D59C11FF8B296003ACC73 /* models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

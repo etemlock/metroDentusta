@@ -260,7 +260,7 @@ class benefitCardViewController: UIViewController {
         idLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
         idLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5).isActive = true
         idLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        idLabel.text = "ID#:\(user.getId())"
+        idLabel.text = "ID#:\(user.getMemberId())"
         let estWidth2 = idLabel.text?.estimateFrameForText(maxWidth: 150, maxHeight: 20, font: 15).width
         idLabel.widthAnchor.constraint(equalToConstant: estWidth2! + 8).isActive = true
         idLabel.font = idLabel.font.withSize(15)

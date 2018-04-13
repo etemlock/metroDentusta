@@ -171,22 +171,6 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
     
-    /*func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == numbersTableView {
-            let number = numbers[indexPath.row]
-            let callAlert = UIAlertController(title: "Call \(number)?", message: "", preferredStyle: UIAlertControllerStyle.alert)
-            callAlert.addAction(UIAlertAction(title: "Call", style: .default, handler: { (action: UIAlertAction) in
-                let phoneString = number.seperateNumbers()
-                guard let numberUrl = URL(string: "tel://\(phoneString)") else { return }
-                UIApplication.shared.open(numberUrl, options: [:], completionHandler: nil)
-                self.promptAlertWithDelay("Calling \(number)", inmessage: "This won't work in the simulator, but should work in the device", indelay: 5.0)
-            }))
-            callAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action: UIAlertAction) in
-                callAlert.dismiss(animated: true, completion: nil)
-            }))
-            present(callAlert, animated: true, completion: nil)
-        }
-    }*/
     
     /***************************************** textField and textView functions *****************************/
     func userInputFieldDidChange(userInputField: userInputField) {
