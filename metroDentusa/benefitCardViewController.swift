@@ -50,6 +50,7 @@ class benefitCardViewController: UIViewController {
         
         menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
         self.toggleMenuButton(menuButton: menuButton)
+        self.navigationController?.view.backgroundColor = UIColor.white
         edgesForExtendedLayout = []
         setUpInnerView()
     }
@@ -155,16 +156,18 @@ class benefitCardViewController: UIViewController {
         innerView.addSubview(header)
         
         header.topAnchor.constraint(equalTo: innerView.topAnchor, constant: 8).isActive = true
-        if UIDevice.current.orientation.isPortrait {
-            headerXConstraint = header.leadingAnchor.constraint(equalTo: innerView.leadingAnchor, constant: 8)
-            headerWidthConstraint = header.widthAnchor.constraint(equalToConstant: 220)
-            header.font = UIFont.boldSystemFont(ofSize: 15)
-            
-        } else {
+        switch UIDevice.current.orientation {
+        case .landscapeLeft, .landscapeRight:
             headerXConstraint = header.centerXAnchor.constraint(equalTo: innerView.centerXAnchor)
             headerWidthConstraint = header.widthAnchor.constraint(equalToConstant: 300)
             header.font = UIFont.boldSystemFont(ofSize: 19)
+        default:
+            headerXConstraint = header.leadingAnchor.constraint(equalTo: innerView.leadingAnchor, constant: 8)
+            headerWidthConstraint = header.widthAnchor.constraint(equalToConstant: 220)
+            header.font = UIFont.boldSystemFont(ofSize: 15)
         }
+        
+
         headerXConstraint.isActive = true
         headerWidthConstraint.isActive = true
         header.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -318,13 +321,9 @@ class benefitCardViewController: UIViewController {
         viewClaimsButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         sendInfoButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
         sendInfoButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        if UIDevice.current.orientation.isPortrait {
-            viewClaimsXConstraint = viewClaimsButton.centerXAnchor.constraint(equalTo: innerView.centerXAnchor)
-            viewClaimsYConstraint = viewClaimsButton.topAnchor.constraint(equalTo: idLabel.bottomAnchor, constant: 20)
-            
-            sendInfoXConstraint = sendInfoButton.centerXAnchor.constraint(equalTo: innerView.centerXAnchor)
-            sendInfoYConstraint = sendInfoButton.topAnchor.constraint(equalTo: viewClaimsButton.bottomAnchor, constant: 20)
-        } else {
+        
+        switch UIDevice.current.orientation {
+        case .landscapeRight, .landscapeLeft:
             setUpButtonLandscapeViews()
             
             viewClaimsXConstraint = viewClaimsButton.centerXAnchor.constraint(equalTo: buttonLandScapeViews[0].centerXAnchor)
@@ -332,8 +331,15 @@ class benefitCardViewController: UIViewController {
             
             sendInfoXConstraint = sendInfoButton.centerXAnchor.constraint(equalTo: buttonLandScapeViews[1].centerXAnchor, constant: -25)
             sendInfoYConstraint = sendInfoButton.centerYAnchor.constraint(equalTo: buttonLandScapeViews[1].centerYAnchor)
-
+        default:
+            viewClaimsXConstraint = viewClaimsButton.centerXAnchor.constraint(equalTo: innerView.centerXAnchor)
+            viewClaimsYConstraint = viewClaimsButton.topAnchor.constraint(equalTo: idLabel.bottomAnchor, constant: 20)
+            
+            sendInfoXConstraint = sendInfoButton.centerXAnchor.constraint(equalTo: innerView.centerXAnchor)
+            sendInfoYConstraint = sendInfoButton.topAnchor.constraint(equalTo: viewClaimsButton.bottomAnchor, constant: 20)
         }
+        
+
         viewClaimsXConstraint.isActive = true
         viewClaimsYConstraint.isActive = true
         sendInfoXConstraint.isActive = true

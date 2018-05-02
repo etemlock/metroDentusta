@@ -22,24 +22,34 @@ import MapKit
 class findDentistViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource,  XMLParserDelegate, setRowDelegate {
 
     var menuButton : UIBarButtonItem!
-    //var mapView  = MKMapView(frame: CGRect(x: 0, y: 105, width: 375, height: 325))
-    var scrollView : UIScrollView!
-    var tableView: UITableView!
     
-    var divider : UIView!
-    var resultsCountLabel : UILabel!
-    var rollTableViewButton : UIButton!
-    var addressTextField = UITextField(frame: CGRect(x: 8, y: 31, width: 360, height: 30))
-    var dentistNameTextField = UITextField(frame: CGRect(x: 8, y: 276, width: 360, height: 30))
-    var newPickerPop : popUpPickerViewView!
+    
+    
+    /******** views ***********/
+    //var mapView  = MKMapView(frame: CGRect(x: 0, y: 105, width: 375, height: 325))
+    var scrollView = UIScrollView()
+    var contentView = UIView()
+    var contentViewBottom : NSLayoutConstraint!
+    var stackView = UIStackView()
+    var tableView = UITableView()
+    var divider = UIView()
+    var dividerTop : NSLayoutConstraint!
+    var resultsCountLabel = UILabel()
+    var findDentistButton = UIButton()
+    var rollTableViewButton = UIButton()
+    var addressTextField = UITextField()
+    var dentistNameTextField = UITextField()
+    var newPickerPop = popUpPickerViewView()
+    var newPickerPopTop : NSLayoutConstraint!
+    var newPickerPopBottom: NSLayoutConstraint!
     var tableRolledDown : Bool = true
     
     //instead of a pickerView here, perhaps open a window from the bottom.
     var numResults = 0
     var providerModelArray : [providerModel] = []
-    var dentistPickerTrigger = UIButton()
-    var distancePickerTrigger = UIButton()
-    var statePickerTrigger = UIButton()
+    var dentistPickerTrigger : UIButton!
+    var distancePickerTrigger : UIButton!
+    var statePickerTrigger : UIButton!
 
     
     private var dentistTypeArray = ["All Dentists", "General Practitioners",
@@ -71,112 +81,226 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
         self.navigationItem.title = "Find Your Dentist"
         self.toggleMenuButton(menuButton: menuButton)
-        setUpScrollView()
-        setUpSearchFields()
+        self.navigationController?.view.backgroundColor = UIColor.white
+        edgesForExtendedLayout = []
+        self.setUpScrollViewAndContentView(scrollView: self.scrollView, contentView: self.contentView)
+        setUpStackView()
         setUpNonTriggerButtons()
+        
+        switch UIDevice.current.orientation {
+        /*case .portrait:
+            contentViewBottom = contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 30)*/
+        case .landscapeLeft, .landscapeRight:
+            contentViewBottom = contentView.bottomAnchor.constraint(equalTo: findDentistButton.bottomAnchor, constant: 250)
+        default:
+            contentViewBottom = contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 30)
+        }
+        contentViewBottom.isActive = true
+        contentView.layoutIfNeeded()
+        scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
+        
         setUpTableView()
-        newPickerPop = popUpPickerViewView(frame: CGRect(x: 0, y: scrollView.frame.height, width: self.view.frame.width, height: 0))
-        scrollView.addSubview(self.newPickerPop)
+        initPickerPop()
+        
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        let orient = UIDevice.current.orientation
+        
+        
+        newPickerPopTop.isActive = false
+        newPickerPopBottom.isActive = false
+        contentViewBottom.isActive = false
+        dividerTop.isActive = false
+        switch orient {
+        case .portrait:
+            contentViewBottom = contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 30)
+            if newPickerPopTop.constant != 0 {
+                newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: findDentistButton.bottomAnchor, constant: 10)
+                newPickerPopBottom = newPickerPop.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            }
+            if !tableRolledDown {
+                dividerTop = divider.topAnchor.constraint(equalTo: addressTextField.bottomAnchor, constant: 5)
+            }
+        case .landscapeLeft, .landscapeRight:
+            contentViewBottom = contentView.bottomAnchor.constraint(equalTo: findDentistButton.bottomAnchor, constant: 250)
+            if newPickerPopTop.constant != 0 {
+                newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150)
+                newPickerPopBottom = newPickerPop.bottomAnchor.constraint(equalTo: newPickerPop.topAnchor, constant: 200)
+            }
+            if !tableRolledDown {
+                dividerTop = divider.topAnchor.constraint(equalTo: dentistPickerTrigger.bottomAnchor, constant: 5)
+            }
+        default:
+            break
+        }
+        contentViewBottom.isActive = true
+        newPickerPopTop.isActive = true
+        newPickerPopBottom.isActive = true
+        dividerTop.isActive = true
+        
+        contentView.layoutIfNeeded()
+        scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
+        //add completion handler to resize scrollView contentSize
+    }
+    
+
+    func setUpStackView(){
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(stackView)
+        stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+        stackView.heightAnchor.constraint(equalToConstant: 281).isActive = true
+        stackView.axis = UILayoutConstraintAxis.vertical
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .center
+        stackView.spacing = 8.0
+        setUpSearchFields()
+        
+    }
     
     func setUpSearchFields(){
-        scrollView.addSubview(addressTextField)
-        scrollView.addSubview(dentistNameTextField)
+        
+        addressTextField.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(addressTextField)
+        addressTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        addressTextField.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
         addressTextField.attributedPlaceholder = NSAttributedString(string: "(Optional) full address or zipcode", attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        
+        
+        setUpPickerTriggers()
+        
+        let fillerView = UIView()
+        fillerView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(fillerView)
+        fillerView.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+        fillerView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        fillerView.backgroundColor = UIColor.clear
+        
+        dentistNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(dentistNameTextField)
+        dentistNameTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        dentistNameTextField.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
         dentistNameTextField.attributedPlaceholder = NSAttributedString(string: "(Optional) Dentist Name", attributes: [NSForegroundColorAttributeName: UIColor.gray])
         
-        for case let textField as UITextField in scrollView.subviews {
-            textField.backgroundColor = UIColor(red: 229/255, green: 226/255, blue: 233/255, alpha: 1)
+        for case let textField as UITextField in stackView.arrangedSubviews {
+            textField.backgroundColor = LoginSignUpViewController.defaultGray
             textField.borderStyle = UITextBorderStyle.roundedRect
             textField.clearButtonMode = .whileEditing
         }
         
-        setUpPickerTriggers()
     }
     
     func setUpPickerTriggers(){
-        var componentPosition = 71
         for index in 0...2 {
-            let label = UILabel(frame: CGRect(x: 123, y: componentPosition, width: 130, height: 20))
-            let triggerFrame =  CGRect(x: 16, y: componentPosition + 25, width: 344, height: 35)
+            let searchCapsule = UIView()
+            searchCapsule.translatesAutoresizingMaskIntoConstraints = false
+            stackView.addArrangedSubview(searchCapsule)
+            searchCapsule.heightAnchor.constraint(equalToConstant: 60).isActive = true
+            searchCapsule.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+            searchCapsule.backgroundColor = UIColor.clear
+            
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            searchCapsule.addSubview(label)
+            label.centerXAnchor.constraint(equalTo: searchCapsule.centerXAnchor).isActive = true
+            label.widthAnchor.constraint(equalToConstant: 150).isActive = true
+            label.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            label.topAnchor.constraint(equalTo: searchCapsule.topAnchor).isActive = true
+            label.textColor = UIColor.lightGray
+            label.textAlignment = .center
+            
+            let triggerButton = UIButton()
+            triggerButton.translatesAutoresizingMaskIntoConstraints = false
+            searchCapsule.addSubview(triggerButton)
+            triggerButton.widthAnchor.constraint(equalTo: searchCapsule.widthAnchor).isActive = true
+            triggerButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
+            triggerButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 5).isActive = true
+            triggerButton.centerXAnchor.constraint(equalTo: searchCapsule.centerXAnchor).isActive = true
+            triggerButton.setTitleColor(UIColor(red: 60/255, green: 136/255, blue: 255/255, alpha: 1), for: .normal)
+            triggerButton.addTarget(self, action: #selector(presentPopUpPickerView), for: .touchUpInside)
+            
             if index == 0 {
-                dentistPickerTrigger.frame = triggerFrame
+                dentistPickerTrigger = triggerButton
                 dentistPickerTrigger.setTitle(dentistTypeArray[0], for: .normal)
                 dentistPickerTrigger.layer.borderWidth = 1
                 label.text = "Dentist Specialty"
-                scrollView.addSubview(dentistPickerTrigger)
             } else if index == 1 {
-                distancePickerTrigger.frame = triggerFrame
+                distancePickerTrigger = triggerButton
                 distancePickerTrigger.setTitle(distanceArray[0], for: .normal)
                 distancePickerTrigger.layer.borderWidth = 1
                 label.text = "Distance"
-                scrollView.addSubview(distancePickerTrigger)
             } else if index == 2 {
-                statePickerTrigger.frame = triggerFrame
+                statePickerTrigger = triggerButton
                 statePickerTrigger.setTitle(stateArray[0], for: .normal)
                 statePickerTrigger.layer.borderWidth = 1
                 label.text = "State"
-                scrollView.addSubview(statePickerTrigger)
             }
-            label.textColor = UIColor.lightGray
-            label.textAlignment = .center
-            scrollView.addSubview(label)
-            componentPosition += 65
-        }
-        
-        for case let trigger as UIButton in scrollView.subviews {
-            trigger.setTitleColor(UIColor(red: 60/255, green: 136/255, blue: 255/255, alpha: 1), for: .normal)
-            trigger.addTarget(self, action: #selector(presentPopUpPickerView), for: .touchUpInside)
-            
         }
     }
     
-    func setUpScrollView(){
-        scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        scrollView.backgroundColor = UIColor.clear
-        scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.height)
-        scrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        scrollView.alwaysBounceVertical = false
-        scrollView.bounces = false
-        self.view.addSubview(scrollView)
+    func setUpNonTriggerButtons(){
+        findDentistButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(findDentistButton)
+        findDentistButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 35).isActive = true
+        findDentistButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        findDentistButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        findDentistButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        findDentistButton.setUpDefaultType(title: "Find Dentists")
+        findDentistButton.addTarget(self, action: #selector(findDentists), for: .touchUpInside)
     }
+
     
     
     func setUpTableView(){
         //divider with roll up button
-        divider = UIView(frame: CGRect(x: 0, y: 386, width: scrollView.frame.size.width, height: 30))
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(divider)
+        dividerTop = divider.topAnchor.constraint(equalTo: findDentistButton.bottomAnchor, constant: 10)
+        dividerTop.isActive = true
+        divider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        divider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        divider.heightAnchor.constraint(equalToConstant: 30).isActive = true
         divider.backgroundColor = UIColor(red: 206/255, green: 205/255, blue: 212/255, alpha: 1)
-        rollTableViewButton = UIButton(frame: CGRect(x: 167, y: 0, width: 20, height: 30))
-        rollTableViewButton.setTitle("\u{25B2}", for: .normal)
-        rollTableViewButton.setTitleColor(UIColor(red: 60/255, green: 136/255, blue: 255/255, alpha: 1), for: .normal)
-        rollTableViewButton.addTarget(self, action: #selector(rollUpTable), for: .touchUpInside)
-        divider.addSubview(rollTableViewButton)
-        scrollView.addSubview(divider)
         
-        //tableView
-        tableView = UITableView(frame: CGRect(x: 0, y: 416, width: scrollView.frame.size.width, height: scrollView.frame.size.height-416))
+        rollTableViewButton.translatesAutoresizingMaskIntoConstraints = false
+        divider.addSubview(rollTableViewButton)
+        rollTableViewButton.centerXAnchor.constraint(equalTo: divider.centerXAnchor).isActive = true
+        rollTableViewButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        rollTableViewButton.heightAnchor.constraint(equalTo: divider.heightAnchor).isActive = true
+        rollTableViewButton.centerYAnchor.constraint(equalTo: divider.centerYAnchor).isActive = true
+        rollTableViewButton.setTitle("\u{25B2}", for: .normal)
+        rollTableViewButton.setTitleColor(LoginSignUpViewController.themeColor, for: .normal)
+        rollTableViewButton.addTarget(self, action: #selector(rollUpTable), for: .touchUpInside)
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(tableView)
+        tableView.topAnchor.constraint(equalTo: divider.bottomAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: divider.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: divider.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "headingCell")
         tableView.register(dentistInfoTableCell.self, forCellReuseIdentifier: "infoCell")
         tableView.alwaysBounceVertical = false
         tableView.tableFooterView = UIView()
-        scrollView.addSubview(tableView)
         
-        //the label that is to be added later to a dequed headerCell
-        resultsCountLabel = UILabel(frame: CGRect(x: tableView.center.x - 130, y: 5, width: 260, height: 20))
-        resultsCountLabel.font = resultsCountLabel.font.withSize(15)
-        resultsCountLabel.textAlignment = .center
-        resultsCountLabel.textColor = UIColor.darkGray
     }
     
-    func setUpNonTriggerButtons(){
-        let findDentistButton = UIButton(frame: CGRect(x: 88, y: 326, width: 200, height: 40))
-        findDentistButton.setUpDefaultType(title: "Find Dentists")
-        findDentistButton.addTarget(self, action: #selector(findDentists), for: .touchUpInside)
-        scrollView.addSubview(findDentistButton)
+    func initPickerPop(){
+        newPickerPop.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(newPickerPop)
+        newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: contentView.bottomAnchor)
+        newPickerPopTop.isActive = true
+        newPickerPop.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        newPickerPop.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        newPickerPopBottom = newPickerPop.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        newPickerPopBottom.isActive = true
     }
+    
+    
     
     
     /*This function basically finds the appropriate values to set to query string"*/
@@ -255,6 +379,23 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         return dentSearchParams(patientzip: patientZip, distance: currDistance, specialty: currType, state: currState, dentName: practitionName)
     }
     
+    func setUpResultCountLabel(cellContentView: UIView){
+        /*resultsCountLabel = UILabel(frame: CGRect(x: tableView.center.x - 130, y: 5, width: 260, height: 20))
+        resultsCountLabel.font = resultsCountLabel.font.withSize(15)
+        resultsCountLabel.textAlignment = .center
+        resultsCountLabel.textColor = UIColor.darkGray*/
+        
+        resultsCountLabel.translatesAutoresizingMaskIntoConstraints = false
+        cellContentView.addSubview(resultsCountLabel)
+        resultsCountLabel.leadingAnchor.constraint(equalTo: cellContentView.leadingAnchor, constant: 16).isActive = true
+        resultsCountLabel.trailingAnchor.constraint(equalTo: cellContentView.trailingAnchor, constant: -16).isActive = true
+        resultsCountLabel.centerYAnchor.constraint(equalTo: cellContentView.centerYAnchor).isActive = true
+        resultsCountLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        resultsCountLabel.textAlignment = .center
+        resultsCountLabel.textColor = UIColor.darkGray
+        
+    }
+    
     
     
     /************************************ tableView functions ***************************************/
@@ -273,7 +414,8 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "headingCell", for: indexPath)
-            cell.contentView.addSubview(resultsCountLabel)
+            setUpResultCountLabel(cellContentView: cell.contentView)
+            //cell.contentView.addSubview(resultsCountLabel)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell", for: indexPath) as! dentistInfoTableCell
@@ -322,39 +464,67 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         DispatchQueue.global(qos: .background).async {
             let start = DispatchTime.now()
             AppDelegate().makeHTTPPostRequestToSearchDentists(urlstring: "https://www.asonet.com/httpserver.ashx?obj=getPPOjson", parameters: params, completion: {
-                (jsonResult: [[String: Any]]?) in
-                
+                (jsonResult: [[String: Any]]?, error: Error?) in
+                guard error == nil else {
+                    self.promptAlertWithDelay("Error", inmessage: String(describing: error!), indelay: 5.0)
+                    return
+                }
                 if jsonResult != nil {
                     self.numResults = (jsonResult?.count)!
                     self.providerModelArray.removeAll()
                     
-                    //print("\(jsonResult!)")
                     for result in jsonResult! {
-                        var newProvider = providerModel(instName: "", provName: "", languages: "", address: "", city: "", stateZip: "", lat: -1, long: -1, distance: -1, telephone: "", hours: "", handicapAccess: "", webAddress: "", doctors: [])
+                        //print("\(result)")
+                        var newProvider = providerModel(instName: "" /*, provName: ""*/, languages: "", address: "", city: "", stateZip: "", lat: -1, long: -1, distance: -1, telephone: "", hours: "", handicapAccess: "", webAddress: "", doctors: [])
                         
-                        
-                        newProvider.instName = String(describing: (result["practicename"])!)
-                        newProvider.provName = String(describing: (result["uftpracticename"])!)
-                        newProvider.languages = String(describing: (result["languages"])!)
-                        newProvider.address = String(describing: (result["address"])!) + String(describing: (result["address2"])!)
-                        newProvider.city = String(describing: (result["city"])!)
-                        newProvider.stateZip = String(describing: (result["state"])!) + " " + String(describing: (result["zip"])!)
-                        if let latitude = Double(String(describing: (result["lattitude"])!)){
-                            newProvider.lat = latitude
+                        if let resultName = result["practicename"] {
+                            newProvider.instName = String(describing: resultName)
                         }
-                        if let longitude = Double(String(describing: (result["longitude"])!)){
-                            newProvider.long = longitude
+                        if let resultLang = result["languages"] {
+                            newProvider.languages = String(describing: resultLang)
                         }
-                        if let distance = Double(String(describing: (result["distance"])!)) {
+                        if let resultAdd1 = result["address"]{
+                            newProvider.address = String(describing: resultAdd1)
+                        }
+                        if let resultAdd2 = result["address2"]{
+                            newProvider.address += " \(String(describing: resultAdd2))"
+                        }
+                        if let resultCity = result["city"]{
+                            newProvider.city = String(describing: resultCity)
+                        }
+                        if let resultState = result["state"]{
+                            newProvider.stateZip = String(describing: resultState)
+                        }
+                        if let resultZip = result["zip"]{
+                            newProvider.stateZip += " \(String(describing: resultZip))"
+                        }
+                        if let resultLat = result["lattitude"], let latitude = Double(String(describing: resultLat))  {
+                              newProvider.lat = latitude
+                        }
+                        if let resultLong = result["longitude"], let longitude = Double(String(describing: resultLong)) {
+                            newProvider.long = Double(String(describing: longitude))!
+                        }
+                        if let resultDist = result["distance"], let distance = Double(String(describing: resultDist)){
                             newProvider.distance = distance
                         }
-                        newProvider.telephone = String(describing: (result["telephone"])!)
-                        newProvider.hours = String(describing: (result["eveninghours"])!) + " " + String(describing: (result["weekendhours"])!)
-                        newProvider.handicapAccess = String(describing: (result["handicapaccess"])!).uppercased()
-                        if newProvider.handicapAccess != "YES" {
-                            newProvider.handicapAccess = "NO"
+                        if let resultPhone = result["telephone"]{
+                            newProvider.telephone = String(describing: resultPhone)
                         }
-                        newProvider.webAddress = String(describing: (result["webaddress"])!)
+                        if let resultEHours = result["eveninghours"]{
+                            newProvider.hours = String(describing: resultEHours)
+                        }
+                        if let resultWHours = result["weekendhours"]{
+                            newProvider.hours += " \(String(describing: resultWHours))"
+                        }
+                        if let resultHandicap = result["handicapaccess"]{
+                            newProvider.handicapAccess = String(describing: resultHandicap).uppercased()
+                            if newProvider.handicapAccess != "YES" {
+                                newProvider.handicapAccess = "NO"
+                            }
+                        }
+                        if let resultWeb = result["webaddress"]{
+                            newProvider.webAddress = String(describing: resultWeb)
+                        }
                         if let providerInfoArray = result["providers"] as? [[String:Any]] {
                             for providerInfo in providerInfoArray {
                                 var doctor : (name: String, specialty: String, school: String, graduationDate: String) = ("","","","")
@@ -369,6 +539,7 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
                     }
                 } else {
                     self.numResults = 0
+                    self.promptAlertWithDelay("Error", inmessage: "Could not access data from www.asonet.com", indelay: 5.0)
                 }
                 self.resultsCountLabel.text = String(self.numResults) + " providers matched your search"
                
@@ -393,19 +564,25 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
     
     func rollUpTable(){
         if tableRolledDown {
+            dividerTop.isActive = false
+            switch UIDevice.current.orientation {
+            case .landscapeRight, .landscapeLeft:
+                dividerTop = divider.topAnchor.constraint(equalTo: dentistPickerTrigger.bottomAnchor, constant: 5)
+            default:
+                dividerTop = divider.topAnchor.constraint(equalTo: addressTextField.bottomAnchor, constant: 5)
+            }
+            dividerTop.isActive = true
             UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveLinear, animations: {
-                self.divider.frame.origin.y = 61
-                self.tableView.frame.origin.y = 91
-                self.tableView.frame.size.height = self.scrollView.frame.height - 91
+                self.view.layoutIfNeeded()
                 self.rollTableViewButton.setTitle("\u{25BC}", for: .normal)
                 self.tableRolledDown = false
             }, completion: nil)
         } else {
+            dividerTop.isActive = false
+            dividerTop = divider.topAnchor.constraint(equalTo: findDentistButton.bottomAnchor, constant: 10)
+            dividerTop.isActive = true
             UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveLinear, animations: {
-                self.divider.frame.origin.y = 386
-                //self.divider2.frame.origin.y = 416
-                self.tableView.frame.origin.y = 416
-                self.tableView.frame.size.height = self.scrollView.frame.height - 426
+                self.view.layoutIfNeeded()
                 self.rollTableViewButton.setTitle("\u{25B2}", for: .normal)
                 self.tableRolledDown = true
             }, completion: nil)
@@ -439,12 +616,20 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
             break
         }
         
+        newPickerPopTop.isActive = false
+        newPickerPopBottom.isActive = false
+        switch UIDevice.current.orientation {
+        case .landscapeRight, .landscapeLeft:
+            newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150)
+            newPickerPopBottom = newPickerPop.bottomAnchor.constraint(equalTo: newPickerPop.topAnchor, constant: 200)
+        default:
+            newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: findDentistButton.bottomAnchor, constant: 10)
+        }
+        newPickerPopTop.isActive = true
+        newPickerPopBottom.isActive = true
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveLinear, animations: {
-            self.newPickerPop.frame.origin.y = 386
-            self.newPickerPop.frame.size.height = self.scrollView.frame.height - 386
+            self.view.layoutIfNeeded()
         }, completion: nil)
-        newPickerPop.pickerView.delegate = self
-        newPickerPop.pickerView.dataSource = self
         
         switch selectedTriggerNum {
         case 0:
@@ -456,14 +641,23 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         default:
             break
         }
+        newPickerPop.pickerView.delegate = self
+        newPickerPop.pickerView.dataSource = self
         
         newPickerPop.closeButton.addTarget(self, action: #selector(dismissPopUpPicker), for: .touchUpInside)
     }
     
     func dismissPopUpPicker(){
+        newPickerPopTop.isActive = false
+        newPickerPopBottom.isActive = false
+        newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: contentView.bottomAnchor)
+        newPickerPopBottom = newPickerPop.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        newPickerPopBottom.isActive = true
+        newPickerPopTop.isActive = true
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveLinear, animations: {
-            self.newPickerPop.frame.origin.y = self.scrollView.frame.height
-            self.newPickerPop.frame.size.height = 0
+            self.view.layoutIfNeeded()
+            //self.newPickerPop.frame.origin.y = self.scrollView.frame.height
+            //self.newPickerPop.frame.size.height = 0
         }, completion: nil)
     }
     

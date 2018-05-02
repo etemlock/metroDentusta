@@ -12,7 +12,7 @@ import Foundation
 class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, userInputFieldDelegate , XMLParserDelegate {
     
 
-    var menuButton : UIBarButtonItem!
+    //var menuButton : UIBarButtonItem!
     
     //views and subviews
     var scrollView = UIScrollView()
@@ -20,8 +20,6 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     var retrieveView = retrievePasswordView()
     var retrieveViewTop : NSLayoutConstraint!
     private var segmentIndexFlag = 0
-    static var themeColor = UIColor(red: 26/255, green: 122/255, blue: 1, alpha: 1)
-    static var defaultButtonTextColor = UIColor(red: 22/255, green: 118/255, blue: 1, alpha: 1)
     var logoView = UIImageView()
     var homePic =  UIImageView()
     var homePicConstraints : [String: NSLayoutConstraint?] = ["x": nil, "y": nil, "width" : nil, "height": nil] //left, top, width, height
@@ -31,11 +29,17 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     var continueTop : NSLayoutConstraint!
     var forgotPasswordBtn = UIButton()
     let segmentController : UISegmentedControl = UISegmentedControl(items: ["Login", "Create Username"])
+    
+    /*********** colors **********/
+    static var themeColor = UIColor(red: 26/255, green: 122/255, blue: 1, alpha: 1)
+    static var defaultGray = UIColor(red: 229/255, green: 226/255, blue: 233/255, alpha: 1)
+    static var defaultButtonTextColor = UIColor(red: 22/255, green: 118/255, blue: 1, alpha: 1)
     //var benefitCard: BenefitCardView?
     
     /*********** data *********/
     private var loginInputW = loginInputWrapper()
     private var createInputW = createInputWrapper()
+    var segueId = "goSegue"
     
     //********** XMLParser testing related variables **********/
     var parser = XMLParser()
@@ -58,12 +62,9 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("\(currUser)")
         self.hideKeyBoardWhenTappedAround()
         self.view.backgroundColor = UIColor.white
-        menuButton = UIBarButtonItem(image: UIImage(named: "Hamburg Menu"), style: .plain, target: self, action: nil)
         self.navigationItem.title = "Welcome to ASO Data Services!"
-        self.toggleMenuButton(menuButton: menuButton)
         
         setUpScrollAndContentView()
         setUpImages()
@@ -99,6 +100,16 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
             break
         }
         super.viewWillTransition(to: size, with: coordinator)
+        self.view.layoutIfNeeded()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueId {
+            if let navBarView = self.revealViewController().rearViewController as? navBarController {
+                navBarView.setUser(member: self.currUser!)
+                //navBarView.tableView.reloadData()
+            }
+        }
     }
     
     
@@ -139,7 +150,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         logoView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(logoView)
         logoView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        logoView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15).isActive = true
+        logoView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30).isActive = true
         logoView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         logoView.widthAnchor.constraint(equalToConstant: 140).isActive = true
         logoView.image = UIImage(named: "Logo Icon")
@@ -148,7 +159,6 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         homePic.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(homePic)
         homePic.image = UIImage(named: "HomePic")
-        
         
         let orient = UIDevice.current.orientation
         switch orient {
@@ -331,6 +341,8 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         }
     }
     
+
+    
     func performLoginRequest(){
         let isLoginValid = validateLogin()
         if isLoginValid {
@@ -353,13 +365,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                             DispatchQueue.main.async {
                                 activityIndicator.stopAnimating()
                                 if self.statusSuccess && self.currUser != nil {
-                                    if let navBar = self.revealViewController().rearViewController as? navBarController {
-                                        navBar.setUser(member: self.currUser!)
-                                        navBar.tableView.reloadData()
-                                    }
-                                    self.promptAlertWithDelay("Welcome Back", inmessage: "Welcome back \((self.currUser?.getUsername())!)", indelay: 1000)
-                                    self.statusSuccess = false
-                                    //self.presentBenefitCard()
+                                    self.performSegue(withIdentifier: self.segueId, sender: self)
                                 } else {
                                     self.promptAlertWithDelay("Error logging in", inmessage: "Username or password incorrect. Please try a different combination", indelay: 5.0)
                                 }
@@ -375,6 +381,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         }
     }
     
+ 
     func performRegisterRequest(){
         let registrationValid = validateRegistration()
         if registrationValid {
@@ -400,7 +407,10 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                         DispatchQueue.main.async {
                             activityIndicator.stopAnimating()
                             if self.statusSuccess && self.newUser != nil {
-                                let nextVC = userCreationViewController(user: self.newUser!)
+                                let nextVC = userCreationEditViewController(user: self.newUser!, isNewUser: true)
+                                    
+                                    
+                                    //userCreationViewController(user: self.newUser!, isNewUser: true)
                                 self.setUpBackBarButton(title: "Back")
                                 self.navigationController?.pushViewController(nextVC, animated: true)
                             } else {
@@ -432,7 +442,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         
         retrieveView.closeBtn.addTarget(self, action: #selector(dismissRetrieveView), for: .touchUpInside)
         retrieveView.retrieveQsBtn.addTarget(self, action: #selector(getQuestions), for: .touchUpInside)
-        retrieveView.submitBtn.addTarget(self, action: #selector(getPassword), for: .touchUpInside)
+        retrieveView.submitBtn.addTarget(self, action: #selector(retrieveOrResetPassword), for: .touchUpInside)
         
         
         /*let nextVC = retrievePasswordViewController()
@@ -460,17 +470,35 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         })
     }
     
-    func getPassword(){
-        retrieveView.submitQuestions(completion: { (result: String?) in
-            if result != "" && result != nil {
+    func retrieveOrResetPassword(){
+        if !retrieveView.resetModeOn {
+            retrieveView.submitQuestions(completion: { (result: String?) in
+                
+                guard result != nil && result != "" else {
+                    return
+                }
+                
                 if result! == "success" {
                     self.promptAlertWithDelay(result!, inmessage: "Your password should be sent to the email you provided shortly", indelay: 5.0)
                 } else {
                     self.promptAlertWithDelay("Error", inmessage: result!, indelay: 5.0)
                 }
-            }
-            
-        })
+            })
+        } else {
+            retrieveView.changePassword(completion: { (result: String?) in
+                guard result != nil && result != "" else {
+                    return
+                }
+                
+                if result == "successfully changed password" {
+                    self.promptAlertWithDelay("success", inmessage: result!, indelay: 5.0)
+                    self.dismissRetrieveView()
+                } else {
+                    self.promptAlertWithDelay("Error", inmessage: result!, indelay: 5.0)
+                }
+                
+            })
+        }
     }
     
 

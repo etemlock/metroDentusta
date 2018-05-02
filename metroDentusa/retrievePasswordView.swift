@@ -8,23 +8,32 @@
 
 import Foundation
 
+//call retrieveResetPasswordView
 class retrievePasswordView: UIView, XMLParserDelegate {
     
     /******* views **********/
     var topBarView = UIView()
-    private var userNameTextField = UITextField()
+    private var topTextField = UITextField()
     var retrieveQsBtn = UIButton()
     var closeBtn = UIButton()
-    var secQLabelOne = UILabel()
-    var secQLabelTwo = UILabel()
+    var barTitle = UILabel()
+    var topLabel = UILabel()
+    var answerLabelOne = UILabel()
+    var answerLabelTwo = UILabel()
     private var answerTextFieldOne = UITextField()
     private var answerTextFieldTwo = UITextField()
     var submitBtn = UIButton()
 
+
     
-    
+    var topLabelWidth : NSLayoutConstraint!
     var question1Height : NSLayoutConstraint!
     var question2Height : NSLayoutConstraint!
+    
+    
+    /********* data **************/
+    var resetModeOn : Bool = false
+    private var userName = ""
     
     /******** XMLParser related variables ************/
     var parser = XMLParser()
@@ -57,7 +66,6 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         topBarView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         topBarView.backgroundColor = LoginSignUpViewController.themeColor
         
-        let barTitle = UILabel()
         barTitle.translatesAutoresizingMaskIntoConstraints = false
         topBarView.addSubview(barTitle)
         barTitle.centerXAnchor.constraint(equalTo: topBarView.centerXAnchor).isActive = true
@@ -80,65 +88,65 @@ class retrievePasswordView: UIView, XMLParserDelegate {
     }
     
     func setUpInputFields(){
-        let userNameLabel = UILabel()
-        userNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(userNameLabel)
-        userNameLabel.topAnchor.constraint(equalTo: topBarView.bottomAnchor, constant: 25).isActive = true
-        userNameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-        userNameLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        userNameLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        userNameLabel.text = "Username: "
+        topLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(topLabel)
+        topLabel.topAnchor.constraint(equalTo: topBarView.bottomAnchor, constant: 25).isActive = true
+        topLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
+        topLabelWidth = topLabel.widthAnchor.constraint(equalToConstant: 100)
+        topLabelWidth.isActive = true
+        topLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        topLabel.text = "Username: "
         
-        userNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(userNameTextField)
-        userNameTextField.leadingAnchor.constraint(equalTo: userNameLabel.trailingAnchor, constant: 2).isActive = true
-        userNameTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8).isActive = true
-        userNameTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        userNameTextField.topAnchor.constraint(equalTo: userNameLabel.topAnchor).isActive = true
+        topTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(topTextField)
+        topTextField.leadingAnchor.constraint(equalTo: topLabel.trailingAnchor, constant: 2).isActive = true
+        topTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8).isActive = true
+        topTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        topTextField.topAnchor.constraint(equalTo: topLabel.topAnchor).isActive = true
         
         retrieveQsBtn.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(retrieveQsBtn)
         retrieveQsBtn.widthAnchor.constraint(equalToConstant: 300).isActive = true
         retrieveQsBtn.heightAnchor.constraint(equalToConstant: 35).isActive = true
         retrieveQsBtn.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        retrieveQsBtn.topAnchor.constraint(equalTo: userNameTextField.bottomAnchor, constant: 20).isActive = true
+        retrieveQsBtn.topAnchor.constraint(equalTo: topTextField.bottomAnchor, constant: 20).isActive = true
         retrieveQsBtn.setUpDefaultType(title: "Click to Retrieve Security Questions")
         
         
-        secQLabelOne.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(secQLabelOne)
-        secQLabelOne.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        secQLabelOne.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8).isActive = true
-        secQLabelOne.topAnchor.constraint(equalTo: retrieveQsBtn.topAnchor).isActive = true
-        question1Height = secQLabelOne.heightAnchor.constraint(equalToConstant: 20)
+        answerLabelOne.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(answerLabelOne)
+        answerLabelOne.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        answerLabelOne.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8).isActive = true
+        answerLabelOne.topAnchor.constraint(equalTo: retrieveQsBtn.topAnchor).isActive = true
+        question1Height = answerLabelOne.heightAnchor.constraint(equalToConstant: 20)
         question1Height.isActive = true
-        secQLabelOne.text = "Temp Input"
-        secQLabelOne.textAlignment = .center
-        secQLabelOne.isHidden = true
+        answerLabelOne.text = "Temp Input"
+        answerLabelOne.textAlignment = .center
+        answerLabelOne.isHidden = true
         
         answerTextFieldOne.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(answerTextFieldOne)
         answerTextFieldOne.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8).isActive = true
         answerTextFieldOne.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8).isActive = true
-        answerTextFieldOne.topAnchor.constraint(equalTo: secQLabelOne.bottomAnchor, constant: 8).isActive = true
+        answerTextFieldOne.topAnchor.constraint(equalTo: answerLabelOne.bottomAnchor, constant: 8).isActive = true
         answerTextFieldOne.heightAnchor.constraint(equalToConstant: 30).isActive = true
         answerTextFieldOne.isHidden = true
         
 
-        secQLabelTwo.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(secQLabelTwo)
-        secQLabelTwo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        secQLabelTwo.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8).isActive = true
-        secQLabelTwo.topAnchor.constraint(equalTo: answerTextFieldOne.bottomAnchor, constant: 8).isActive = true
-        question2Height = secQLabelTwo.heightAnchor.constraint(equalToConstant: 20)
+        answerLabelTwo.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(answerLabelTwo)
+        answerLabelTwo.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        answerLabelTwo.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8).isActive = true
+        answerLabelTwo.topAnchor.constraint(equalTo: answerTextFieldOne.bottomAnchor, constant: 8).isActive = true
+        question2Height = answerLabelTwo.heightAnchor.constraint(equalToConstant: 20)
         question2Height.isActive = true
-        secQLabelTwo.text = "Temp Input"
-        secQLabelTwo.textAlignment = .center
-        secQLabelTwo.isHidden = true
+        answerLabelTwo.text = "Temp Input"
+        answerLabelTwo.textAlignment = .center
+        answerLabelTwo.isHidden = true
         
         answerTextFieldTwo.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(answerTextFieldTwo)
-        answerTextFieldTwo.topAnchor.constraint(equalTo: secQLabelTwo.bottomAnchor, constant: 8).isActive = true
+        answerTextFieldTwo.topAnchor.constraint(equalTo: answerLabelTwo.bottomAnchor, constant: 8).isActive = true
         answerTextFieldTwo.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8).isActive = true
         answerTextFieldTwo.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8).isActive = true
         answerTextFieldTwo.heightAnchor.constraint(equalToConstant: 30).isActive = true
@@ -170,24 +178,52 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         switch labelNum {
         case 1:
             question1Height.isActive = false
-            question1Height = secQLabelOne.heightAnchor.constraint(equalToConstant: estHeight)
-            secQLabelOne.text = titleText
-            secQLabelOne.numberOfLines = Int(numLines)
+            question1Height = answerLabelOne.heightAnchor.constraint(equalToConstant: estHeight)
+            answerLabelOne.text = titleText
+            answerLabelOne.numberOfLines = Int(numLines)
             question1Height.isActive = true
         case 2:
             question2Height.isActive = false
-            question2Height = secQLabelTwo.heightAnchor.constraint(equalToConstant: estHeight)
-            secQLabelTwo.text = titleText
-            secQLabelTwo.numberOfLines = Int(numLines)
+            question2Height = answerLabelTwo.heightAnchor.constraint(equalToConstant: estHeight)
+            answerLabelTwo.text = titleText
+            answerLabelTwo.numberOfLines = Int(numLines)
             question2Height.isActive = true
         default:
             break
         }
     }
     
+    func activateResetMode(){
+        resetModeOn = true
+        barTitle.text = "Change Password"
+        topLabelWidth.isActive = false
+        topLabelWidth = topLabel.widthAnchor.constraint(equalToConstant: 180)
+        topLabelWidth.isActive = true
+        topLabel.text = "Temporary Password: "
+        answerLabelOne.text = "New Password"
+        answerLabelTwo.text = "Confirm New Password"
+        answerTextFieldOne.isSecureTextEntry = true
+        answerTextFieldTwo.isSecureTextEntry = true
+        submitBtn.setTitle("Change Password", for: .normal)
+    }
+    
+    func deactivateResetMode(){
+        resetModeOn = false
+        barTitle.text = "Retrieve Password"
+        topLabelWidth.isActive = false
+        topLabelWidth = topLabel.widthAnchor.constraint(equalToConstant: 100)
+        topLabelWidth.isActive = true
+        topLabel.text = "Username: "
+        answerLabelOne.text = "Question1"
+        answerLabelTwo.text = "Question2"
+        answerTextFieldOne.isSecureTextEntry = false
+        answerTextFieldTwo.isSecureTextEntry = false
+        submitBtn.setTitle("Have Password Emailed to User", for: .normal)
+    }
+    
     /************************** UIButton Actions *********************/
     func getQuestions(completion: @escaping (_ result: String?) -> Void){
-        if let name = userNameTextField.text {
+        if let name = topTextField.text {
             let activityIndicator = setUpActivityIndicator()
             DispatchQueue.global(qos: .background).async {
                 AppDelegate().makeHTTPPostRequestToGetQuestions(urlString: "https://edi.asonet.com/httpserver.ashx?obj=retrieveUserSecurityQ", username: name, completion: {
@@ -203,9 +239,10 @@ class retrievePasswordView: UIView, XMLParserDelegate {
                                 completion(self.errorMsg)
                                 return
                             }
+                            self.userName = name
                             self.retrieveQsBtn.isHidden = true
-                            self.secQLabelOne.isHidden = false
-                            self.secQLabelTwo.isHidden = false
+                            self.answerLabelOne.isHidden = false
+                            self.answerLabelTwo.isHidden = false
                             self.answerTextFieldTwo.isHidden = false
                             self.answerTextFieldOne.isHidden = false
                             self.submitBtn.isHidden = false
@@ -226,13 +263,26 @@ class retrievePasswordView: UIView, XMLParserDelegate {
     }
     
     func submitQuestions(completion: @escaping (_ result: String?) -> Void){
-        guard let name = userNameTextField.text,
+ 
+        
+       /* guard name != nil && answerToQ1 != nil &&
+              answerToQ2 != nil && name != "" &&
+               answerToQ2 != "" && answerToQ2 != ""*/
+        guard let name = topTextField.text,
               let answerToQ1 = answerTextFieldOne.text,
               let answerToQ2 = answerTextFieldTwo.text
+        else {
+            completion("please make sure all input fields are filled")
+            return
+        }
+        
+        guard name != "" && answerToQ1 != "" && answerToQ2 != ""
             else {
                 completion("please make sure all input fields are filled")
                 return
         }
+        
+
         let activityIndicator = setUpActivityIndicator()
         DispatchQueue.global(qos: .background).async {
             AppDelegate().makeHTTPPostRequestToEmailPassword(urlString: "https://edi.asonet.com/httpserver.ashx?obj=submitUserSecurityQ", username: name, answer1: answerToQ1, answer2: answerToQ2, completion: { (data: Data?) in
@@ -245,14 +295,13 @@ class retrievePasswordView: UIView, XMLParserDelegate {
                     self.parser.delegate = self
                     self.parser.parse()
                     DispatchQueue.main.async {
-                        //print("\(self.statusSuccess)")
                         activityIndicator.stopAnimating()
-                        guard self.errorMsg == "Password Emailed." else {
+                        /*guard self.statusSuccess else {
                             completion(self.errorMsg)
                             return
-                        }
+                        }*/
                         completion("success")
-                        return
+                        self.activateResetMode()
                     }
                     
                 } else {
@@ -264,22 +313,75 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         }
         
     }
+    
+    func changePassword(completion: @escaping (_ result: String?)->Void){
+        guard let tempPass = topTextField.text,
+              let newPass = answerTextFieldOne.text,
+              let newPassCfrm = answerTextFieldTwo.text
+            else {
+                completion("Please make sure all input fields are filled")
+                return
+        }
+        
+        guard tempPass != "" && newPass != "" && newPassCfrm != "" else {
+            completion("Please make sure all input fields are filled")
+            return
+        }
+        
+        let activityIndicator = setUpActivityIndicator()
+        DispatchQueue.global(qos: .background).async {
+            AppDelegate().makeHTTPPostRequestToChangePassword(urlString: "https://edi.asonet.com/httpserver.ashx?obj=UserUpdateFromTemp", userName: self.userName, tempPass: tempPass, newPassword: newPass, confirmPassword: newPassCfrm, completion: { (data: Data?) in
+                if data != nil {
+                    if let dataString = String(data: data!, encoding: .utf8){
+                        print("\(dataString)")
+                    }
+                    self.parser = XMLParser(data: data!)
+                    self.parser.parse()
+                    
+                    DispatchQueue.main.async {
+                        print("\(self.statusSuccess)")
+                        activityIndicator.stopAnimating()
+                        guard self.statusSuccess else {
+                            completion(self.errorMsg)
+                            return
+                        }
+                        completion("successfully changed password")
+                        self.statusSuccess = false
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        completion("Could not access data from www.asonet.com. We apologize for the inconvenience")
+                    }
+                }
+                
+            })
+        }
+        
+    }
 
     
     
     func didDismissView(){
         retrieveQsBtn.isHidden = false
-        secQLabelOne.isHidden = true
-        secQLabelTwo.isHidden = true
+        answerLabelOne.isHidden = true
+        answerLabelTwo.isHidden = true
         answerTextFieldTwo.isHidden = true
         answerTextFieldOne.isHidden = true
         submitBtn.isHidden = true
+        deactivateResetMode()
     }
     
     
     /********************** XMLParser Delegate ************************/
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         if elementName == "response" {
+            if let status = attributeDict["status"]{
+                if status == "SUCCESSFUL" {
+                    print("status successful parsed")
+                    statusSuccess = true
+                }
+                print("\(status)")
+            }
             if let msg = attributeDict["message"]{
                 errorMsg = msg
             }
@@ -300,135 +402,3 @@ class retrievePasswordView: UIView, XMLParserDelegate {
 }
 
 
-
-
-/*class retrievePasswordViewController : UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var formTableView : UITableView!
-    var userNameLabel : UILabel!
-    private var userNameTextField : userInputField!
-    var securityQuestion1: UILabel?
-    private var security1TextField : userInputField?
-    var securityQuestion2: UILabel?
-    private var security2TextField: userInputField?
-    var initSecondaryView : Bool = false
-    let getQuestionsButton = UIButton(frame: CGRect(x: 67, y: 310, width: 240, height: 44))
-    let tempPasswordButton = UIButton(frame: CGRect(x: 55, y: 500, width: 265, height: 50))
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        navigationItem.title = "Retrieve Password"
-        view.backgroundColor = UIColor.white
-        self.hideKeyBoardWhenTappedAround()
-        setUpTableView()
-        setUpButtons()
-    }
-    
-    
-    func setUpTableView(){
-        formTableView = UITableView(frame: CGRect(x: 37, y: 120, width: 300, height: 340))
-        formTableView.dataSource = self
-        formTableView.delegate = self
-        formTableView.register(formTableViewCell.self, forCellReuseIdentifier: "formCell")
-        formTableView.alwaysBounceVertical = false
-        formTableView.separatorStyle = .none
-        self.view.addSubview(formTableView)
-    }
-    
-    func setUpButtons(){
-        getQuestionsButton.addTarget(self, action: #selector(getQuestions), for: .touchUpInside)
-        getQuestionsButton.setUpDefaultType(title: "Answer Security Questions")
-        self.view.addSubview(getQuestionsButton)
-    }
-    
-    func setUpSecondaryView(){
-        getQuestionsButton.isHidden = true
-        
-        tempPasswordButton.addTarget(self, action: #selector(sendEmailTempPasswordRequest), for: .touchUpInside)
-        tempPasswordButton.setUpDefaultType(title: "")
-        tempPasswordButton.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
-        let nsTitle = NSMutableAttributedString(string: "send temp password to\nLarrySachs@gmail.com")
-        tempPasswordButton.setAttributedTitle(nsTitle, for: .normal)
-        self.view.addSubview(tempPasswordButton)
-        
-    }
-    
-    func getQuestions(){
-        if (userNameTextField.text?.isEmpty)! {
-            promptAlertWithDelay("Could not fetch questions", inmessage: "Username must not be empty", indelay: 5.0)
-            return
-        }
-        initSecondaryView = true
-        setUpSecondaryView()
-        
-        formTableView.reloadData()
-    }
-    
-    func sendEmailTempPasswordRequest(){
-        print("this does not do anything right now")
-    }
-    
-    /************************************************ tableView functions ****************************************/
-    func numberOfSections(in tableView: UITableView) -> Int {
-        if initSecondaryView {
-            return 3
-        } else {
-            return 1
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 45))
-        headerView.backgroundColor = UIColor.clear
-        if section == 0 {
-            userNameLabel = UILabel(frame: CGRect(x: 4, y: 17, width: headerView.frame.size.width-4, height: 25))
-            userNameLabel.text = "Username: "
-            headerView.addSubview(userNameLabel)
-        }
-        if section == 1 {
-            securityQuestion1 = UILabel(frame: CGRect(x: 4, y: 17, width: headerView.frame.size.width-4, height: 25))
-            securityQuestion1?.text = "What was your first car model?"
-            headerView.addSubview(securityQuestion1!)
-        }
-        if section == 2 {
-           securityQuestion2 = UILabel(frame: CGRect(x: 4, y: 17, width: headerView.frame.size.width-4, height: 25))
-            securityQuestion2?.text = "What is your mothers maiden name?"
-            headerView.addSubview(securityQuestion2!)
-        }
-        return headerView
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 45
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 45
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "formCell", for: indexPath) as! formTableViewCell
-        if indexPath.section == 0 {
-            userNameTextField = cell.formTextField
-        }
-        if indexPath.section == 1 {
-            security1TextField = cell.formTextField
-        }
-        if indexPath.section == 2 {
-            security2TextField = cell.formTextField
-        }
-        return cell
-    }
- 
-}*/

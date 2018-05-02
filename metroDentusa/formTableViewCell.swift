@@ -49,7 +49,7 @@ class formTableViewCell : UITableViewCell {
         
         
         /*formTextField = userInputField(frame: CGRect(x: 0, y: 0, width: self.frame.size.width-40, height: self.frame.size.height))
-        formTextField.backgroundColor = UIColor(red: 229/255, green: 226/255, blue: 233/255, alpha: 1)
+        formTextField.backgroundColor = LoginSignUpViewController.defaultGray, green: 226/255, blue: 233/255, alpha: 1)
         formTextField.borderStyle = UITextBorderStyle.roundedRect
         self.contentView.addSubview(formTextField!)*/
     }
@@ -69,7 +69,7 @@ class formTableViewCell : UITableViewCell {
         formTextField.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
         formTextField.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
         formTextField.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-        formTextField.backgroundColor = UIColor(red: 229/255, green: 226/255, blue: 233/255, alpha: 1)
+        formTextField.backgroundColor = LoginSignUpViewController.defaultGray
         formTextField.borderStyle = UITextBorderStyle.roundedRect
     }
 }

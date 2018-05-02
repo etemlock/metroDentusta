@@ -9,6 +9,7 @@
 import Foundation
 
 extension UIViewController {
+    
     func promptAlertWithDelay(_ intitle: String,  inmessage: String, indelay: Double){
         let alert = UIAlertController(title: intitle, message: inmessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
@@ -87,6 +88,8 @@ extension UIViewController {
     }
   
 }
+
+
 
 extension UIView {
     func setUpActivityIndicator() -> UIActivityIndicatorView {

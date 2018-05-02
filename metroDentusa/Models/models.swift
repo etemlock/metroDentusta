@@ -249,7 +249,7 @@ struct DocumentModel{
 
 struct providerModel {
     var instName: String
-    var provName: String
+    //var provName: String
     var languages: String
     var address: String
     var city: String
@@ -265,7 +265,7 @@ struct providerModel {
 }
 
 struct expProvider {
-    static private var singleton = providerModel(instName: "", provName: "", languages: "", address: "", city: "", stateZip: "", lat: -1, long: -1, distance: -1, telephone: "", hours: "", handicapAccess: "", webAddress: "", doctors: [])
+    static private var singleton = providerModel(instName: "",/* provName: "",*/ languages: "", address: "", city: "", stateZip: "", lat: -1, long: -1, distance: -1, telephone: "", hours: "", handicapAccess: "", webAddress: "", doctors: [])
     
     static func getSingleton() -> providerModel {
         return singleton 

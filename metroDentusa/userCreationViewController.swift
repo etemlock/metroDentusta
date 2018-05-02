@@ -20,6 +20,7 @@ class userCreationViewController: UIViewController, UITableViewDelegate, UITable
     var formCellId = "formCell"
     private var saveParams = SaveUserParams()
     var user : member!
+    var isNewMember: Bool = true
     
     /*************** XMLParser related variables ************/
     var parser = XMLParser()
@@ -29,9 +30,10 @@ class userCreationViewController: UIViewController, UITableViewDelegate, UITable
     
     
     
-    init(user: member){
+    init(user: member, isNewUser: Bool){
         super.init(nibName: nil, bundle: nil)
         self.user = user
+        self.isNewMember = isNewUser
     }
     
     required init?(coder aDecoder: NSCoder) {

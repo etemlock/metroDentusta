@@ -104,7 +104,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func makeHTTPPOSTRequestToGetUser(urlstring: String, loginInputs: [String], completion: @escaping ( _ data: Data?)->Void){
         if let myUrl = URL(string: urlstring){
             let queryString = "<request type='LOGINMEMBER'  username='\(loginInputs[0])' password='\(loginInputs[1])' StyleSheet='xml' SessionID=''></request>"
+            print("\(queryString)")
             let request = prepareRequest(url: myUrl, requestString: queryString)
+            
             
             
             /*var request = URLRequest(url: myUrl)
@@ -170,7 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         
     
-    func makeHTTPPostRequestToSearchDentists(urlstring: String, parameters: dentSearchParams, completion: @escaping (_ jsonResults: [[String: Any]]?)->Void){
+    func makeHTTPPostRequestToSearchDentists(urlstring: String, parameters: dentSearchParams, completion: @escaping (_ jsonResults: [[String: Any]]?, _ error: Error?)->Void){
         if let myUrl = URL(string: urlstring){
             /*570 ATLANTIC AVE LAWRENCE NY 11559*/
             var searchBy = "city"
@@ -185,16 +187,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             xmlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
             
             AlamofireHandlePostRequest(request: xmlRequest, completion: { (error: Error?, data: Data?) in
+                guard error == nil else {
+                    completion(nil,error)
+                    return
+                }
                 if data != nil {
                     do {
                         if let jsonDict = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: Any]{
                             if let results = jsonDict["results"] as? [[String: Any]] {
-                                completion(results)
+                                completion(results, nil)
                             }
                         }
                     } catch let error {
                         print("JSONSerialization Error : \(error)")
-                        completion(nil)
+                        completion(nil, error)
                     }
                 }
             })
@@ -265,6 +271,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    func makeHTTPPostRequestToChangePassword(urlString: String, userName: String, tempPass: String, newPassword: String, confirmPassword: String, completion: @escaping (_ data: Data?) -> Void){
+        if let myUrl = URL(string: urlString){
+            let requestString = "<userinfo username='\(userName)' temppassword='\(tempPass)' newpassword='\(newPassword)' newpasswordconfirm='\(confirmPassword)' StyleSheet='xml' SessionID='' sessionguid=''></userinfo>"
+            print("\(requestString)")
+            let request = prepareRequest(url: myUrl, requestString: requestString)
+            
+            AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
+                if data != nil {
+                    completion(data)
+                }
+            })
+        }
+    }
     
             
 

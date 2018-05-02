@@ -224,7 +224,8 @@ class formViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         divider.leadingAnchor.constraint(equalTo: invisibleView.leadingAnchor).isActive = true
         divider.trailingAnchor.constraint(equalTo: invisibleView.trailingAnchor).isActive = true
         divider.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        divider.backgroundColor = UIColor(red: 206/255, green: 205/255, blue: 212/255, alpha: 1)
+        divider.backgroundColor = LoginSignUpViewController.defaultGray
+        //divider.backgroundColor = UIColor(red: 206/255, green: 205/255, blue: 212/255, alpha: 1)
         
         rollTableViewButton.translatesAutoresizingMaskIntoConstraints = false
         divider.addSubview(rollTableViewButton)

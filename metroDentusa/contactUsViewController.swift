@@ -96,7 +96,7 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
         messageBox.leadingAnchor.constraint(equalTo: formTableView.leadingAnchor).isActive = true
         messageBox.trailingAnchor.constraint(equalTo: formTableView.trailingAnchor).isActive = true
         messageBox.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.17).isActive = true
-        messageBox.backgroundColor = UIColor(red: 229/255, green: 226/255, blue: 233/255, alpha: 1)
+        messageBox.backgroundColor = LoginSignUpViewController.defaultGray
         messageBox.layer.cornerRadius = 5
         messageBox.layer.borderWidth = 1
         messageBox.layer.borderColor = UIColor.lightGray.cgColor

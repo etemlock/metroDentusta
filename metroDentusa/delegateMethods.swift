@@ -19,3 +19,7 @@ protocol setRowDelegate {
 protocol openViewDelegate {
     func openView(navBar: navBarController)
 }
+
+protocol translateMaskingConstraintDelegate {
+    func translateAllInstanceViewsMaskingConstraints()
+}
