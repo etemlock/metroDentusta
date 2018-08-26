@@ -17,6 +17,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     //views and subviews
     var scrollView = UIScrollView()
     var contentView = UIView()
+    var contentViewBottom : NSLayoutConstraint!
     var retrieveView = retrievePasswordView()
     var retrieveViewTop : NSLayoutConstraint!
     private var segmentIndexFlag = 0
@@ -64,9 +65,8 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         super.viewDidLoad()
         self.hideKeyBoardWhenTappedAround()
         self.view.backgroundColor = UIColor.white
-        self.navigationItem.title = "Welcome to ASO Data Services!"
-        
-        setUpScrollAndContentView()
+        self.navigationItem.title = "Welcome to ASO!"
+        self.setUpScrollViewAndContentView(scrollView: self.scrollView, contentView: self.contentView)
         setUpImages()
         setUpLabel()
         setUpSegmentController()
@@ -74,12 +74,20 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         setUpButtons()
         
         
-        contentView.bottomAnchor.constraint(equalTo: forgotPasswordBtn.bottomAnchor, constant: 90).isActive = true
+        
+        if getAnchorYPositionDiff(anchorTop: contentView.topAnchor, anchorBottom: self.view.bottomAnchor) > getAnchorYPositionDiff(anchorTop: contentView.topAnchor, anchorBottom: forgotPasswordBtn.bottomAnchor){
+            contentViewBottom = contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 30)
+        } else {
+            contentViewBottom = contentView.bottomAnchor.constraint(equalTo: forgotPasswordBtn.bottomAnchor, constant: 90)
+        }
+
+        contentViewBottom.isActive = true
         contentView.layoutIfNeeded()
         scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
         
         initRetrieveView()
     }
+    
     
     
     override func didReceiveMemoryWarning() {
@@ -92,16 +100,15 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
             constraint.value?.isActive = false
         }
         switch orient {
-        case .portrait:
-            setHomePicPotrait()
         case .landscapeLeft, .landscapeRight:
             setHomePicLandScape()
         default:
-            break
+            setHomePicPotrait()
         }
         super.viewWillTransition(to: size, with: coordinator)
-        self.view.layoutIfNeeded()
+        resizeScrollViewForLoginViewAfterTransition(coordinator: coordinator)
     }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueId {
@@ -113,32 +120,6 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     }
     
     
-    func setUpScrollAndContentView(){
-        //scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-        //scrollView.contentSize = CGSize(width: self.view.frame.width, height: 800)
-        //self.view.addSubview(scrollView)
-        
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(scrollView)
-        scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        
-        
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(contentView)
-        contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        contentView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        
-        scrollView.backgroundColor = UIColor.clear
-
-        scrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        scrollView.alwaysBounceVertical = false
-        scrollView.bounces = false
-        
-    }
     
     func setUpImages(){
         //logoView = UIImageView(frame: CGRect(x: scrollView.center.x - 70, y: 15, width: 140, height: 40))
@@ -162,12 +143,10 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         
         let orient = UIDevice.current.orientation
         switch orient {
-        case .portrait:
-           setHomePicPotrait()
         case .landscapeLeft, .landscapeRight:
             setHomePicLandScape()
         default:
-            break
+            setHomePicPotrait()
         }
     }
     
@@ -304,8 +283,23 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
          retrieveView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
          retrieveView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
          retrieveView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+         retrieveView.setUpView()
     }
     
+    func resizeScrollViewForLoginViewAfterTransition(coordinator: UIViewControllerTransitionCoordinator){
+        coordinator.animate(alongsideTransition: nil, completion: {
+            (context) -> Void in
+            self.contentViewBottom.isActive = false
+            if self.getAnchorYPositionDiff(anchorTop: self.contentView.topAnchor, anchorBottom: self.view.bottomAnchor) > self.getAnchorYPositionDiff(anchorTop: self.contentView.topAnchor, anchorBottom: self.forgotPasswordBtn.bottomAnchor){
+                self.contentViewBottom = self.contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 30)
+            } else {
+                self.contentViewBottom = self.contentView.bottomAnchor.constraint(equalTo: self.forgotPasswordBtn.bottomAnchor, constant: 90)
+            }
+            self.contentViewBottom.isActive = true
+            self.contentView.layoutIfNeeded()
+            self.scrollView.contentSize = CGSize(width: self.contentView.frame.width, height: self.contentView.frame.height)
+        })
+    }
     
     func changeIndex(sender: UISegmentedControl){
         switch sender.selectedSegmentIndex {
@@ -354,7 +348,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                     loginParams[pos] = self.loginInputW.getInput(pos: pos)
                 }
                 AppDelegate().makeHTTPPOSTRequestToGetUser(urlstring: "https://edi.asonet.com/httpserver.ashx?obj=LOGINMEMBER", loginInputs: loginParams, completion: {
-                    (/*error: Error?,*/ data: Data?) in
+                    ( data: Data?, errorDesc: String?) in
                     if data != nil {
                         print("there was data")
                         if let dataString = String(data: data!, encoding: .utf8){
@@ -393,7 +387,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                     createParams[pos] = self.createInputW.getInput(pos: pos)
                 }
                 AppDelegate().makeHTTPPostRequestToCreateUser(urlString: "https://edi.asonet.com/httpserver.ashx?obj=saveNewUserProfile", createInputs: createParams, completion: {
-                    (data: Data?) in
+                    (data: Data?, errorDesc: String?) in
                     if data != nil {
                         if let dataString = String(data: data!, encoding: .utf8){
                             print("\(dataString)")
@@ -441,9 +435,10 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         
         
         retrieveView.closeBtn.addTarget(self, action: #selector(dismissRetrieveView), for: .touchUpInside)
+        retrieveView.barViewBackBtn.addTarget(self, action: #selector(getPreviousRetrieveScreen), for: .touchUpInside)
+        
         retrieveView.retrieveQsBtn.addTarget(self, action: #selector(getQuestions), for: .touchUpInside)
         retrieveView.submitBtn.addTarget(self, action: #selector(retrieveOrResetPassword), for: .touchUpInside)
-        
         
         /*let nextVC = retrievePasswordViewController()
         self.setUpBackBarButton(title: "Back to Login")
@@ -458,9 +453,17 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveLinear, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
-        
-        retrieveView.didDismissView()
+        //retrieveView.didDismissView()
     }
+    
+    func getPreviousRetrieveScreen(){
+        if retrieveView.currViewMode == retrieveMode.fetchP.rawValue {
+            retrieveView.activateFetchQMode()
+        } else if retrieveView.currViewMode == retrieveMode.resetP.rawValue {
+            retrieveView.activateFetchPMode()
+        }
+    }
+    
     
     func getQuestions(){
         retrieveView.getQuestions(completion: { (result: String?) in
@@ -471,7 +474,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
     }
     
     func retrieveOrResetPassword(){
-        if !retrieveView.resetModeOn {
+        if retrieveView.currViewMode == retrieveMode.fetchP.rawValue {
             retrieveView.submitQuestions(completion: { (result: String?) in
                 
                 guard result != nil && result != "" else {
@@ -484,7 +487,7 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
                     self.promptAlertWithDelay("Error", inmessage: result!, indelay: 5.0)
                 }
             })
-        } else {
+        } else if retrieveView.currViewMode == retrieveMode.resetP.rawValue {
             retrieveView.changePassword(completion: { (result: String?) in
                 guard result != nil && result != "" else {
                     return
@@ -650,16 +653,21 @@ class LoginSignUpViewController : UIViewController, UITableViewDelegate, UITable
             }
             if let id = attributeDict["userid"]{
                 if statusSuccess {
-                    newUser = member(id: id, usrname: "", pssword: "", memId: "", group: "",  ssId: "")
+                    newUser = member(id: id, usrname: "", name: "", pssword: "", memId: "", group: "",  ssId: "")
                 }
             }
             if let memId = attributeDict["memberid"]{
                 if statusSuccess {
                     if segmentIndexFlag == 0 {
-                        currUser = member(id: "", usrname: loginInputW.getInput(pos: 0), pssword: loginInputW.getInput(pos: 1), memId: memId, group: "", ssId: "")
+                        currUser = member(id: "", usrname: loginInputW.getInput(pos: 0), name: "", pssword: loginInputW.getInput(pos: 1), memId: memId, group: "", ssId: "")
                     } else {
                         newUser?.setMemberId(memId: memId)
                     }
+                }
+            }
+            if let memName = attributeDict["name"]{
+                if statusSuccess {
+                    currUser?.setName(name: memName)
                 }
             }
             if let client = attributeDict["client"]{

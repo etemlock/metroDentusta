@@ -9,14 +9,16 @@
 struct member{
     private var Id: String
     private var username: String
+    private var memberName: String
     private var password: String
     private var memberId: String
     private var clientId: String
     private var sessionId: String
     
-    init(id: String, usrname: String, pssword: String, memId: String, group: String, ssId: String){
+    init(id: String, usrname: String, name: String, pssword: String, memId: String, group: String, ssId: String){
         Id = id
         username = usrname
+        memberName = name
         password = pssword
         memberId = memId
         clientId = group
@@ -43,6 +45,9 @@ struct member{
         clientId = group
     }
     
+    mutating func setName(name: String){
+        memberName = name
+    }
     
     func getId() -> String {
         return Id
@@ -66,6 +71,10 @@ struct member{
     
     func getClientId() -> String {
         return clientId
+    }
+    
+    func getName() -> String {
+        return memberName
     }
 }
 

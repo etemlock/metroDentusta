@@ -42,16 +42,17 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
     var newPickerPop = popUpPickerViewView()
     var newPickerPopTop : NSLayoutConstraint!
     var newPickerPopBottom: NSLayoutConstraint!
-    var tableRolledDown : Bool = true
-    
-    //instead of a pickerView here, perhaps open a window from the bottom.
-    var numResults = 0
-    var providerModelArray : [providerModel] = []
     var dentistPickerTrigger : UIButton!
     var distancePickerTrigger : UIButton!
     var statePickerTrigger : UIButton!
 
+    /******** data ***********/
+    var numResults = 0
+    var providerModelArray : [providerModel] = []
+    var tableRolledDown : Bool = true
+    var viewIsLarge: Bool = false
     
+    //note that this is not good, because the lists are not necessarily static.
     private var dentistTypeArray = ["All Dentists", "General Practitioners",
                                     "Periodontists","Endodontists",
                                     "Orthodontists","Oral Surgeons",
@@ -88,10 +89,13 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         setUpNonTriggerButtons()
         
         switch UIDevice.current.orientation {
-        /*case .portrait:
-            contentViewBottom = contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 30)*/
         case .landscapeLeft, .landscapeRight:
-            contentViewBottom = contentView.bottomAnchor.constraint(equalTo: findDentistButton.bottomAnchor, constant: 250)
+            if getAnchorYPositionDiff(anchorTop: contentView.topAnchor, anchorBottom: self.view.bottomAnchor) > getAnchorYPositionDiff(anchorTop: contentView.topAnchor, anchorBottom: findDentistButton.bottomAnchor) {
+                contentViewBottom = contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                viewIsLarge = true
+            } else {
+                contentViewBottom = contentView.bottomAnchor.constraint(equalTo: findDentistButton.bottomAnchor, constant: 250)
+            }
         default:
             contentViewBottom = contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 30)
         }
@@ -125,7 +129,7 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         case .landscapeLeft, .landscapeRight:
             contentViewBottom = contentView.bottomAnchor.constraint(equalTo: findDentistButton.bottomAnchor, constant: 250)
             if newPickerPopTop.constant != 0 {
-                newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150)
+                newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -200)
                 newPickerPopBottom = newPickerPop.bottomAnchor.constraint(equalTo: newPickerPop.topAnchor, constant: 200)
             }
             if !tableRolledDown {
@@ -139,9 +143,7 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         newPickerPopBottom.isActive = true
         dividerTop.isActive = true
         
-        contentView.layoutIfNeeded()
-        scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
-        //add completion handler to resize scrollView contentSize
+        self.resizeScrollViewAfterTransition(coordinator: coordinator, scrollView: self.scrollView, contentView: self.contentView)
     }
     
 
@@ -440,9 +442,10 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
             }
             if addressTextField.text != "" {
                 cell.distanceLabel.text = "\(providerForCell.distance) miles away"
-            } else {
-                cell.distanceLabel.text = "Info not available"
             }
+            /*else {
+                cell.distanceLabel.text = "Info not available"
+            }*/
             return cell
         }
         
@@ -464,14 +467,11 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         DispatchQueue.global(qos: .background).async {
             let start = DispatchTime.now()
             AppDelegate().makeHTTPPostRequestToSearchDentists(urlstring: "https://www.asonet.com/httpserver.ashx?obj=getPPOjson", parameters: params, completion: {
-                (jsonResult: [[String: Any]]?, error: Error?) in
-                guard error == nil else {
-                    self.promptAlertWithDelay("Error", inmessage: String(describing: error!), indelay: 5.0)
-                    return
-                }
+                (jsonResult: [[String: Any]]?, errorDesc: String?) in
+                self.providerModelArray.removeAll()
                 if jsonResult != nil {
                     self.numResults = (jsonResult?.count)!
-                    self.providerModelArray.removeAll()
+                    //self.providerModelArray.removeAll()
                     
                     for result in jsonResult! {
                         //print("\(result)")
@@ -539,7 +539,11 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
                     }
                 } else {
                     self.numResults = 0
-                    self.promptAlertWithDelay("Error", inmessage: "Could not access data from www.asonet.com", indelay: 5.0)
+                    if errorDesc != nil {
+                        self.promptAlertWithDelay("Error", inmessage: errorDesc!, indelay: 5.0)
+                    } else {
+                        self.promptAlertWithDelay("Error", inmessage: "Could not access data from www.asonet.com", indelay: 5.0)
+                    }
                 }
                 self.resultsCountLabel.text = String(self.numResults) + " providers matched your search"
                
@@ -620,7 +624,7 @@ class findDentistViewController : UIViewController, UITableViewDelegate, UITable
         newPickerPopBottom.isActive = false
         switch UIDevice.current.orientation {
         case .landscapeRight, .landscapeLeft:
-            newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150)
+            newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -200)
             newPickerPopBottom = newPickerPop.bottomAnchor.constraint(equalTo: newPickerPop.topAnchor, constant: 200)
         default:
             newPickerPopTop = newPickerPop.topAnchor.constraint(equalTo: findDentistButton.bottomAnchor, constant: 10)

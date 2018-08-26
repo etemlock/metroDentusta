@@ -23,6 +23,7 @@ class retrievePasswordView: UIView, XMLParserDelegate {
     private var answerTextFieldOne = UITextField()
     private var answerTextFieldTwo = UITextField()
     var submitBtn = UIButton()
+    var barViewBackBtn = UIButton()
 
 
     
@@ -32,23 +33,16 @@ class retrievePasswordView: UIView, XMLParserDelegate {
     
     
     /********* data **************/
-    var resetModeOn : Bool = false
+    //var resetModeOn : Bool = false
+    var currViewMode = ""
     private var userName = ""
+   
     
     /******** XMLParser related variables ************/
     var parser = XMLParser()
     var statusSuccess: Bool = false
     var errorMsg = ""
     
-    override init(frame: CGRect){
-        super.init(frame: frame)
-        setUpView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)!
-        setUpView()
-    }
     
     func setUpView(){
         self.backgroundColor = UIColor.white
@@ -85,6 +79,16 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         closeBtn.widthAnchor.constraint(equalToConstant: 20).isActive = true
         closeBtn.setTitle("X", for: .normal)
         closeBtn.setTitleColor(UIColor.white, for: .normal)
+        
+        barViewBackBtn.translatesAutoresizingMaskIntoConstraints = false
+        topBarView.addSubview(barViewBackBtn)
+        barViewBackBtn.leadingAnchor.constraint(equalTo: topBarView.leadingAnchor, constant: 8).isActive = true
+        barViewBackBtn.centerYAnchor.constraint(equalTo: topBarView.centerYAnchor).isActive = true
+        barViewBackBtn.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        barViewBackBtn.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        barViewBackBtn.setTitle("< Back", for: .normal)
+        barViewBackBtn.setTitleColor(UIColor.white, for: .normal)
+        barViewBackBtn.isHidden = true
     }
     
     func setUpInputFields(){
@@ -120,7 +124,7 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         answerLabelOne.topAnchor.constraint(equalTo: retrieveQsBtn.topAnchor).isActive = true
         question1Height = answerLabelOne.heightAnchor.constraint(equalToConstant: 20)
         question1Height.isActive = true
-        answerLabelOne.text = "Temp Input"
+        answerLabelOne.text = "Question1 "
         answerLabelOne.textAlignment = .center
         answerLabelOne.isHidden = true
         
@@ -140,7 +144,7 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         answerLabelTwo.topAnchor.constraint(equalTo: answerTextFieldOne.bottomAnchor, constant: 8).isActive = true
         question2Height = answerLabelTwo.heightAnchor.constraint(equalToConstant: 20)
         question2Height.isActive = true
-        answerLabelTwo.text = "Temp Input"
+        answerLabelTwo.text = "Question 2"
         answerLabelTwo.textAlignment = .center
         answerLabelTwo.isHidden = true
         
@@ -170,6 +174,7 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         submitBtn.setUpDefaultType(title: "Have Password Emailed to User")
         submitBtn.titleLabel?.lineBreakMode = .byWordWrapping
         submitBtn.isHidden = true
+        
     }
     
     func setLabelTitleAndHeight(labelNum: Int, titleText: String){
@@ -193,7 +198,53 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         }
     }
     
-    func activateResetMode(){
+    func activateFetchQMode(){
+        currViewMode = retrieveMode.fetchQ.rawValue
+        retrieveQsBtn.isHidden = false
+        answerLabelOne.isHidden = true
+        answerLabelTwo.isHidden = true
+        answerTextFieldTwo.isHidden = true
+        answerTextFieldOne.isHidden = true
+        barViewBackBtn.isHidden = true
+        submitBtn.isHidden = true
+    }
+    
+    func activateFetchPMode(){
+        currViewMode = retrieveMode.fetchP.rawValue
+        retrieveQsBtn.isHidden = true
+        answerLabelOne.isHidden = false
+        answerLabelTwo.isHidden = false
+        answerTextFieldTwo.isHidden = false
+        answerTextFieldOne.isHidden = false
+        barViewBackBtn.isHidden = false
+        submitBtn.isHidden = false
+        topLabelWidth.isActive = false
+        topLabelWidth = topLabel.widthAnchor.constraint(equalToConstant: 100)
+        topLabelWidth.isActive = true
+        topLabel.text = "Username: "
+        answerTextFieldOne.isSecureTextEntry = false
+        answerTextFieldTwo.isSecureTextEntry = false
+        submitBtn.setTitle("Have Password Emailed to User", for: .normal)
+    }
+    
+    func activateResetPMode(){
+        currViewMode = retrieveMode.resetP.rawValue
+        print("\(currViewMode)")
+        barTitle.text = "Change Password"
+        topLabelWidth.isActive = false
+        topLabelWidth = topLabel.widthAnchor.constraint(equalToConstant: 180)
+        topLabelWidth.isActive = true
+        topLabel.text = "Temporary Password: "
+        answerLabelOne.text = "New Password"
+        answerLabelTwo.text = "Confirm New Password"
+        answerTextFieldOne.text?.removeAll()
+        answerTextFieldTwo.text?.removeAll()
+        answerTextFieldOne.isSecureTextEntry = true
+        answerTextFieldTwo.isSecureTextEntry = true
+        submitBtn.setTitle("Change Password", for: .normal)
+    }
+    
+    /*func activateResetMode(){
         resetModeOn = true
         barTitle.text = "Change Password"
         topLabelWidth.isActive = false
@@ -202,6 +253,8 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         topLabel.text = "Temporary Password: "
         answerLabelOne.text = "New Password"
         answerLabelTwo.text = "Confirm New Password"
+        answerTextFieldOne.text?.removeAll()
+        answerTextFieldTwo.text?.removeAll()
         answerTextFieldOne.isSecureTextEntry = true
         answerTextFieldTwo.isSecureTextEntry = true
         submitBtn.setTitle("Change Password", for: .normal)
@@ -219,7 +272,7 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         answerTextFieldOne.isSecureTextEntry = false
         answerTextFieldTwo.isSecureTextEntry = false
         submitBtn.setTitle("Have Password Emailed to User", for: .normal)
-    }
+    }*/
     
     /************************** UIButton Actions *********************/
     func getQuestions(completion: @escaping (_ result: String?) -> Void){
@@ -227,7 +280,7 @@ class retrievePasswordView: UIView, XMLParserDelegate {
             let activityIndicator = setUpActivityIndicator()
             DispatchQueue.global(qos: .background).async {
                 AppDelegate().makeHTTPPostRequestToGetQuestions(urlString: "https://edi.asonet.com/httpserver.ashx?obj=retrieveUserSecurityQ", username: name, completion: {
-                    (data: Data?) in
+                    (data: Data?, errorDesc: String?) in
                     if data != nil {
                         self.parser = XMLParser(data: data!)
                         self.parser.delegate = self
@@ -239,14 +292,10 @@ class retrievePasswordView: UIView, XMLParserDelegate {
                                 completion(self.errorMsg)
                                 return
                             }
+                            self.activateFetchPMode()
                             self.userName = name
-                            self.retrieveQsBtn.isHidden = true
-                            self.answerLabelOne.isHidden = false
-                            self.answerLabelTwo.isHidden = false
-                            self.answerTextFieldTwo.isHidden = false
-                            self.answerTextFieldOne.isHidden = false
-                            self.submitBtn.isHidden = false
                             self.statusSuccess = false
+                            
                             //completion(nil)
                         }
                     } else {
@@ -285,8 +334,14 @@ class retrievePasswordView: UIView, XMLParserDelegate {
 
         let activityIndicator = setUpActivityIndicator()
         DispatchQueue.global(qos: .background).async {
-            AppDelegate().makeHTTPPostRequestToEmailPassword(urlString: "https://edi.asonet.com/httpserver.ashx?obj=submitUserSecurityQ", username: name, answer1: answerToQ1, answer2: answerToQ2, completion: { (data: Data?) in
+            AppDelegate().makeHTTPPostRequestToEmailPassword(urlString: "https://edi.asonet.com/httpserver.ashx?obj=submitUserSecurityQ", username: name, answer1: answerToQ1, answer2: answerToQ2, completion: { (data: Data?, errorDesc: String?) in
 
+                guard errorDesc == nil else {
+                    DispatchQueue.main.async {
+                        completion(errorDesc!)
+                    }
+                    return
+                }
                 if data != nil {
                     if let dataString = String(data: data!, encoding: .utf8){
                         print("\(dataString)")
@@ -296,12 +351,15 @@ class retrievePasswordView: UIView, XMLParserDelegate {
                     self.parser.parse()
                     DispatchQueue.main.async {
                         activityIndicator.stopAnimating()
-                        /*guard self.statusSuccess else {
+                        guard self.statusSuccess else {
                             completion(self.errorMsg)
                             return
-                        }*/
+                        }
+                        
+                        self.statusSuccess = false
+                        self.activateResetPMode()
+                        
                         completion("success")
-                        self.activateResetMode()
                     }
                     
                 } else {
@@ -310,6 +368,7 @@ class retrievePasswordView: UIView, XMLParserDelegate {
                     }
                 }
             })
+            
         }
         
     }
@@ -330,7 +389,7 @@ class retrievePasswordView: UIView, XMLParserDelegate {
         
         let activityIndicator = setUpActivityIndicator()
         DispatchQueue.global(qos: .background).async {
-            AppDelegate().makeHTTPPostRequestToChangePassword(urlString: "https://edi.asonet.com/httpserver.ashx?obj=UserUpdateFromTemp", userName: self.userName, tempPass: tempPass, newPassword: newPass, confirmPassword: newPassCfrm, completion: { (data: Data?) in
+            AppDelegate().makeHTTPPostRequestToChangePassword(urlString: "https://edi.asonet.com/httpserver.ashx?obj=UserUpdateFromTemp", userName: self.userName, tempPass: tempPass, newPassword: newPass, confirmPassword: newPassCfrm, completion: { (data: Data?, errorDesc: String?) in
                 if data != nil {
                     if let dataString = String(data: data!, encoding: .utf8){
                         print("\(dataString)")
@@ -361,26 +420,16 @@ class retrievePasswordView: UIView, XMLParserDelegate {
 
     
     
-    func didDismissView(){
-        retrieveQsBtn.isHidden = false
-        answerLabelOne.isHidden = true
-        answerLabelTwo.isHidden = true
-        answerTextFieldTwo.isHidden = true
-        answerTextFieldOne.isHidden = true
-        submitBtn.isHidden = true
-        deactivateResetMode()
-    }
     
     
     /********************** XMLParser Delegate ************************/
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         if elementName == "response" {
             if let status = attributeDict["status"]{
-                if status == "SUCCESSFUL" {
+                if status.contains("SUCCESSFUL") {
                     print("status successful parsed")
                     statusSuccess = true
                 }
-                print("\(status)")
             }
             if let msg = attributeDict["message"]{
                 errorMsg = msg
@@ -399,6 +448,12 @@ class retrievePasswordView: UIView, XMLParserDelegate {
     }
     
     
+}
+
+public enum retrieveMode : String {
+    case fetchQ = "fetchQuestions"
+    case fetchP = "fetchPassword"
+    case resetP = "resetPassword"
 }
 
 

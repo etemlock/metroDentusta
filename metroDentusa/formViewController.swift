@@ -13,9 +13,6 @@ class formViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     
     /********* views *******/
     var menuButton : UIBarButtonItem!
-    //var scrollView = UIScrollView()
-    //var contentViewBottom : NSLayoutConstraint!
-    //var contentView = UIView()
     var pickerPop = popUpPickerViewView()
     var pickerPopTop : NSLayoutConstraint!
     var invisibleView = UIView()
@@ -277,7 +274,7 @@ class formViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         let activityIndicator = setUpActivityIndicator()
         DispatchQueue.global(qos: .background).async {
             activityIndicator.startAnimating()
-            AppDelegate().makeHTTPPostRequestToGetPlanDocuments(urlString: "https://edi.asonet.com/httpserver.ashx?obj=plandocumentsHTML", user: self.user!, completion: { (data: Data?) in
+            AppDelegate().makeHTTPPostRequestToGetPlanDocuments(urlString: "https://edi.asonet.com/httpserver.ashx?obj=plandocumentsHTML", user: self.user!, completion: { (data: Data?, errorDesc: String?) in
                 if data != nil {
                     self.parser = XMLParser(data: data!)
                     self.parser.delegate = self
@@ -296,7 +293,7 @@ class formViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
                 } else {
                     DispatchQueue.main.async {
                         activityIndicator.stopAnimating()
-                        print("no data aquired")
+                        self.promptAlertWithDelay("Error", inmessage: "Oops! Seems like there was no data for that plan", indelay: 5.0)
                     }
                 }
             })

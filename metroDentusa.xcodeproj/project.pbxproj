@@ -31,7 +31,6 @@
 		545E0D9F2087D2A400D272A3 /* userCreationEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545E0D9E2087D2A400D272A3 /* userCreationEditViewController.swift */; };
 		545E0DA12088287E00D272A3 /* menuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545E0DA02088287E00D272A3 /* menuViewController.swift */; };
 		545E0DA420883EAD00D272A3 /* labelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545E0DA320883EAD00D272A3 /* labelCell.swift */; };
-		5484951B20746E49000872E7 /* userCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5484951A20746E49000872E7 /* userCreationViewController.swift */; };
 		5489A2C42056FEFF006644D6 /* FAQsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489A2C32056FEFF006644D6 /* FAQsViewController.swift */; };
 		5489A2C620573372006644D6 /* FAQsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489A2C520573372006644D6 /* FAQsTableViewCell.swift */; };
 		5489A2CA205748B5006644D6 /* FAQsAnswerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489A2C9205748B5006644D6 /* FAQsAnswerViewController.swift */; };
@@ -88,7 +87,6 @@
 		545E0D9E2087D2A400D272A3 /* userCreationEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = userCreationEditViewController.swift; sourceTree = "<group>"; };
 		545E0DA02088287E00D272A3 /* menuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = menuViewController.swift; sourceTree = "<group>"; };
 		545E0DA320883EAD00D272A3 /* labelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = labelCell.swift; sourceTree = "<group>"; };
-		5484951A20746E49000872E7 /* userCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = userCreationViewController.swift; sourceTree = "<group>"; };
 		5489A2C32056FEFF006644D6 /* FAQsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAQsViewController.swift; sourceTree = "<group>"; };
 		5489A2C520573372006644D6 /* FAQsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAQsTableViewCell.swift; sourceTree = "<group>"; };
 		5489A2C9205748B5006644D6 /* FAQsAnswerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAQsAnswerViewController.swift; sourceTree = "<group>"; };
@@ -210,7 +208,6 @@
 			children = (
 				5456ECB11FE4ACA500C9D6E4 /* formTableViewCell.swift */,
 				541709D41FE27BD400DA8027 /* LoginSignUpViewController.swift */,
-				5484951A20746E49000872E7 /* userCreationViewController.swift */,
 				54D8E5A81FF2393B00CC888B /* retrievePasswordView.swift */,
 				545E0D9E2087D2A400D272A3 /* userCreationEditViewController.swift */,
 			);
@@ -499,7 +496,6 @@
 				545E0DA12088287E00D272A3 /* menuViewController.swift in Sources */,
 				542F95862072F9D300312E16 /* testingScrollVC.swift in Sources */,
 				5489A2C620573372006644D6 /* FAQsTableViewCell.swift in Sources */,
-				5484951B20746E49000872E7 /* userCreationViewController.swift in Sources */,
 				5456ECB41FE4CBEE00C9D6E4 /* delegateMethods.swift in Sources */,
 				542F9582206AEF4300312E16 /* documentTableViewCell.swift in Sources */,
 				54A13999202CECCB0055FC7C /* providerProfileViewController.swift in Sources */,

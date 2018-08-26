@@ -67,6 +67,9 @@ class FAQsAnswerViewController: UIViewController {
             self.answerLabelHeight.isActive = true
             self.questionLabelHeight = self.questionLabel.heightAnchor.constraint(equalToConstant: self.questionHeight)
             self.questionLabelHeight.isActive = true
+            
+            self.contentView.layoutIfNeeded()
+            self.scrollView.contentSize = CGSize(width: self.contentView.frame.width, height: self.contentView.frame.height)
         })
     }
     

@@ -13,6 +13,7 @@ import Alamofire
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    typealias CompletionHandler = (_ data : Data?, _ errorDesc: String?) -> Void
     //static var xmlStringCache = [String: Data]()
 
 
@@ -81,7 +82,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 } else {
                     if let error = response.result.error {
-                        print("Unsuccessful response error: \(error)")
+                        print("Unsuccessful response error: \(error.localizedDescription)")
+                        
                         completion(error,nil)
                     } else {
                         print("unknown error")
@@ -101,47 +103,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-    func makeHTTPPOSTRequestToGetUser(urlstring: String, loginInputs: [String], completion: @escaping ( _ data: Data?)->Void){
+    func makeHTTPPOSTRequestToGetUser(urlstring: String, loginInputs: [String], completion: @escaping CompletionHandler /*completion: @escaping ( _ data: Data?)->Void*/){
         if let myUrl = URL(string: urlstring){
             let queryString = "<request type='LOGINMEMBER'  username='\(loginInputs[0])' password='\(loginInputs[1])' StyleSheet='xml' SessionID=''></request>"
             print("\(queryString)")
             let request = prepareRequest(url: myUrl, requestString: queryString)
             
             
-            
-            /*var request = URLRequest(url: myUrl)
-            request.httpBody = queryString.data(using: .utf8)
-            request.httpMethod = "POST"
-            request.addValue("application/xml", forHTTPHeaderField: "Content-Type")*/
-            
             AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
                 if data != nil {
-                    completion(data)
+                    completion(data, nil)
+                    //completion(data)
+                } else if error != nil {
+                    completion(nil, error?.localizedDescription)
                 }
             })
         }
     }
     
-    func makeHTTPPostRequestToCreateUser(urlString: String, createInputs: [String], completion: @escaping (_ data: Data?)->Void){
+    func makeHTTPPostRequestToCreateUser(urlString: String, createInputs: [String], completion: @escaping CompletionHandler /*(_ data: Data?)->Void*/){
         if let myUrl = URL(string: urlString){
             let queryString = "<userinfo type='newuserprofile' StyleSheet='xml'><newuservalidation checkuser='Y' MemberLast4='\(createInputs[0])' MemberBirthdate='\(createInputs[1])' MemberZipCode='\(createInputs[2])' StyleSheet='xml'></newuservalidation></userinfo>"
             let request = prepareRequest(url: myUrl, requestString: queryString)
             
             
-            /*var request = URLRequest(url: myUrl)
-            request.httpBody = queryString.data(using: .utf8)
-            request.httpMethod = "POST"
-            request.addValue("application/xml", forHTTPHeaderField: "Content-Type")*/
-            
             AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
                 if data != nil {
-                    completion(data)
+                    completion(data, nil)
+                    //completion(data)
+                } else if error != nil {
+                    completion(nil, error?.localizedDescription)
                 }
             })
         }
     }
     
-    func makeHTTPPostRequestToSaveUser(urlString: String, params: SaveUserParams, completion: @escaping (_ data: Data?)->Void){
+    func makeHTTPPostRequestToSaveUser(urlString: String, params: SaveUserParams, completion: @escaping CompletionHandler
+        /*(_ data: Data?)->Void*/){
         if let myUrl = URL(string: urlString){
             let newName = params.getName(getConfirmField: false)
             let newNameCfrm = params.getName(getConfirmField: true)
@@ -154,17 +152,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let answer2 = params.getAnswer2()
             let sessionId = params.getSessionID()
             let suId = params.getSuID()
-            let queryString = "<userinfo newusername='\(newName)' newusernameconfirm='\(newNameCfrm)' newpassword='\(newPass)' newpasswordconfirm='\(newPassCfrm)' useremailaddress='\(usrMail)' securityquestion1='\(question1)' securityanswer1='\(answer1)' securityquestion2='\(question2)' securityanswer2='\(answer2)' StyleSheet='xml' sessionguid='\(sessionId)' suid='\(suId)' ></userinfo>"
+            let queryString = "<userinfo newusername='\(newName)' newusernameconfirm='\(newNameCfrm)' newpassword='\(newPass)' newpasswordconfirm='\(newPassCfrm)' useremailaddress='\(usrMail)' securityquestion1='\(question1)' securityanswer1='\(answer1)' securityquestion2='\(question2)' securityanswer2='\(answer2)' StyleSheet='xml' sessionguid='\(sessionId)' suid='\(suId)'></userinfo>"
+            print("\(queryString)")
             let request = prepareRequest(url: myUrl, requestString: queryString)
             
-            /*var request = URLRequest(url: myUrl)
-            request.httpBody = queryString.data(using: .utf8)
-            request.httpMethod = "POST"
-            request.addValue("application/xml", forHTTPHeaderField: "Content-Type")*/
             
             AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
                 if data != nil {
-                    completion(data)
+                    completion(data, nil)
+                    //completion(data)
+                } else if error != nil {
+                    completion(nil, error?.localizedDescription)
                 }
             })
         }
@@ -172,7 +170,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         
     
-    func makeHTTPPostRequestToSearchDentists(urlstring: String, parameters: dentSearchParams, completion: @escaping (_ jsonResults: [[String: Any]]?, _ error: Error?)->Void){
+    func makeHTTPPostRequestToSearchDentists(urlstring: String, parameters: dentSearchParams, completion: @escaping (_ jsonResults: [[String: Any]]?, _ errorDesc : String?)->Void){
         if let myUrl = URL(string: urlstring){
             /*570 ATLANTIC AVE LAWRENCE NY 11559*/
             var searchBy = "city"
@@ -188,7 +186,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             AlamofireHandlePostRequest(request: xmlRequest, completion: { (error: Error?, data: Data?) in
                 guard error == nil else {
-                    completion(nil,error)
+                    completion(nil,error?.localizedDescription)
                     return
                 }
                 if data != nil {
@@ -199,79 +197,79 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             }
                         }
                     } catch let error {
-                        print("JSONSerialization Error : \(error)")
-                        completion(nil, error)
+                        print("JSONSerialization Error : \(error.localizedDescription)")
+                        let jsonDescription = "There were no results matching the query provided"
+                        completion(nil, jsonDescription)
                     }
                 }
             })
         }
     }
     
-    func makeHTTPPostRequestToGetPlanDocuments(urlString: String, user: member, completion: @escaping (_ data : Data?) -> Void){
+    func makeHTTPPostRequestToGetPlanDocuments(urlString: String, user: member, completion: @escaping CompletionHandler /*(_ data : Data?) -> Void*/){
         if let myUrl = URL(string: urlString){
             let queryString = "<request type='plandocumentsHTML'  StyleSheet='xml' memberid='\(user.getMemberId()) ' ClientID='\(user.getClientId())' sessionguid='a'></request>"
             let request = prepareRequest(url: myUrl, requestString: queryString)
             
-            /*var request = URLRequest(url: myUrl)
-            request.httpBody = queryString.data(using: .utf8)
-            request.httpMethod = "POST"
-            request.addValue("application/xml", forHTTPHeaderField: "Content-Type")*/
             
             AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
                 if data != nil {
-                    completion(data)
+                    completion(data, nil)
+                } else if error != nil {
+                    completion(nil, error?.localizedDescription)
                 }
             })
         }
     }
     
-    func makeHTTPPostRequestToViewClaims(urlString: String, userDetails: member, completion: @escaping (_ data: Data?) -> Void ){
+    func makeHTTPPostRequestToViewClaims(urlString: String, userDetails: member, completion: @escaping CompletionHandler /*(_ data: Data?) -> Void*/ ){
         if let myUrl = URL(string: urlString){
             let queryString = "<request type='serviceHistoryHTML' UserID='' MemberID='\(userDetails.getMemberId())' ClientID='\(userDetails.getClientId())' StartDate='' EndDate='' Specialty='' FamilyID='' ShowFilter='Y' Tooth='' Code='' Benefit='' Order='' Claim='' ShowServiceDetail='true' MemberServices='' SessionID='' sessionguid='a' StyleSheet='xml'></request>"
             let request = prepareRequest(url: myUrl, requestString: queryString)
             
-            
-            /*var request = URLRequest(url: myUrl)
-            request.httpBody = queryString.data(using: .utf8)
-            request.httpMethod = "POST"
-            request.addValue("application/xml", forHTTPHeaderField: "Content-Type")*/
-            
             AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
                 if data != nil {
-                    completion(data)
+                    completion(data,nil)
+                } else if error != nil {
+                    completion(nil, error?.localizedDescription)
                 }
             })
         }
     }
     
-    func makeHTTPPostRequestToGetQuestions(urlString: String, username: String, completion: @escaping (_ data: Data?) -> Void){
+    func makeHTTPPostRequestToGetQuestions(urlString: String, username: String, completion: @escaping CompletionHandler /*(_ data: Data?) -> Void*/){
         if let myUrl = URL(string: urlString){
             let queryString = "<user type='showusersecurityq' UserName='\(username)' StyleSheet='xml'></user>"
             let request = prepareRequest(url: myUrl, requestString: queryString)
             
             AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
                 if data != nil {
-                    completion(data)
+                    completion(data,nil)
+                } else if error != nil {
+                    completion(nil, error?.localizedDescription)
                 }
             })
         }
     }
     
-    func makeHTTPPostRequestToEmailPassword(urlString: String, username: String, answer1: String, answer2: String, completion: @escaping (_ data: Data?) -> Void){
+    func makeHTTPPostRequestToEmailPassword(urlString: String, username: String, answer1: String, answer2: String, completion: @escaping CompletionHandler /*(_ data: Data?) -> Void*/){
         if let myUrl = URL(string: urlString){
             let queryString = "<user type='submitusersecurityq' UserName='\(username)' Answer1='\(answer1)' Answer2='\(answer2)' StyleSheet='xml'></user>"
+            print("\(queryString)")
             let request = prepareRequest(url: myUrl, requestString: queryString)
             
             
             AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
                 if data != nil {
-                    completion(data)
+                    completion(data, nil)
+                } else if error != nil {
+                    completion(nil, error?.localizedDescription)
                 }
             })
         }
     }
     
-    func makeHTTPPostRequestToChangePassword(urlString: String, userName: String, tempPass: String, newPassword: String, confirmPassword: String, completion: @escaping (_ data: Data?) -> Void){
+    func makeHTTPPostRequestToChangePassword(urlString: String, userName: String, tempPass: String, newPassword: String, confirmPassword: String, completion: @escaping CompletionHandler /*(_ data: Data?) -> Void*/){
         if let myUrl = URL(string: urlString){
             let requestString = "<userinfo username='\(userName)' temppassword='\(tempPass)' newpassword='\(newPassword)' newpasswordconfirm='\(confirmPassword)' StyleSheet='xml' SessionID='' sessionguid=''></userinfo>"
             print("\(requestString)")
@@ -279,11 +277,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             AlamofireHandlePostRequest(request: request, completion: { (error: Error?, data: Data?) in
                 if data != nil {
-                    completion(data)
+                    completion(data, nil)
+                } else if error != nil {
+                    completion(nil, error?.localizedDescription)
                 }
             })
         }
     }
+    
+    /*public enum requestError: Error {
+        init? (type: String, message: String){
+            switch type {
+                case "connection":
+                    self.init(
+            }
+        }
+    }*/
     
             
 

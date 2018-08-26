@@ -28,7 +28,8 @@ class menuViewController: UITableViewController {
             let parentVC = self.navigationController?.viewControllers[index-1] as! LoginSignUpViewController
             if parentVC.currUser != nil {
                 self.user = parentVC.currUser
-                self.promptAlertWithDelay("Welcome Back", inmessage: "Welcome back \((self.user?.getUsername())!)", indelay: 1000)
+                self.promptAlertWithDelay("Welcome Back", inmessage: "Welcome back \((self.user?.getName())!)", indelay: 1000)
+                print("\(self.user)")
                 
             }
         }
@@ -68,29 +69,41 @@ class menuViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: segueArray[indexPath.section], sender: self)
+        if segueArray[indexPath.section] == "logoutSegue" {
+            performLogout()
+        } else {
+            performSegue(withIdentifier: segueArray[indexPath.section], sender: self)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navController = segue.destination as? UINavigationController {
-            /*if segue.identifier == "backHome" {
-             navController.viewControllers = [LoginSignUpViewController(user: self.user, session: nil)]
-             }*/
             if segue.identifier == "formSegue" {
                 navController.viewControllers = [formViewController(user: self.user)]
             }
-            if segue.identifier == "viewCardSegue" {
+            else if segue.identifier == "viewCardSegue" {
                 navController.viewControllers = [benefitCardViewController(user: (self.user)!, session: nil)]
             }
-            if segue.identifier == "viewEditSegue" {
+            else if segue.identifier == "viewEditSegue" {
                 navController.viewControllers = [userCreationEditViewController(user: (self.user)!, isNewUser: false)]
             }
-            if segue.identifier == "logoutSegue" {
+        }
+    }
+    
+    func performLogout(){
+        let logoutAlert = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        logoutAlert.willPerformLogout(completion: { (didSelectLogout: Bool) in
+            if didSelectLogout {
                 if let revealVC = self.revealViewController(), let navBarView = revealVC.rearViewController as? navBarController {
                     navBarView.killUser()
+                    self.performSegue(withIdentifier: "logoutSegue", sender: self)
+                } else {
+                    logoutAlert.dismiss(animated: true, completion: nil)
+                    self.promptAlertWithDelay("", inmessage: "We're experiencing difficulty logging out. Try closing the app and reopening", indelay: 5.0)
                 }
             }
-        }
+        })
+        present(logoutAlert, animated: true, completion: nil)
     }
     
 }

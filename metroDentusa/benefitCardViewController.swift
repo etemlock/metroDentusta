@@ -352,7 +352,7 @@ class benefitCardViewController: UIViewController {
     
     /********************************************* UIButton actions ******************************************/
     func viewClaims(){
-        AppDelegate().makeHTTPPostRequestToViewClaims(urlString: "https://edi.asonet.com/httpserver.ashx?obj=serviceHistoryHTML", userDetails: user, completion: { (data: Data?) in
+        AppDelegate().makeHTTPPostRequestToViewClaims(urlString: "https://edi.asonet.com/httpserver.ashx?obj=serviceHistoryHTML", userDetails: user, completion: { (data: Data?, errorDesc: String?) in
             if data != nil {
                 print("there was data")
                 print("not sure what to do with this data")

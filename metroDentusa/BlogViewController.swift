@@ -86,9 +86,9 @@ class BlogViewController : UIViewController, UITableViewDelegate, UITableViewDat
             AppDelegate().downloadDataFromURL(urlString: "http://metrodentusa.com/feed", completion: { (data) in
                 if data != nil {
                     print("there was data")
-                    /*if let dataString = String(data: data!, encoding: .utf8){
+                    if let dataString = String(data: data!, encoding: .utf8){
                         print("\(dataString)")
-                    }*/
+                    }
                     self.parser = XMLParser(data: data!)
                     self.parser.delegate = self
                     let parserDidSuceed = self.parser.parse()

@@ -43,6 +43,11 @@ class contactUsViewController: UIViewController, UITableViewDelegate, UITableVie
         scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        self.resizeScrollViewAfterTransition(coordinator: coordinator, scrollView: self.scrollView, contentView: self.contentView)
+    }
+    
     func setUpView(){
         invisibleTopView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(invisibleTopView)

@@ -16,7 +16,6 @@ class navBarController : UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
-        print("view did load. user is \(user)")
     }
     
     
@@ -34,13 +33,8 @@ class navBarController : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        /*if(indexPath.section == 0){
-            performSegue(withIdentifier: "backHome", sender: self)
-        }*/
         if(indexPath.section == 0){
             performSegue(withIdentifier: "findDentistSegue", sender: self)
-            //let findVC = findDentistViewController()
-            //self.revealViewController().pushFrontViewController(findVC, animated: true)
         }
         if(indexPath.section == 1){
             performSegue(withIdentifier: "formSegue", sender: self)
@@ -53,19 +47,12 @@ class navBarController : UITableViewController {
         }
         if(indexPath.section == 4){
             performSegue(withIdentifier: "viewEditSegue", sender: self)
-            /*if self.user != nil {
-                performSegue(withIdentifier: "viewCardSegue", sender: self)
-            } else {
-                self.promptAlertWithDelay("", inmessage: "Must be logged in to view benefit card", indelay: 5.0)
-            }*/
         }
         if(indexPath.section == 5){
             performSegue(withIdentifier: "viewCardSegue", sender: self)
         }
         if(indexPath.section == 6){
-            //probably should present Alert Controller first
-            killUser()
-            performSegue(withIdentifier: "backToLogin", sender: self)
+            performLogout()
         }
     }
     
@@ -86,9 +73,6 @@ class navBarController : UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navController = segue.destination as? UINavigationController {
-            /*if segue.identifier == "backHome" {
-                navController.viewControllers = [LoginSignUpViewController(user: self.user, session: nil)]
-            }*/
             if segue.identifier == "formSegue" {
                 navController.viewControllers = [formViewController(user: self.user)]
             }
@@ -99,6 +83,17 @@ class navBarController : UITableViewController {
                 navController.viewControllers = [userCreationEditViewController(user: (self.user)!, isNewUser: false)]
             }
         }
+    }
+    
+    func performLogout(){
+        let logoutAlert = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        logoutAlert.willPerformLogout(completion: { (didSelectLogout: Bool) in
+            if didSelectLogout {
+                self.killUser()
+                self.performSegue(withIdentifier: "backToLogin", sender: self)
+            }
+        })
+        present(logoutAlert, animated: true, completion: nil)
     }
 
     

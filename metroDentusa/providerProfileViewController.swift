@@ -19,6 +19,7 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
     var addressLabel = UILabel()
     var addressLabelHeight: NSLayoutConstraint!
     var mapView = MKMapView()
+    var mapViewHeight: NSLayoutConstraint!
     var midViewLeft = UIView()
     var midViewRight = UIView()
     var handicapLabel = UILabel()
@@ -69,15 +70,7 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
         translateDelegate = self
         translateDelegate?.translateAllInstanceViewsMaskingConstraints()
         providerInfo = expProvider.getSingleton()
-        /************** Old ********
-        providerInfo = expProvider.getSingleton()
-        setUpScrollView()
-        setUpHeader()
-        setUpMapView()
-        setUpMidView()
-        setUpBottomView()
- 
-         ****/
+
         
         
         /************** New **********/
@@ -90,6 +83,26 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
         contentView.bottomAnchor.constraint(equalTo: providerLabel.bottomAnchor, constant: 30).isActive = true
         contentView.layoutIfNeeded()
         scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil, completion: {
+            (context) -> Void in
+            self.mapViewHeight.isActive = false
+            
+            let orient = UIDevice.current.orientation
+            switch orient {
+            case .landscapeRight, .landscapeLeft:
+                self.mapViewHeight = self.mapView.heightAnchor.constraint(equalToConstant: 235)
+            default:
+                self.mapViewHeight = self.mapView.heightAnchor.constraint(equalToConstant: 265)
+            }
+            self.mapViewHeight.isActive = true
+            
+            self.contentView.layoutIfNeeded()
+            self.scrollView.contentSize = CGSize(width: self.contentView.frame.width, height: self.contentView.frame.height)
+        })
     }
     
     /********************************** functions to set up view *******************************/
@@ -119,15 +132,6 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
     
     
     func setUpHeader() {
-        /************ Old ********/
-       /*let estRect = providerInfo.instName.estimateFrameForText(maxWidth: 359, maxHeight: 50, font: 19)
-       if estRect.height < 25 {
-            headingView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 90))
-       } else {
-            headingView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 115))
-       }
-       headingView.backgroundColor = UIColor.white
-       ************/
 
         contentView.addSubview(headingView)
         headingView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
@@ -136,16 +140,6 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
         let estHeight = providerInfo.instName.estimateFrameForText(maxWidth: self.view.frame.width - 16, maxHeight: 50, font: 19).height
         headingView.backgroundColor = UIColor.white
         
-        
-        
-        /*********** more Old stuff ***************
-       let instTitle = UILabel(frame: CGRect(x: headingView.center.x - estRect.width/2, y: 8, width: estRect.width, height: estRect.height))
-       instTitle.numberOfLines = 2
-       instTitle.text = providerInfo.instName
-       instTitle.textAlignment = .center
-       instTitle.font = instTitle.font.withSize(19)
-       instTitle.textColor = LoginSignUpViewController.themeColor
-       ********/
         
         headingView.addSubview(instTitle)
         instTitle.leadingAnchor.constraint(equalTo: headingView.leadingAnchor, constant: 8).isActive = true
@@ -160,19 +154,6 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
         instTitle.textColor = LoginSignUpViewController.themeColor
         
         
-        /************** But wait there's more old stuff **********
-       let addStr = "\(providerInfo.address) \(providerInfo.city), \(providerInfo.stateZip)"
-       let estRect2 = addStr.estimateFrameForText(maxWidth: 359, maxHeight: 40, font: 15)
-       let addressLabel = UILabel(frame: CGRect(x: 8, y: instTitle.frame.maxY + 5, width: 359, height: estRect2.height))
-       addressLabel.numberOfLines = 2
-       addressLabel.text = addStr
-       addressLabel.textAlignment = .center
-       addressLabel.font = addressLabel.font.withSize(15)
-       if estRect2.height > 20 {
-           headingView.frame.size.height += 20
-       }
-       *********/
-        
         let addStr = "\(providerInfo.address) \(providerInfo.city), \(providerInfo.stateZip)"
         let estHeight2 = addStr.estimateFrameForText(maxWidth: self.view.frame.width - 16, maxHeight: 40, font: 15).height
         headingView.addSubview(addressLabel)
@@ -186,19 +167,6 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
         addressLabel.textAlignment = .center
         addressLabel.font = addressLabel.font.withSize(15)
         
-        
-       
-       /********** Old stuff ********
-       let hourLabel = UILabel(frame: CGRect(x: 8, y: addressLabel.frame.maxY + 5, width: 359, height: 20))
-       hourLabel.text = "Hours:  \(providerInfo.hours)"
-       hourLabel.textAlignment = .center
-       hourLabel.font = hourLabel.font.withSize(15)
-        
-       headingView.addSubview(instTitle)
-       headingView.addSubview(addressLabel)
-       headingView.addSubview(hourLabel)
-       scrollView.addSubview(headingView)
-       **************/
         
         let hourLabel = UILabel()
         hourLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -215,16 +183,19 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
     }
     
     func setUpMapView(){
-        /********* Old frames ********
-        mapView = MKMapView(frame: CGRect(x: 0, y: headingView.frame.maxY+1, width: self.view.frame.width, height: 265))
-        ******/
         
         contentView.addSubview(mapView)
         mapView.topAnchor.constraint(equalTo: headingView.bottomAnchor, constant: 1).isActive = true
         mapView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         mapView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        mapView.heightAnchor.constraint(equalToConstant: 265).isActive = true
-        
+        let orient = UIDevice.current.orientation
+        switch orient {
+        case .landscapeLeft, .landscapeRight:
+            mapViewHeight = mapView.heightAnchor.constraint(equalToConstant: 235)
+        default:
+            mapViewHeight = mapView.heightAnchor.constraint(equalToConstant: 265)
+        }
+        mapViewHeight.isActive = true
         
         if providerInfo.lat != -1 && providerInfo.long != -1 {
             location = CLLocation(latitude: providerInfo.lat, longitude: providerInfo.long)
@@ -236,17 +207,9 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
             annotation.title = providerInfo.instName
             mapView.addAnnotation(annotation)
         }
-        //scrollView.addSubview(mapView)
     }
     
     func setUpMidView(){
-        /*********** Old ***********
-        midView = UIView(frame: CGRect(x: 0, y: mapView.frame.maxY+1, width: self.view.frame.width, height: 40))
-        midView.backgroundColor = UIColor.white
-         
-        let midViewDivider = UIView(frame: CGRect(x: midView.center.x-1, y: 0, width: 2, height: midView.frame.height))
-        midViewDivider.backgroundColor = UIColor.darkGray
-        **************/
 
         contentView.addSubview(midViewLeft)
         midViewLeft.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
@@ -310,18 +273,7 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
         }
         callButton.setTitleColor(UIColor.lightGray, for: .normal)
         callButton.titleLabel?.font = callButton.titleLabel?.font.withSize(15)
-        
-        
-        
-        /***********  more Old Stuff *******
-        let mapIcon = UIImageView(frame: CGRect(x: midViewDivider.frame.maxX+5, y: 5, width: 30, height: 30))
-        mapIcon.image = UIImage(named: "Map Icon")
-        let threeQuarters = mapIcon.frame.maxX + (self.view.frame.width - mapIcon.frame.maxX)/2
-        let directionsButton = UIButton(frame: CGRect(x: threeQuarters - 50, y: 5, width: 100, height: 30))
-        directionsButton.setTitle("Get Directions", for: .normal)
-        directionsButton.addTarget(self, action: #selector(getDirections), for: .touchUpInside)
-        directionsButton.titleLabel?.textColor = UIColor.lightGray
-        *************/
+
         
         let mapIcon = UIImageView()
         mapIcon.translatesAutoresizingMaskIntoConstraints = false
@@ -344,19 +296,7 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
         directionsButton.titleLabel?.textColor = UIColor.lightGray
         directionsButton.setTitleColor(UIColor.lightGray, for: .normal)
         directionsButton.titleLabel?.font = directionsButton.titleLabel?.font.withSize(15)
-        
 
-        /*midView.addSubview(callIcon)
-        midView.addSubview(callButton)
-        midView.addSubview(mapIcon)
-        midView.addSubview(directionsButton)
-        midView.addSubview(midViewDivider)
-        
-        for case let button as UIButton in midView.subviews {
-            button.setTitleColor(UIColor.lightGray, for: .normal)
-            button.titleLabel?.font = button.titleLabel?.font.withSize(15)
-        }
-        scrollView.addSubview(midView)*/
     }
     
     func setUpBottomView(){
@@ -412,30 +352,6 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
         
         initProviderLabel()
         
-        
-
-        /*let infoHeading = UILabel(frame: CGRect(x: 8, y: midView.frame.maxY+8, width: 60, height: 20))
-        infoHeading.text = "Info"
-        infoHeading.font = UIFont.boldSystemFont(ofSize: 17)
-        let languagesLabel = UILabel(frame: CGRect(x: 16, y: infoHeading.frame.maxY+5, width: 341, height: 20))
-        languagesLabel.text = "Languages: \(providerInfo.languages)"
-        let websiteLabel = UILabel(frame: CGRect(x: 16, y: languagesLabel.frame.maxY+5, width: 341, height: 20))
-        if providerInfo.webAddress != "" {
-            websiteLabel.text = "Website: \(providerInfo.webAddress)"
-        } else {
-            websiteLabel.text = "Website: Not Available"
-        }
-        let handicapLabel = UILabel(frame: CGRect(x: 16, y: websiteLabel.frame.maxY+5, width: 341, height: 20))
-        handicapLabel.text = "Handidap Access: \(providerInfo.handicapAccess)"
-        let providersLabel = estimateDoctorLabel(topY: handicapLabel.frame.maxY+5)
-        scrollView.addSubview(languagesLabel)
-        scrollView.addSubview(websiteLabel)
-        scrollView.addSubview(handicapLabel)
-        scrollView.addSubview(providersLabel)
-        for case let label as UILabel in scrollView.subviews {
-            label.font = label.font.withSize(15)
-        }
-        scrollView.addSubview(infoHeading)*/
     }
     
     func initProviderLabel() {
@@ -456,14 +372,6 @@ class providerProfileViewController : UIViewController, translateMaskingConstrai
         providerLabel.text = credentialText
         providerLabel.numberOfLines = necessaryLines
         providerLabel.font = providerLabel.font.withSize(15)
-        
-        /*if estRect.height + topY > self.view.frame.height {
-            scrollView.contentSize.height += (estRect.height - (self.view.frame.height - topY))
-        }
-        let credLabel = UILabel(frame: CGRect(x: 16, y: topY, width: 341, height: estRect.height))
-        credLabel.text = credentialText
-        credLabel.numberOfLines = necessaryLines
-        return credLabel*/
     }
     
     /************************************* Map related fuctions *****************************/

@@ -70,6 +70,9 @@ class FAQsViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.FAQsTableHeight = self.FAQsTableView.heightAnchor.constraint(equalToConstant: FAQsViewController.rowHeightsSum)
             self.FAQsTableHeight.isActive = true
             self.FAQsTableView.reloadData()
+            
+            self.contentView.layoutIfNeeded()
+            self.scrollView.contentSize = CGSize(width: self.contentView.frame.width, height: self.contentView.frame.height)
         })
     }
     

@@ -10,6 +10,40 @@ import Foundation
 
 extension UIViewController {
     
+    func createTransition(duration: CFTimeInterval, transitionSubType: String){
+        let transition = CATransition()
+        transition.duration = duration
+        transition.type = kCATransitionPush
+        transition.subtype = transitionSubType
+        self.view.window!.layer.add(transition, forKey: kCATransition)
+    }
+    
+    func dismissKeyboard(){
+        view.endEditing(true)
+    }
+    
+    func getAnchorYPositionDiff(anchorTop: NSLayoutAnchor<NSLayoutYAxisAnchor>, anchorBottom: NSLayoutAnchor<NSLayoutYAxisAnchor>) -> CGFloat {
+        let measureStick = UIView()
+        var heightDiff : CGFloat = 0
+        
+        measureStick.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(measureStick)
+        measureStick.topAnchor.constraint(equalTo: anchorTop).isActive = true
+        measureStick.bottomAnchor.constraint(equalTo: anchorBottom).isActive = true
+        measureStick.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        measureStick.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        measureStick.layoutIfNeeded()
+        heightDiff = measureStick.frame.height
+        measureStick.removeFromSuperview()
+        return heightDiff
+    }
+    
+    func hideKeyBoardWhenTappedAround(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
     func promptAlertWithDelay(_ intitle: String,  inmessage: String, indelay: Double){
         let alert = UIAlertController(title: intitle, message: inmessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
@@ -21,13 +55,14 @@ extension UIViewController {
         }
     }
     
-    func createTransition(duration: CFTimeInterval, transitionSubType: String){
-        let transition = CATransition()
-        transition.duration = duration
-        transition.type = kCATransitionPush
-        transition.subtype = transitionSubType
-        self.view.window!.layer.add(transition, forKey: kCATransition)
+    func resizeScrollViewAfterTransition(coordinator: UIViewControllerTransitionCoordinator,scrollView: UIScrollView, contentView: UIView){
+        coordinator.animate(alongsideTransition: nil, completion: {
+            (context) -> Void in
+            contentView.layoutIfNeeded()
+            scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
+        })
     }
+    
     
     func setUpActivityIndicator() -> UIActivityIndicatorView {
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
@@ -35,28 +70,6 @@ extension UIViewController {
         activityIndicator.hidesWhenStopped = true
         self.view.addSubview(activityIndicator)
         return activityIndicator
-    }
-    
-    func hideKeyBoardWhenTappedAround(){
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    func dismissKeyboard(){
-        view.endEditing(true)
-    }
-    
-    func toggleMenuButton(menuButton: UIBarButtonItem){
-        if self.navigationController != nil {
-            self.navigationItem.leftBarButtonItem = menuButton
-            if self.revealViewController() != nil {
-                menuButton.target = self.revealViewController()
-                menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
-                self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-                self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
-            }
-        }
     }
     
     func setUpBackBarButton(title: String?){
@@ -86,7 +99,35 @@ extension UIViewController {
         scrollView.alwaysBounceVertical = false
         scrollView.bounces = false
     }
-  
+    
+    
+    func toggleMenuButton(menuButton: UIBarButtonItem){
+        if self.navigationController != nil {
+            self.navigationItem.leftBarButtonItem = menuButton
+            if self.revealViewController() != nil {
+                menuButton.target = self.revealViewController()
+                menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
+                self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+                self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
+            }
+        }
+    }
+    
+    
+}
+
+extension UIAlertController {
+    func willPerformLogout(completion: @escaping (_ didSelectLogout: Bool) -> Void){
+        self.title = "Logout?"
+        self.message = "Are you sure you want to logout? Your current activity will not be saved"
+        self.addAction(UIAlertAction(title: "Logout", style: .default, handler: { (action: UIAlertAction) in
+            completion(true)
+        }))
+        self.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action: UIAlertAction) in
+            self.dismiss(animated: true, completion: nil)
+            completion(false)
+        }))
+    }
 }
 
 
@@ -114,9 +155,15 @@ extension UIButton {
 }
 
 extension String {
-    func validatePredicate(regex: String) -> Bool {
-        let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
-        return predicate.evaluate(with: self)
+    
+    func estimateFrameForText(maxWidth: CGFloat, maxHeight: CGFloat, font: CGFloat?) -> CGRect {
+        let size = CGSize(width: maxWidth, height: maxHeight)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        if font != nil {
+            return NSString(string: self).boundingRect(with: size, options: options, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: font!)], context: nil)
+        }
+        return NSString(string: self).boundingRect(with: size, options: options, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 15.0)], context: nil)
+        
     }
     
     func seperateNumbers() -> String {
@@ -131,15 +178,11 @@ extension String {
         return trimmedString
     }
     
-    func estimateFrameForText(maxWidth: CGFloat, maxHeight: CGFloat, font: CGFloat?) -> CGRect {
-        let size = CGSize(width: maxWidth, height: maxHeight)
-        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-        if font != nil {
-            return NSString(string: self).boundingRect(with: size, options: options, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: font!)], context: nil)
-        }
-        return NSString(string: self).boundingRect(with: size, options: options, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 15.0)], context: nil)
-        
+    func validatePredicate(regex: String) -> Bool {
+        let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
+        return predicate.evaluate(with: self)
     }
+    
 }
 
 public protocol genericTableViewCell : class {

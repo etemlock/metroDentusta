@@ -20,10 +20,6 @@ class userCreationEditViewController: UIViewController, UITableViewDelegate, UIT
     var confirmPasswordTxtFld = UITextField()
     var emailTableView = UITableView()
     var securityQATableView = UITableView()
-    
-    
-    //var formTableView = UITableView()
-    //var securityQATableView = UITableView()
     var saveUserButton = UIButton()
     
     /********* data **********/
@@ -69,9 +65,14 @@ class userCreationEditViewController: UIViewController, UITableViewDelegate, UIT
         setUpUserNamePasswordFields()
         setUpTableViews()
         setUpButton()
-        contentView.bottomAnchor.constraint(equalTo: saveUserButton.bottomAnchor, constant: 30).isActive = true
+        contentView.bottomAnchor.constraint(equalTo: saveUserButton.bottomAnchor, constant: 250).isActive = true
         contentView.layoutIfNeeded()
         scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        self.resizeScrollViewAfterTransition(coordinator: coordinator, scrollView: self.scrollView, contentView: self.contentView)
     }
     
     
@@ -332,7 +333,7 @@ class userCreationEditViewController: UIViewController, UITableViewDelegate, UIT
                 activityIndicator.startAnimating()
                 self.saveParams.setSessionID(sessId: self.user.getSessionId())
                 self.saveParams.setSuID(suId: self.user.getId())
-                AppDelegate().makeHTTPPostRequestToSaveUser(urlString: "https://edi.asonet.com/httpserver.ashx?obj=saveUserProfile", params: self.saveParams, completion: { (data: Data?) in
+                AppDelegate().makeHTTPPostRequestToSaveUser(urlString: "https://edi.asonet.com/httpserver.ashx?obj=saveUserProfile", params: self.saveParams, completion: { (data: Data?, errorDesc: String?) in
                     if data != nil {
                         if let dataString = String(data: data!, encoding: .utf8){
                             print("\(dataString)")
@@ -375,13 +376,16 @@ class userCreationEditViewController: UIViewController, UITableViewDelegate, UIT
                                 
                                 //if is a newMember proceed to go to menu.
                                 if self.isNewMember == true {
+                                    //might need to instantiate from storyboard
                                     if let navController = self.navigationController {
                                         let nextVC = menuViewController()
                                         navController.pushViewController(nextVC, animated: true)
                                     }
                                 }
+                                self.statusSuccess = false
+                            } else {
+                                self.promptAlertWithDelay("Unable to submit request", inmessage: self.errorMsg, indelay: 5.0)
                             }
-                            self.statusSuccess = false
                         }
                     } else {
                         DispatchQueue.main.async {
