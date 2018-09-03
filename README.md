@@ -7,7 +7,7 @@ This app provides a mobile friendly platform on iOS for Associated Services Only
 Simply run on your local terminal
 
 ```
-git clone etemlock/metroDentusa
+git clone https://github.com/etemlock/metroDentusta
 ```
 
 
