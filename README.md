@@ -10,6 +10,11 @@ Simply run on your local terminal
 git clone https://github.com/etemlock/metroDentusta
 ```
 
+## Requirements
+
+* iOS 10.0+
+* Xcode 8.2.1+ 
+* Swift 3.1+
 
 ## Dependencies
 
