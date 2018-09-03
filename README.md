@@ -2,7 +2,7 @@
 
 This app provides a mobile friendly platform on iOS for Associated Services Only members to easily access and modify their medical plan information, and lookup nearby doctors.
 
-## How to copy over
+## Setup
 
 Simply run on your local terminal
 
