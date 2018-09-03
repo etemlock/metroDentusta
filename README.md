@@ -11,7 +11,7 @@ git clone etemlock/metroDentusa
 ```
 
 
-### Dependencies
+## Dependencies
 
 * Alamofire 4.0 (https://github.com/Alamofire/Alamofire) - Used to make cleaner, more elegant usage of Swift 3's Network Request API's.
 * CocoaPods (https://cocoapods.org/) - Dependency Manager
